@@ -23,14 +23,19 @@ env:
 jobs:
   build:
     strategy:
+      # one target that fails does not cancel the others: their logs show
+      # whether the failure is the target's or the code's
+      fail-fast: false
       matrix:
         include:
           - { target: x86_64-unknown-linux-musl, os: ubuntu-24.04 }
           - { target: aarch64-unknown-linux-musl, os: ubuntu-24.04-arm }
-          # GitHub has retired its Intel macOS runners: the x86_64 binary is
-          # cross-compiled on Apple silicon, whose toolchain targets both
-          - { target: x86_64-apple-darwin, os: macos-14 }
-          - { target: aarch64-apple-darwin, os: macos-14 }
+          # the versioned macOS images are retired one after the other, so
+          # the two macOS targets use the current one. GitHub has no Intel
+          # runners any more: the x86_64 binary is cross-compiled on Apple
+          # silicon, whose toolchain targets both
+          - { target: x86_64-apple-darwin, os: macos-latest }
+          - { target: aarch64-apple-darwin, os: macos-latest }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
