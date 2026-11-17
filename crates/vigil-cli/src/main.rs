@@ -17,7 +17,7 @@ use std::io::{self, IsTerminal, Write};
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{ArgAction, CommandFactory, Parser, Subcommand, ValueEnum};
 use vigil_codegen_llvm::ProgramDesc;
 use vigil_codegen_llvm::clang::Clang;
 use vigil_diagnostics::{Diagnostic, Diagnostics, Renderer, SourceMap, codes};
@@ -25,14 +25,24 @@ use vigil_sema::Analysis;
 
 use crate::project::Project;
 
+// the text of `vigil --version`
+const VERSION: &str = concat!(
+    "Vigil Programming Language Compiler - version ",
+    env!("CARGO_PKG_VERSION")
+);
+
 // the command line. The `///` comments of the fields and variants here, in
 // `Command` and in `Emit` are the text of `vigil --help`. The comments on
 // the types are plain `//` because clap would use them as help too
 #[derive(Parser)]
+// clap prints its version flag as `vigil <version>`, so the flag is ours:
+// it prints `VERSION` alone. The subcommand is then optional for the
+// parser, and `main` reports it missing
 #[command(
     name = "vigil",
-    version,
-    about = "Compiler for the Vigil eBPF language"
+    about = "Compiler for the Vigil eBPF language",
+    disable_version_flag = true,
+    override_usage = "vigil [OPTIONS] <COMMAND>"
 )]
 struct Cli {
     /// When to color diagnostics.
@@ -45,8 +55,12 @@ struct Cli {
           value_parser = clap::value_parser!(u8).range(0..=1))]
     opt_level: u8,
 
+    /// Print version.
+    #[arg(short = 'V', long, action = ArgAction::SetTrue)]
+    version: bool,
+
     #[command(subcommand)]
-    command: Command,
+    command: Option<Command>,
 }
 
 // the subcommands
@@ -167,12 +181,24 @@ impl ColorChoice {
 
 fn main() -> ExitCode {
     let cli = Cli::parse();
+    if cli.version {
+        println!("{VERSION}");
+        return ExitCode::SUCCESS;
+    }
+    let Some(command) = &cli.command else {
+        Cli::command()
+            .error(
+                clap::error::ErrorKind::MissingSubcommand,
+                "a command is required (`vigil --help` lists them)",
+            )
+            .exit();
+    };
     let color = cli.color.enabled();
     let optimize = cli.opt_level > 0;
     let mut sources = SourceMap::new();
     let mut diags = Diagnostics::new();
 
-    match &cli.command {
+    match command {
         Command::Check { path, verbose } => {
             if let Some((project, _)) = analyze(path, &mut sources, &mut diags) {
                 print_checked(&project, *verbose);
