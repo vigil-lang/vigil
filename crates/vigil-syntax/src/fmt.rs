@@ -466,15 +466,16 @@ impl<'t> Formatter<'t> {
             let at = if b == EQ { i } else { i - 1 };
             return annotated(tokens, at);
         }
+        // no space after a unary minus or plus, even before a bracket
+        // (`-(1 << n)`): it comes first or after an operator, a bracket, a
+        // comma or a keyword
+        if matches!(a, MINUS | PLUS) && (i < 2 || is_before_operand(tokens[i - 2].kind)) {
+            return false;
+        }
         // no space in `f(x)`, `a[i]`, `Map[K, V]`, but a space in `x = (a)`
         // and `return [1]`
         if matches!(b, L_PAREN | L_BRACK) {
             return !matches!(a, IDENT | R_PAREN | R_BRACK | STRING | FSTRING | QUESTION);
-        }
-        // no space after a unary minus or plus, which comes first or after
-        // an operator, a bracket, a comma or a keyword
-        if matches!(a, MINUS | PLUS) && (i < 2 || is_before_operand(tokens[i - 2].kind)) {
-            return false;
         }
         true
     }
@@ -636,6 +637,40 @@ def main(ctx: XdpContext) -> XdpAction:
         // lines without brackets stay long
         let import = format!("from std.net import {}\n", ["XdpContext"; 12].join(", "));
         assert_eq!(format(&import).as_deref(), Ok(import.as_str()));
+    }
+
+    #[test]
+    fn keeps_unary_minus_before_a_bracket() {
+        let source = "def f(n: u64, a: i64) -> i64:\n    return -(1 << n) - (a) + -[1][0] * g(-(2), - (3))\n";
+        let expected =
+            "def f(n: u64, a: i64) -> i64:\n    return -(1 << n) - (a) + -[1][0] * g(-(2), -(3))\n";
+        assert_eq!(format(source).as_deref(), Ok(expected));
+    }
+
+    /// the standard library and the examples are already formatted
+    #[test]
+    fn library_and_examples_are_formatted() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let mut dirs = vec![root.join("examples"), root.join("../std")];
+        let mut unformatted = Vec::new();
+        while let Some(dir) = dirs.pop() {
+            for entry in std::fs::read_dir(&dir).unwrap().flatten() {
+                let path = entry.path();
+                if path.is_dir() && !path.ends_with(".git") {
+                    dirs.push(path);
+                } else if path.extension().is_some_and(|e| e == "vg") {
+                    let text = std::fs::read_to_string(&path).unwrap();
+                    if format(&text).as_deref() != Ok(text.as_str()) {
+                        unformatted.push(path.display().to_string());
+                    }
+                }
+            }
+        }
+        assert!(
+            unformatted.is_empty(),
+            "not formatted (run `vigil fmt`):\n{}",
+            unformatted.join("\n")
+        );
     }
 
     #[test]

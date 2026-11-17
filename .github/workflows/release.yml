@@ -27,7 +27,9 @@ jobs:
         include:
           - { target: x86_64-unknown-linux-musl, os: ubuntu-24.04 }
           - { target: aarch64-unknown-linux-musl, os: ubuntu-24.04-arm }
-          - { target: x86_64-apple-darwin, os: macos-13 }
+          # GitHub has retired its Intel macOS runners: the x86_64 binary is
+          # cross-compiled on Apple silicon, whose toolchain targets both
+          - { target: x86_64-apple-darwin, os: macos-14 }
           - { target: aarch64-apple-darwin, os: macos-14 }
     runs-on: ${{ matrix.os }}
     steps:
