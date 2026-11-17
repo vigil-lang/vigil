@@ -1,0 +1,32 @@
+protocol Scorer[In]:
+    def score(self, x: In) -> i64: ...
+
+# The method takes another type.
+struct A(Scorer[u32]):
+    k: u32
+
+    def score(self, x: u16) -> i64:
+        return 0
+
+# Missing argument of the protocol.
+struct B(Scorer):
+    k: u32
+
+    def score(self, x: u32) -> i64:
+        return 0
+
+enum C(Scorer[u8]):
+    One
+
+def use[M: Scorer[u64]](m: M) -> i64:
+    return m.score(1)
+
+struct D(Scorer[u32]):
+    k: u32
+
+    def score(self, x: u32) -> i64:
+        return 0
+
+def wrong() -> i64:
+    # `D` implements `Scorer[u32]`, not `Scorer[u64]`.
+    return use[D](D(1))

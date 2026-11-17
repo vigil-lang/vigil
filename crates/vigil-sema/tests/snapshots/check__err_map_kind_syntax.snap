@@ -1,0 +1,39 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: `ProgArray` takes no type arguments, as in `ProgArray(max_entries=4)`
+   ╭─[ main.vg:2:8 ]
+   │
+ 2 │ map s: ProgArray[u32](max_entries=4)
+   │        ────┬────  
+   │            ╰────── expected `map name: ProgArray(max_entries=N)`
+───╯
+[E0402] Error: ring buffers are declared with `event`, not `map`
+   ╭─[ main.vg:3:8 ]
+   │
+ 3 │ map e: RingBuf[u32](size=4096)
+   │        ───┬───  
+   │           ╰───── expected `event name: RingBuf[T](size=N)`
+───╯
+[E0403] Error: `LruHash` takes a key type and a value type, as in `LruHash[K, V]`
+   ╭─[ main.vg:4:8 ]
+   │
+ 4 │ map l: LruHash[u32](max_entries=4)
+   │        ───┬───  
+   │           ╰───── expected `map name: LruHash[K, V](max_entries=N)`
+───╯
+[E0403] Error: `PerCpuArray` takes a value type and a length, as in `PerCpuArray[V, 16]`
+   ╭─[ main.vg:5:8 ]
+   │
+ 5 │ map a: PerCpuArray[u32]
+   │        ─────┬─────  
+   │             ╰─────── expected `map name: PerCpuArray[V, N]`
+───╯
+[E0402] Error: events are declared with `RingBuf`
+   ╭─[ main.vg:6:10 ]
+   │
+ 6 │ event h: Hash[u32, u32](max_entries=4)
+   │          ──┬─  
+   │            ╰─── expected `event name: RingBuf[T](size=N)`
+───╯

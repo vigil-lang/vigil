@@ -1,0 +1,20 @@
+# module: net.headers
+struct EthHdr:
+    proto: u16
+
+const ETH_P_IP: u16 = 0x0800
+
+def _private() -> u32:
+    return 1
+
+def is_ip(h: EthHdr) -> bool:
+    return h.proto == ETH_P_IP and _private() == 1
+
+# module: main
+from net.headers import EthHdr, ETH_P_IP as IP, is_ip
+import net.headers as hdr
+import net
+
+def f(h: EthHdr) -> bool:
+    other = hdr.EthHdr(IP)
+    return is_ip(h) and hdr.is_ip(other) and net.headers.is_ip(other)

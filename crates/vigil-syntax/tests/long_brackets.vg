@@ -1,0 +1,9 @@
+struct [](Classifier[Vector[T,hidden:Linear[T,IN,HID]struct Knn[T,F:usize,N:usize,K:usize,CLASSES:usize](Classifier[Vector[T,F]]):def classify(self,x:Vector[T,F])usize:nearest=[x.items[0]-x.items[0]]*K
+        nearest_labels:u16[K]=[0]*K
+        count:usize=0for i in range(N):d=self.points.row(i).distance2(x)label=self.labels[i]@unroll
+            for slot in range(K):if slot=count or d<nearest[slot]:farther=nearest[slot]farther_label=nearest_labels[slot]nearest[slot]=d
+                    nearest_labels[slot]=label
+                    d=farther
+                    label=farther_label
+            count=min(count+1,K)votes:u32[CLASSES]=[0]*CLASSES
+        for slot in range(K):l=usize(nearest_labels[slot])if slot<count and l<CLASSES:votes[l]=1return Vector[u32,CLASSES](votes).argmax()

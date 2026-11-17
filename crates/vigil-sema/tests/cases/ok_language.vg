@@ -1,0 +1,124 @@
+from std.bpf import KprobeContext, pid_tgid
+
+const PORT: u16 = 8080
+const MASK: u32 = (1 << 24) - 1
+const ENABLED = True
+const SLOTS: usize = 4
+const LIMIT: i64 = -SLOTS_I * 2
+const SLOTS_I: i64 = 4
+
+type Port = u16
+type Buf = bytes[16]
+
+struct Point:
+    x: i32
+    y: i32
+
+    def norm1(self) -> i32:
+        return abs_i32(self.x) + abs_i32(self.y)
+
+    def origin() -> Point:
+        return Point(0, 0)
+
+struct Packet:
+    port: Port
+    payload: Buf
+    points: Point[2]
+
+def abs_i32(v: i32) -> i32:
+    if v < 0:
+        return -v
+    return v
+
+def area(p: Point, q: Point) -> i64:
+    w = i64(q.x - p.x)
+    h = i64(q.y - p.y)
+    return w * h
+
+def literals() -> u64:
+    a = 0xFF_FF
+    b: u8 = 0b1010
+    c = a + 1
+    return u64(b) + c
+
+def loops(n: u32) -> u32:
+    total = 0
+    for i in range(n):
+        total += i
+    @bounded(16)
+    while total > 100:
+        total = total // 2
+    arr = [1, 2, 3, 4]
+    for x in arr:
+        total += x
+    @unroll
+    for j in range(SLOTS):
+        if j == 2:
+            continue
+        total += u32(j)
+    return total
+
+enum Shape:
+    Circle(u32)
+    Rect(u32, u32)
+    Empty
+
+    def area(self) -> u64:
+        match self:
+            case Shape.Circle(r):
+                return 3 * u64(r) * u64(r)
+            case Shape.Rect(w, h):
+                return u64(w) * u64(h)
+            case Shape.Empty:
+                return 0
+
+def first_even(xs: u32[4]) -> u32?:
+    for x in xs:
+        if x % 2 == 0:
+            return Some(x)
+    return None
+
+def try_chain(xs: u32[4]) -> u64?:
+    x = first_even(xs)?
+    return Some(u64(x) + 1)
+
+def classify(n: i32) -> u8:
+    match n:
+        case 0:
+            return 0
+        case 1 | 2 | -1:
+            return 1
+        case _:
+            return 2
+
+def with_option(o: Option[u16]) -> u16:
+    match o:
+        case Some(v) if v > 10:
+            return v
+        case Some(_):
+            return 10
+        case None:
+            return 0
+
+def packets(p: Packet) -> u16:
+    p.points[1].x = 7
+    p.payload[0] = 0xFF
+    first = p.points[0]
+    return p.port + u16(first.norm1() > 0)
+
+@kprobe("do_sys_openat2")
+def prog(ctx: KprobeContext) -> i32:
+    pid = pid_tgid() >> 32
+    p = Point.origin()
+    p.x = 3
+    s = Shape.Rect(2, 3)
+    v = first_even([1, 2, 3, 4])?
+    print(f"value {v} area {s.area()} pid {pid}")
+    print("plain {{braces}}")
+    smallest = min(v, 10)
+    if PORT == 8080 and not ENABLED:
+        return 1
+    elif MASK > u32(smallest) or LIMIT < 0:
+        return 2
+    else:
+        return 0

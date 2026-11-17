@@ -1,0 +1,109 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0305] Error: type `Node` contains itself
+   ╭─[ main.vg:1:8 ]
+   │
+ 1 │ struct Node:
+   │        ──┬─  
+   │          ╰─── this type would have an infinite size
+   │ 
+   │ Note: eBPF programs have no heap; store an index into a map instead
+───╯
+[E0304] Error: type alias `Loop` refers to itself
+   ╭─[ main.vg:5:6 ]
+   │
+ 5 │ type Loop = Loop
+   │      ──┬─  
+   │        ╰─── cycle through this alias
+───╯
+[E0304] Error: constant `A` depends on itself
+   ╭─[ main.vg:7:7 ]
+   │
+ 7 │ const A: u32 = B + 1
+   │       ┬  
+   │       ╰── cycle through this constant
+───╯
+[E0406] Error: `1000` does not fit in `u8`
+   ╭─[ main.vg:9:17 ]
+   │
+ 9 │ const BIG: u8 = 1000
+   │                 ──┬─  
+   │                   ╰─── `u8` goes from 0 to 255
+───╯
+[E0414] Error: division by zero
+    ╭─[ main.vg:10:18 ]
+    │
+ 10 │ const DIV: u32 = 1 // 0
+    │                  ───┬──  
+    │                     ╰──── the divisor is 0
+────╯
+[E0402] Error: constants cannot have type `Point`
+    ╭─[ main.vg:11:10 ]
+    │
+ 11 │ const P: Point = 0
+    │          ──┬──  
+    │            ╰──── expected an integer or `bool`
+────╯
+[E0302] Error: member `x` is defined twice
+    ╭─[ main.vg:15:5 ]
+    │
+ 14 │     x: u32
+    │     ┬  
+    │     ╰── first defined here
+ 15 │     x: u32
+    │     ┬  
+    │     ╰── redefined here
+────╯
+[E0402] Error: `bytes` needs a length
+    ╭─[ main.vg:16:11 ]
+    │
+ 16 │     data: bytes
+    │           ──┬──  
+    │             ╰──── write it as `bytes[N]`
+────╯
+[E0402] Error: `Option` takes one type argument
+    ╭─[ main.vg:17:10 ]
+    │
+ 17 │     opt: Option
+    │          ───┬──  
+    │             ╰──── write it as `Option[T]` or `T?`
+────╯
+[E0402] Error: `helper` is not a type
+    ╭─[ main.vg:18:12 ]
+    │
+ 18 │     other: helper
+    │            ───┬──  
+    │               ╰──── expected a type
+────╯
+[E0414] Error: invalid array length 0
+    ╭─[ main.vg:19:14 ]
+    │
+ 19 │     zero: u8[0]
+    │              ┬  
+    │              ╰── lengths go from 1 to 4294967295
+────╯
+[E0302] Error: parameter `a` is defined twice
+    ╭─[ main.vg:21:20 ]
+    │
+ 21 │ def helper(a: u32, a: u32, b) -> u32:
+    │            ┬       ┬  
+    │            ╰────────── first defined here
+    │                    │  
+    │                    ╰── redefined here
+────╯
+[E0405] Error: parameter `b` needs a type annotation
+    ╭─[ main.vg:21:28 ]
+    │
+ 21 │ def helper(a: u32, a: u32, b) -> u32:
+    │                            ┬  
+    │                            ╰── missing `: type`
+────╯
+[E0402] Error: `self` must be the first parameter of a method
+    ╭─[ main.vg:24:18 ]
+    │
+ 24 │ def self_outside(self) -> u32:
+    │                  ──┬─  
+    │                    ╰─── unexpected `self`
+────╯

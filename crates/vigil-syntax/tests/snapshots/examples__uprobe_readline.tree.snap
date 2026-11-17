@@ -1,0 +1,201 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..462
+  IMPORT@141..200
+    FROM_KW@141..145 "from"
+    PATH@146..153
+      NAME_REF@146..149
+        IDENT@146..149 "std"
+      DOT@149..150 "."
+      NAME_REF@150..153
+        IDENT@150..153 "bpf"
+    IMPORT_KW@154..160 "import"
+    IMPORT_NAME@161..174
+      NAME_REF@161..174
+        IDENT@161..174 "KprobeContext"
+    COMMA@174..175 ","
+    IMPORT_NAME@176..184
+      NAME_REF@176..184
+        IDENT@176..184 "pid_tgid"
+    COMMA@184..185 ","
+    IMPORT_NAME@186..199
+      NAME_REF@186..199
+        IDENT@186..199 "read_user_str"
+    NEWLINE@199..200 "\n"
+  STRUCT_DEF@201..249
+    STRUCT_KW@201..207 "struct"
+    NAME@208..212
+      IDENT@208..212 "Line"
+    COLON@212..213 ":"
+    MEMBER_LIST@213..249
+      NEWLINE@213..214 "\n"
+      INDENT@218..218 ""
+      FIELD@218..227
+        NAME@218..221
+          IDENT@218..221 "pid"
+        COLON@221..222 ":"
+        PATH_TYPE@223..226
+          PATH@223..226
+            NAME_REF@223..226
+              IDENT@223..226 "u32"
+        NEWLINE@226..227 "\n"
+      FIELD@231..248
+        NAME@231..235
+          IDENT@231..235 "text"
+        COLON@235..236 ":"
+        PATH_TYPE@237..247
+          PATH@237..242
+            NAME_REF@237..242
+              IDENT@237..242 "bytes"
+          GENERIC_ARG_LIST@242..247
+            L_BRACK@242..243 "["
+            CONST_ARG@243..246
+              LITERAL@243..246
+                INT@243..246 "128"
+            R_BRACK@246..247 "]"
+        NEWLINE@247..248 "\n"
+      DEDENT@249..249 ""
+  EVENT_DECL@249..292
+    EVENT_KW@249..254 "event"
+    NAME@255..260
+      IDENT@255..260 "lines"
+    COLON@260..261 ":"
+    PATH_TYPE@262..275
+      PATH@262..269
+        NAME_REF@262..269
+          IDENT@262..269 "RingBuf"
+      GENERIC_ARG_LIST@269..275
+        L_BRACK@269..270 "["
+        TYPE_ARG@270..274
+          PATH_TYPE@270..274
+            PATH@270..274
+              NAME_REF@270..274
+                IDENT@270..274 "Line"
+        R_BRACK@274..275 "]"
+    ARG_LIST@275..291
+      L_PAREN@275..276 "("
+      ARG@276..290
+        NAME@276..280
+          IDENT@276..280 "size"
+        EQ@280..281 "="
+        BIN_EXPR@281..290
+          LITERAL@281..283
+            INT@281..283 "64"
+          STAR@284..285 "*"
+          LITERAL@286..290
+            INT@286..290 "1024"
+      R_PAREN@290..291 ")"
+    NEWLINE@291..292 "\n"
+  FN_DEF@293..462
+    DECORATOR@293..326
+      AT@293..294 "@"
+      PATH@294..303
+        NAME_REF@294..303
+          IDENT@294..303 "uretprobe"
+      ARG_LIST@303..325
+        L_PAREN@303..304 "("
+        ARG@304..324
+          LITERAL@304..324
+            STRING@304..324 "\"/bin/bash:readline\""
+        R_PAREN@324..325 ")"
+      NEWLINE@325..326 "\n"
+    DEF_KW@326..329 "def"
+    NAME@330..341
+      IDENT@330..341 "on_readline"
+    PARAM_LIST@341..361
+      L_PAREN@341..342 "("
+      PARAM@342..360
+        NAME@342..345
+          IDENT@342..345 "ctx"
+        COLON@345..346 ":"
+        PATH_TYPE@347..360
+          PATH@347..360
+            NAME_REF@347..360
+              IDENT@347..360 "KprobeContext"
+      R_PAREN@360..361 ")"
+    RET_TYPE@362..368
+      ARROW@362..364 "->"
+      PATH_TYPE@365..368
+        PATH@365..368
+          NAME_REF@365..368
+            IDENT@365..368 "i32"
+    COLON@368..369 ":"
+    BLOCK@369..462
+      NEWLINE@369..370 "\n"
+      INDENT@374..374 ""
+      EXPR_STMT@374..449
+        CALL_EXPR@374..448
+          FIELD_EXPR@374..384
+            NAME_EXPR@374..379
+              NAME_REF@374..379
+                IDENT@374..379 "lines"
+            DOT@379..380 "."
+            NAME_REF@380..384
+              IDENT@380..384 "emit"
+          ARG_LIST@384..448
+            L_PAREN@384..385 "("
+            ARG@385..447
+              CALL_EXPR@385..447
+                NAME_EXPR@385..389
+                  NAME_REF@385..389
+                    IDENT@385..389 "Line"
+                ARG_LIST@389..447
+                  L_PAREN@389..390 "("
+                  ARG@390..415
+                    NAME@390..393
+                      IDENT@390..393 "pid"
+                    EQ@393..394 "="
+                    CALL_EXPR@394..415
+                      NAME_EXPR@394..397
+                        NAME_REF@394..397
+                          IDENT@394..397 "u32"
+                      ARG_LIST@397..415
+                        L_PAREN@397..398 "("
+                        ARG@398..414
+                          BIN_EXPR@398..414
+                            CALL_EXPR@398..408
+                              NAME_EXPR@398..406
+                                NAME_REF@398..406
+                                  IDENT@398..406 "pid_tgid"
+                              ARG_LIST@406..408
+                                L_PAREN@406..407 "("
+                                R_PAREN@407..408 ")"
+                            SHR@409..411 ">>"
+                            LITERAL@412..414
+                              INT@412..414 "32"
+                        R_PAREN@414..415 ")"
+                  COMMA@415..416 ","
+                  ARG@417..446
+                    NAME@417..421
+                      IDENT@417..421 "text"
+                    EQ@421..422 "="
+                    CALL_EXPR@422..446
+                      NAME_EXPR@422..435
+                        NAME_REF@422..435
+                          IDENT@422..435 "read_user_str"
+                      ARG_LIST@435..446
+                        L_PAREN@435..436 "("
+                        ARG@436..445
+                          CALL_EXPR@436..445
+                            FIELD_EXPR@436..443
+                              NAME_EXPR@436..439
+                                NAME_REF@436..439
+                                  IDENT@436..439 "ctx"
+                              DOT@439..440 "."
+                              NAME_REF@440..443
+                                IDENT@440..443 "ret"
+                            ARG_LIST@443..445
+                              L_PAREN@443..444 "("
+                              R_PAREN@444..445 ")"
+                        R_PAREN@445..446 ")"
+                  R_PAREN@446..447 ")"
+            R_PAREN@447..448 ")"
+        NEWLINE@448..449 "\n"
+      RETURN_STMT@453..462
+        RETURN_KW@453..459 "return"
+        LITERAL@460..461
+          INT@460..461 "0"
+        NEWLINE@461..462 "\n"
+      DEDENT@462..462 ""

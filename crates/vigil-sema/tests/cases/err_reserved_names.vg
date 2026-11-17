@@ -1,0 +1,13 @@
+struct u8:
+    x: u32
+
+enum bool:
+    Yes
+
+protocol Option:
+    def f(self) -> u32: ...
+
+comptime def forever(n: u32) -> u32:
+    return forever(n)
+
+const LIMIT: u32 = forever(1)

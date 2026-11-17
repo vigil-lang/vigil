@@ -1,0 +1,11 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: arrays take one index
+   ╭─[ main.vg:5:5 ]
+   │
+ 5 │     a[] = 1
+   │     ─┬─  
+   │      ╰─── found 0 indices
+───╯

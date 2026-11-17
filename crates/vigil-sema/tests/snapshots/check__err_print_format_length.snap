@@ -1,0 +1,37 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0501] Error: this message is too long for `print`
+   ╭─[ main.vg:7:11 ]
+   │
+ 7 │     print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+   │           ────────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────────  
+   │                                                                           ╰────────────────────────────────────────────────────────────────── a format string of 129 bytes, at most 128
+   │ 
+   │ Help: split the message into several `print` calls
+   │ 
+   │ Note: the format string is built on the 512-byte stack
+───╯
+[E0501] Error: this message is too long for `print`
+   ╭─[ main.vg:8:11 ]
+   │
+ 8 │     print(f"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq{a} %")
+   │           ────────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────────────  
+   │                                                                           ╰───────────────────────────────────────────────────────────────── a format string of 129 bytes, at most 128
+   │ 
+   │ Help: split the message into several `print` calls
+   │ 
+   │ Note: the format string is built on the 512-byte stack
+───╯
+[E0501] Error: this message is too long for `print`
+   ╭─[ main.vg:9:11 ]
+   │
+ 9 │     print(f"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq{True}{3}")
+   │           ─────────────────────────────────────────────────────────────────┬─────────────────────────────────────────────────────────────────  
+   │                                                                            ╰─────────────────────────────────────────────────────────────────── a format string of 129 bytes, at most 128
+   │ 
+   │ Help: split the message into several `print` calls
+   │ 
+   │ Note: the format string is built on the 512-byte stack
+───╯

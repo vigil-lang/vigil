@@ -1,0 +1,6 @@
+---
+source: crates/vigil-diagnostics/src/render.rs
+expression: "render(&sources, &diagnostic)"
+---
+[E9998] Error: could not read `vigil.toml`
+    Note: permission denied

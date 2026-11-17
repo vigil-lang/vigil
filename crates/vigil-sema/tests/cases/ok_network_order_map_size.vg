@@ -1,0 +1,22 @@
+from std.bpf import KprobeContext
+
+# a header has no padding: 1 + 252 + 1 = 254 bytes, within the 256 of a
+# hash value (with C padding it would be 260)
+@network_order
+struct Packed:
+    a: u8
+    b: u32[63]
+    c: u8
+
+# a header inside a C struct is aligned to 1: 1 + 254 + 1 = 256 bytes
+struct Holder:
+    tag: u8
+    header: Packed
+    end: u8
+
+map values: Hash[u32, Packed](max_entries=8)
+map holders: Hash[u32, Holder](max_entries=8)
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    return 0

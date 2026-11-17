@@ -1,0 +1,47 @@
+from std.bpf import KprobeContext, TracepointContext, pid_tgid
+
+@kprobe("do_sys_openat2")
+def wrong_context(ctx: TracepointContext) -> i32:
+    return 0
+
+@kprobe("do_sys_openat2")
+def no_return_type(ctx: KprobeContext):
+    pass
+
+@kprobe
+def no_target(ctx: KprobeContext) -> i32:
+    return 0
+
+@tracepoint("sched_switch")
+def bad_tracepoint(ctx: TracepointContext) -> i32:
+    return 0
+
+@xdp
+def not_yet(ctx: u64) -> i32:
+    return 0
+
+@helper(14)
+def my_helper() -> u64: ...
+
+@context("kprobe")
+struct MyContext:
+    pass
+
+def strings() -> u32:
+    s = "hello"
+    t = f"x {s}"
+    ctx = KprobeContext()
+    return 0
+
+def even(n: u32) -> bool:
+    if n == 0:
+        return True
+    return odd(n - 1)
+
+def odd(n: u32) -> bool:
+    if n == 0:
+        return False
+    return even(n - 1)
+
+def fact(n: u64) -> u64:
+    return n * fact(n - 1)

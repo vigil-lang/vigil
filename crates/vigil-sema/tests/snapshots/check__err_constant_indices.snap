@@ -1,0 +1,32 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0414] Error: index 5 is out of bounds
+   ╭─[ main.vg:7:11 ]
+   │
+ 7 │     x = a[I]
+   │           ┬  
+   │           ╰── the array has 4 elements
+───╯
+[E0414] Error: index 4 is out of bounds
+   ╭─[ main.vg:8:11 ]
+   │
+ 8 │     y = a[J * 2]
+   │           ──┬──  
+   │             ╰──── the array has 4 elements
+───╯
+[E0414] Error: index 4 is out of bounds
+   ╭─[ main.vg:9:7 ]
+   │
+ 9 │     a[I - 1] = 0
+   │       ──┬──  
+   │         ╰──── the array has 4 elements
+───╯
+[E0414] Error: index 4 is out of bounds
+    ╭─[ main.vg:12:14 ]
+    │
+ 12 │     return a[4]
+    │              ┬  
+    │              ╰── the array has 4 elements
+────╯

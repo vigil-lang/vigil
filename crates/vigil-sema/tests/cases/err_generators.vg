@@ -1,0 +1,57 @@
+# The generators of `@property(x=g)`: functions (or methods without
+# `self`) whose parameters are data, returning the type of `x` or an
+# option of it.
+from std.net import XdpContext, XdpAction
+
+map counts: Hash[u32, u64](max_entries=4)
+
+def wrong_type(n: u32) -> u64:
+    return u64(n)
+
+def takes_a_context(ctx: XdpContext) -> u32:
+    return 0
+
+def pair[T](a: T) -> T:
+    return a
+
+@xdp(iface="eth0")
+def program(ctx: XdpContext) -> XdpAction:
+    return XdpAction.PASS
+
+struct Point:
+    x: u32
+
+    def norm(self) -> u32:
+        return self.x
+
+@property(x=nothing)
+def unknown(x: u32) -> bool:
+    return True
+
+@property(x=counts)
+def a_map(x: u32) -> bool:
+    return True
+
+@property(x=wrong_type)
+def returns_another_type(x: u32) -> bool:
+    return True
+
+@property(x=takes_a_context)
+def parameters_not_data(x: u32) -> bool:
+    return True
+
+@property(x=pair)
+def generic(x: u32) -> bool:
+    return True
+
+@property(x=program)
+def a_program(x: u32) -> bool:
+    return True
+
+@property(x=Point.norm)
+def a_method_with_self(x: u32) -> bool:
+    return True
+
+@property(y=wrong_type)
+def not_a_parameter(x: u32) -> bool:
+    return True

@@ -1,0 +1,178 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "check(\"def f(n: u32) -> u32:\\n    @bounded(16)\\n    while n > 0:\\n        n -= 1\\n        if n == 3: break\\n    \\\n         for i in range(4):\\n        continue\\n    comptime:\\n        pass\\n    match n:\\n        \\\n         case Some(x) if x > 1:\\n            return x\\n        case E.A | -1:\\n            pass\\n    return 0\\n\")"
+---
+SOURCE_FILE@0..281
+  FN_DEF@0..281
+    DEF_KW@0..3 "def"
+    NAME@4..5
+      IDENT@4..5 "f"
+    PARAM_LIST@5..13
+      L_PAREN@5..6 "("
+      PARAM@6..12
+        NAME@6..7
+          IDENT@6..7 "n"
+        COLON@7..8 ":"
+        PATH_TYPE@9..12
+          PATH@9..12
+            NAME_REF@9..12
+              IDENT@9..12 "u32"
+      R_PAREN@12..13 ")"
+    RET_TYPE@14..20
+      ARROW@14..16 "->"
+      PATH_TYPE@17..20
+        PATH@17..20
+          NAME_REF@17..20
+            IDENT@17..20 "u32"
+    COLON@20..21 ":"
+    BLOCK@21..281
+      NEWLINE@21..22 "\n"
+      INDENT@26..26 ""
+      WHILE_STMT@26..100
+        DECORATOR@26..39
+          AT@26..27 "@"
+          PATH@27..34
+            NAME_REF@27..34
+              IDENT@27..34 "bounded"
+          ARG_LIST@34..38
+            L_PAREN@34..35 "("
+            ARG@35..37
+              LITERAL@35..37
+                INT@35..37 "16"
+            R_PAREN@37..38 ")"
+          NEWLINE@38..39 "\n"
+        WHILE_KW@43..48 "while"
+        BIN_EXPR@49..54
+          NAME_EXPR@49..50
+            NAME_REF@49..50
+              IDENT@49..50 "n"
+          GT@51..52 ">"
+          LITERAL@53..54
+            INT@53..54 "0"
+        COLON@54..55 ":"
+        BLOCK@55..100
+          NEWLINE@55..56 "\n"
+          INDENT@64..64 ""
+          AUG_ASSIGN_STMT@64..71
+            NAME_EXPR@64..65
+              NAME_REF@64..65
+                IDENT@64..65 "n"
+            MINUS_EQ@66..68 "-="
+            LITERAL@69..70
+              INT@69..70 "1"
+            NEWLINE@70..71 "\n"
+          IF_STMT@79..96
+            IF_KW@79..81 "if"
+            BIN_EXPR@82..88
+              NAME_EXPR@82..83
+                NAME_REF@82..83
+                  IDENT@82..83 "n"
+              EQ2@84..86 "=="
+              LITERAL@87..88
+                INT@87..88 "3"
+            COLON@88..89 ":"
+            BLOCK@90..96
+              BREAK_STMT@90..96
+                BREAK_KW@90..95 "break"
+                NEWLINE@95..96 "\n"
+          DEDENT@100..100 ""
+      FOR_STMT@100..140
+        FOR_KW@100..103 "for"
+        NAME@104..105
+          IDENT@104..105 "i"
+        IN_KW@106..108 "in"
+        CALL_EXPR@109..117
+          NAME_EXPR@109..114
+            NAME_REF@109..114
+              IDENT@109..114 "range"
+          ARG_LIST@114..117
+            L_PAREN@114..115 "("
+            ARG@115..116
+              LITERAL@115..116
+                INT@115..116 "4"
+            R_PAREN@116..117 ")"
+        COLON@117..118 ":"
+        BLOCK@118..140
+          NEWLINE@118..119 "\n"
+          INDENT@127..127 ""
+          CONTINUE_STMT@127..136
+            CONTINUE_KW@127..135 "continue"
+            NEWLINE@135..136 "\n"
+          DEDENT@140..140 ""
+      COMPTIME_STMT@140..167
+        COMPTIME_KW@140..148 "comptime"
+        COLON@148..149 ":"
+        BLOCK@149..167
+          NEWLINE@149..150 "\n"
+          INDENT@158..158 ""
+          PASS_STMT@158..163
+            PASS_KW@158..162 "pass"
+            NEWLINE@162..163 "\n"
+          DEDENT@167..167 ""
+      MATCH_STMT@167..272
+        MATCH_KW@167..172 "match"
+        NAME_EXPR@173..174
+          NAME_REF@173..174
+            IDENT@173..174 "n"
+        COLON@174..175 ":"
+        NEWLINE@175..176 "\n"
+        INDENT@184..184 ""
+        MATCH_ARM@184..236
+          CASE_KW@184..188 "case"
+          TUPLE_STRUCT_PAT@189..196
+            PATH@189..193
+              NAME_REF@189..193
+                IDENT@189..193 "Some"
+            L_PAREN@193..194 "("
+            BIND_PAT@194..195
+              NAME@194..195
+                IDENT@194..195 "x"
+            R_PAREN@195..196 ")"
+          IF_KW@197..199 "if"
+          BIN_EXPR@200..205
+            NAME_EXPR@200..201
+              NAME_REF@200..201
+                IDENT@200..201 "x"
+            GT@202..203 ">"
+            LITERAL@204..205
+              INT@204..205 "1"
+          COLON@205..206 ":"
+          BLOCK@206..236
+            NEWLINE@206..207 "\n"
+            INDENT@219..219 ""
+            RETURN_STMT@219..228
+              RETURN_KW@219..225 "return"
+              NAME_EXPR@226..227
+                NAME_REF@226..227
+                  IDENT@226..227 "x"
+              NEWLINE@227..228 "\n"
+            DEDENT@236..236 ""
+        MATCH_ARM@236..272
+          CASE_KW@236..240 "case"
+          OR_PAT@241..249
+            PATH_PAT@241..244
+              PATH@241..244
+                NAME_REF@241..242
+                  IDENT@241..242 "E"
+                DOT@242..243 "."
+                NAME_REF@243..244
+                  IDENT@243..244 "A"
+            PIPE@245..246 "|"
+            LITERAL_PAT@247..249
+              MINUS@247..248 "-"
+              INT@248..249 "1"
+          COLON@249..250 ":"
+          BLOCK@250..272
+            NEWLINE@250..251 "\n"
+            INDENT@263..263 ""
+            PASS_STMT@263..268
+              PASS_KW@263..267 "pass"
+              NEWLINE@267..268 "\n"
+            DEDENT@272..272 ""
+        DEDENT@272..272 ""
+      RETURN_STMT@272..281
+        RETURN_KW@272..278 "return"
+        LITERAL@279..280
+          INT@279..280 "0"
+        NEWLINE@280..281 "\n"
+      DEDENT@281..281 ""

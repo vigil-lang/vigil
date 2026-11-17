@@ -1,0 +1,22 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0407] Error: cannot assign to an element of map `blobs`
+   ╭─[ main.vg:9:5 ]
+   │
+ 9 │     blobs[0] = b
+   │     ────┬───  
+   │         ╰───── maps are written with their methods
+   │ 
+   │ Help: write `blobs.insert(0, b)`, or change the slot through `blobs.get(0)`
+───╯
+[E0407] Error: cannot assign to an element of map `blobs`
+    ╭─[ main.vg:10:5 ]
+    │
+ 10 │     blobs[1] += 1
+    │     ────┬───  
+    │         ╰───── maps are written with their methods
+    │ 
+    │ Help: write `blobs.insert(1, value)`, or change the slot through `blobs.get(1)`
+────╯

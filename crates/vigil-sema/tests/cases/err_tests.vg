@@ -1,0 +1,26 @@
+# `@test` functions take nothing and return `bool`.
+from std.net import XdpContext, XdpAction
+
+@test
+def takes_an_argument(x: u32) -> bool:
+    return x == 1
+
+@test
+def returns_an_integer() -> u32:
+    return 1
+
+@test(name="x")
+def has_arguments() -> bool:
+    return True
+
+@test
+@xdp
+def also_a_program(ctx: XdpContext) -> XdpAction:
+    return XdpAction.PASS
+
+struct S:
+    x: u32
+
+    @test
+    def method(self) -> bool:
+        return True

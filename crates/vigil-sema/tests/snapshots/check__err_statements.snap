@@ -1,0 +1,114 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0407] Error: cannot assign to constant `LIMIT`
+   ╭─[ main.vg:6:5 ]
+   │
+ 1 │ const LIMIT: u32 = 10
+   │       ──┬──  
+   │         ╰──── the constant is defined here
+   │ 
+ 6 │     LIMIT = 3
+   │     ──┬──  
+   │       ╰──── constants are immutable
+   │ 
+   │ Help: to change the value, copy it into a variable: `limit = LIMIT`
+───╯
+[E0302] Error: `total` is already defined
+   ╭─[ main.vg:8:12 ]
+   │
+ 7 │     total: u32 = 0
+   │     ──┬──  
+   │       ╰──── defined here
+ 8 │     total: u32 = 1
+   │            ─┬─  
+   │             ╰─── annotations only declare new variables
+   │ 
+   │ Help: to change `total`, assign it without the annotation; to declare another variable, choose another name
+───╯
+[E0411] Error: `break` outside of a loop
+   ╭─[ main.vg:9:5 ]
+   │
+ 9 │     break
+   │     ───┬──  
+   │        ╰──── not in a `for` or `while` loop
+───╯
+[E0300] Error: cannot find `inner` in this scope
+    ╭─[ main.vg:10:12 ]
+    │
+  5 │         inner = 1
+    │         ──┬──  
+    │           ╰──── declared here, in a block that has ended
+    │ 
+ 10 │     return inner
+    │            ──┬──  
+    │              ╰──── not found
+    │ 
+    │ Help: variables live until the end of their block; assign `inner` before the block to use it after
+────╯
+[E0409] Error: `missing_return` may end without returning
+    ╭─[ main.vg:12:32 ]
+    │
+ 12 │ def missing_return(c: bool) -> u32:
+    │     ───────┬──────             ─┬─  
+    │            ╰──────────────────────── some paths reach the end of this function
+    │                                 │   
+    │                                 ╰─── returns `u32`
+    │ 
+    │ Help: end every path with `return value`
+────╯
+[E0400] Error: missing return value
+    ╭─[ main.vg:17:5 ]
+    │
+ 16 │ def bad_returns(x: u32) -> u32:
+    │                            ─┬─  
+    │                             ╰─── the return type of `bad_returns`
+ 17 │     return
+    │     ───┬───  
+    │        ╰───── expected a value of type `u32`
+────╯
+[E0400] Error: `no_value` returns nothing
+    ╭─[ main.vg:20:12 ]
+    │
+ 20 │     return 1
+    │            ┬  
+    │            ╰── unexpected value
+    │ 
+    │ Help: declare its return type, as in `def no_value(...) -> u32:`
+────╯
+[E0400] Error: this expression has no value
+    ╭─[ main.vg:23:9 ]
+    │
+ 23 │     x = no_value()
+    │         ─────┬────  
+    │              ╰────── returns nothing
+────╯
+[E0408] Error: `?` needs a function that can fail
+    ╭─[ main.vg:27:12 ]
+    │
+ 26 │ def try_outside(xs: u32?) -> u32:
+    │                              ─┬─  
+    │                               ╰─── `try_outside` returns `u32`, not an `Option`
+ 27 │     return xs?
+    │            ─┬─  
+    │             ╰─── `None` would leave the function here
+    │ 
+    │ Help: handle the `None` case with `match`, or make the function return an `Option`
+    │ 
+    │ Note: in eBPF programs, `?` returns the default action of the program type
+────╯
+[E0408] Error: `?` needs an `Option`, found `u32`
+    ╭─[ main.vg:30:9 ]
+    │
+ 30 │     y = x?
+    │         ┬  
+    │         ╰── not an `Option`
+────╯
+[E0407] Error: a declaration needs an initial value
+    ╭─[ main.vg:34:5 ]
+    │
+ 34 │     y: u32
+    │     ───┬───  
+    │        ╰───── add `= value`
+────╯

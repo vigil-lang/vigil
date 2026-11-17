@@ -1,0 +1,11 @@
+# Shows who opens files: the process, its parent and its user, read from
+# the kernel's `task_struct` with CO-RE (relocated for the running kernel).
+from std.bpf import KprobeContext, current_task
+from kernel import task_struct
+
+@kprobe("do_sys_openat2")
+def who(ctx: KprobeContext) -> i32:
+    task = kptr[task_struct](current_task())
+    parent = task.real_parent
+    print(f"pid {task.tgid} parent {parent.tgid} uid {task.cred.uid.val}")
+    return 0

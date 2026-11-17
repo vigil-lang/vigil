@@ -1,0 +1,34 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0302] Error: `u8` is a builtin type
+   ╭─[ main.vg:1:8 ]
+   │
+ 1 │ struct u8:
+   │        ─┬  
+   │         ╰── cannot be redefined
+───╯
+[E0302] Error: `bool` is a builtin type
+   ╭─[ main.vg:4:6 ]
+   │
+ 4 │ enum bool:
+   │      ──┬─  
+   │        ╰─── cannot be redefined
+───╯
+[E0302] Error: `Option` is a builtin type
+   ╭─[ main.vg:7:10 ]
+   │
+ 7 │ protocol Option:
+   │          ───┬──  
+   │             ╰──── cannot be redefined
+───╯
+[E0415] Error: `forever` is recursive
+    ╭─[ main.vg:10:14 ]
+    │
+ 10 │ comptime def forever(n: u32) -> u32:
+    │              ───┬───  
+    │                 ╰───── calls itself through `forever` → `forever`
+    │ 
+    │ Note: recursion is not allowed in Vigil, compile-time functions included; use a bounded loop instead
+────╯

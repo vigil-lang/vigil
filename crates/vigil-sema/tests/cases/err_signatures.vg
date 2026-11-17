@@ -1,0 +1,25 @@
+struct Node:
+    value: u32
+    next: Node?
+
+type Loop = Loop
+
+const A: u32 = B + 1
+const B: u32 = A
+const BIG: u8 = 1000
+const DIV: u32 = 1 // 0
+const P: Point = 0
+
+struct Point:
+    x: u32
+    x: u32
+    data: bytes
+    opt: Option
+    other: helper
+    zero: u8[0]
+
+def helper(a: u32, a: u32, b) -> u32:
+    return 0
+
+def self_outside(self) -> u32:
+    return 0

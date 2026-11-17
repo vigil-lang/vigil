@@ -1,0 +1,18 @@
+type Pair[T] = T[2]
+type Sized[N: usize] = u8[N]
+type Loop[T] = Loop[T]
+
+def a(x: Pair) -> u8:
+    return 0
+
+def b(x: Pair[u8, u16]) -> u8:
+    return 0
+
+def c(x: Sized[u8]) -> u8:
+    return 0
+
+def d(x: Pair[4]) -> u8:
+    return 0
+
+def e(x: Loop[u8]) -> u8:
+    return 0

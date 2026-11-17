@@ -1,0 +1,54 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: `ProgArray` takes no type arguments, as in `ProgArray(max_entries=4)`
+   ╭─[ main.vg:5:12 ]
+   │
+ 5 │ map typed: ProgArray[u32](max_entries=2)
+   │            ────┬────  
+   │                ╰────── expected `map name: ProgArray(max_entries=N)`
+───╯
+[E0412] Error: invalid arguments for `@tail`
+   ╭─[ main.vg:8:1 ]
+   │
+ 8 │ @tail(stages, 2)
+   │ ────────┬────────  
+   │         ╰────────── the index is not in 0..2
+   │ 
+   │ Help: write `@tail(stages, 0)`, with `map stages: ProgArray(max_entries=N)`
+───╯
+[E0412] Error: invalid arguments for `@tail`
+    ╭─[ main.vg:13:1 ]
+    │
+ 13 │ @tail(counts, 0)
+    │ ────────┬────────  
+    │         ╰────────── the map is not a `ProgArray`
+    │ 
+    │ Help: write `@tail(stages, 0)`, with `map stages: ProgArray(max_entries=N)`
+────╯
+[E0412] Error: `@tail` applies to programs
+    ╭─[ main.vg:17:1 ]
+    │
+ 17 │ @tail(stages, 0)
+    │ ────────┬────────  
+    │         ╰────────── this function is not a program
+    │ 
+    │ Help: add the decorator of its program type, as in `@xdp`
+────╯
+[E0400] Error: `tail_call` takes the context of the program
+    ╭─[ main.vg:23:22 ]
+    │
+ 23 │     stages.tail_call(7, 0)
+    │                      ┬  
+    │                      ╰── found `{integer}`
+────╯
+[E0401] Error: `ProgArray` maps have no method `get`
+    ╭─[ main.vg:24:12 ]
+    │
+ 24 │     stages.get(0)
+    │            ─┬─  
+    │             ╰─── not a method of `stages`
+    │ 
+    │ Note: the methods are `tail_call`
+────╯

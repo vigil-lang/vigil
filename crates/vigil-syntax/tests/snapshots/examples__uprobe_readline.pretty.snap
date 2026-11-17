@@ -1,0 +1,16 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: printed
+---
+from std.bpf import KprobeContext, pid_tgid, read_user_str
+
+struct Line:
+    pid: u32
+    text: bytes[128]
+
+event lines: RingBuf[Line](size=64 * 1024)
+
+@uretprobe("/bin/bash:readline")
+def on_readline(ctx: KprobeContext) -> i32:
+    lines.emit(Line(pid=u32(pid_tgid() >> 32), text=read_user_str(ctx.ret())))
+    return 0

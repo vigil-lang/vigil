@@ -1,0 +1,128 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..454
+  IMPORT@149..197
+    FROM_KW@149..153 "from"
+    PATH@154..161
+      NAME_REF@154..157
+        IDENT@154..157 "std"
+      DOT@157..158 "."
+      NAME_REF@158..161
+        IDENT@158..161 "bpf"
+    IMPORT_KW@162..168 "import"
+    IMPORT_NAME@169..182
+      NAME_REF@169..182
+        IDENT@169..182 "KprobeContext"
+    COMMA@182..183 ","
+    IMPORT_NAME@184..196
+      NAME_REF@184..196
+        IDENT@184..196 "current_task"
+    NEWLINE@196..197 "\n"
+  IMPORT@197..228
+    FROM_KW@197..201 "from"
+    PATH@202..208
+      NAME_REF@202..208
+        IDENT@202..208 "kernel"
+    IMPORT_KW@209..215 "import"
+    IMPORT_NAME@216..227
+      NAME_REF@216..227
+        IDENT@216..227 "task_struct"
+    NEWLINE@227..228 "\n"
+  FN_DEF@229..454
+    DECORATOR@229..255
+      AT@229..230 "@"
+      PATH@230..236
+        NAME_REF@230..236
+          IDENT@230..236 "kprobe"
+      ARG_LIST@236..254
+        L_PAREN@236..237 "("
+        ARG@237..253
+          LITERAL@237..253
+            STRING@237..253 "\"do_sys_openat2\""
+        R_PAREN@253..254 ")"
+      NEWLINE@254..255 "\n"
+    DEF_KW@255..258 "def"
+    NAME@259..262
+      IDENT@259..262 "who"
+    PARAM_LIST@262..282
+      L_PAREN@262..263 "("
+      PARAM@263..281
+        NAME@263..266
+          IDENT@263..266 "ctx"
+        COLON@266..267 ":"
+        PATH_TYPE@268..281
+          PATH@268..281
+            NAME_REF@268..281
+              IDENT@268..281 "KprobeContext"
+      R_PAREN@281..282 ")"
+    RET_TYPE@283..289
+      ARROW@283..285 "->"
+      PATH_TYPE@286..289
+        PATH@286..289
+          NAME_REF@286..289
+            IDENT@286..289 "i32"
+    COLON@289..290 ":"
+    BLOCK@290..454
+      NEWLINE@290..291 "\n"
+      INDENT@295..295 ""
+      ASSIGN_STMT@295..336
+        NAME_EXPR@295..299
+          NAME_REF@295..299
+            IDENT@295..299 "task"
+        EQ@300..301 "="
+        CALL_EXPR@302..335
+          INDEX_EXPR@302..319
+            NAME_EXPR@302..306
+              NAME_REF@302..306
+                IDENT@302..306 "kptr"
+            INDEX_LIST@306..319
+              L_BRACK@306..307 "["
+              NAME_EXPR@307..318
+                NAME_REF@307..318
+                  IDENT@307..318 "task_struct"
+              R_BRACK@318..319 "]"
+          ARG_LIST@319..335
+            L_PAREN@319..320 "("
+            ARG@320..334
+              CALL_EXPR@320..334
+                NAME_EXPR@320..332
+                  NAME_REF@320..332
+                    IDENT@320..332 "current_task"
+                ARG_LIST@332..334
+                  L_PAREN@332..333 "("
+                  R_PAREN@333..334 ")"
+            R_PAREN@334..335 ")"
+        NEWLINE@335..336 "\n"
+      ASSIGN_STMT@340..366
+        NAME_EXPR@340..346
+          NAME_REF@340..346
+            IDENT@340..346 "parent"
+        EQ@347..348 "="
+        FIELD_EXPR@349..365
+          NAME_EXPR@349..353
+            NAME_REF@349..353
+              IDENT@349..353 "task"
+          DOT@353..354 "."
+          NAME_REF@354..365
+            IDENT@354..365 "real_parent"
+        NEWLINE@365..366 "\n"
+      EXPR_STMT@370..441
+        CALL_EXPR@370..440
+          NAME_EXPR@370..375
+            NAME_REF@370..375
+              IDENT@370..375 "print"
+          ARG_LIST@375..440
+            L_PAREN@375..376 "("
+            ARG@376..439
+              LITERAL@376..439
+                FSTRING@376..439 "f\"pid {task.tgid} parent {parent.tgid} uid {task.cred.uid.val}\""
+            R_PAREN@439..440 ")"
+        NEWLINE@440..441 "\n"
+      RETURN_STMT@445..454
+        RETURN_KW@445..451 "return"
+        LITERAL@452..453
+          INT@452..453 "0"
+        NEWLINE@453..454 "\n"
+      DEDENT@454..454 ""

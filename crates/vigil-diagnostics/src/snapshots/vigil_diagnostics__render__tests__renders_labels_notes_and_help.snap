@@ -1,0 +1,18 @@
+---
+source: crates/vigil-diagnostics/src/render.rs
+expression: "render(&sources, &diagnostic)"
+---
+[E9999] Error: mismatched types
+   ╭─[ main.vg:2:12 ]
+   │
+ 1 │ def f(x: u32) -> u64:
+   │                  ─┬─  
+   │                   ╰─── return type declared here
+ 2 │     return x
+   │            ┬  
+   │            ╰── expected `u64`, found `u32`
+   │ 
+   │ Help: use `u64(x)`
+   │ 
+   │ Note: integer types are never converted implicitly
+───╯

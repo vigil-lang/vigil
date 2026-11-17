@@ -1,0 +1,16 @@
+[package]
+name = "vigil-codegen-llvm"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+vigil-diagnostics.workspace = true
+vigil-target.workspace = true
+vigil-sema.workspace = true
+vigil-btf.workspace = true
+la-arena.workspace = true
+object.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+object.workspace = true

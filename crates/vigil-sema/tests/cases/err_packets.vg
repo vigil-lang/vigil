@@ -1,0 +1,30 @@
+from std.net import XdpContext, TcContext, XdpAction, TcAction, EthHdr
+from std.bpf import KprobeContext
+
+@xdp
+def wrong_action(ctx: XdpContext) -> TcAction:
+    return TcAction.OK
+
+@tc(direction="sideways")
+def bad_direction(ctx: TcContext) -> TcAction:
+    return TcAction.OK
+
+@xdp(interface="eth0")
+def bad_param(ctx: XdpContext) -> XdpAction:
+    return XdpAction.PASS
+
+@xdp
+def bad_parse(ctx: XdpContext) -> XdpAction:
+    a = ctx.parse[u32](0)?
+    b = ctx.parse[EthHdr]()?
+    c = ctx.len(1)
+    return XdpAction.PASS
+
+@kprobe("f")
+def no_packet(ctx: KprobeContext) -> i32:
+    eth = ctx.parse[EthHdr](0)?
+    return 0
+
+@network_order(1)
+struct Bad:
+    x: u16

@@ -1,0 +1,5 @@
+def f() -> i32:
+    a, b = 1, 2, 3
+    c, d: i32 = 1, 2
+    e = (a, b)
+    return a

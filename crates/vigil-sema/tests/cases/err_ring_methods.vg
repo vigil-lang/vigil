@@ -1,0 +1,12 @@
+# The note lists the methods programs may call, `count` and `last` apart.
+from std.bpf import KprobeContext
+
+struct Seen:
+    pid: u32
+
+event seen: RingBuf[Seen](size=4096)
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    seen.get(1)
+    return 0

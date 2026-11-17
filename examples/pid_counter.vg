@@ -1,0 +1,11 @@
+# Counts the files opened by each process; `vigil run` shows the map.
+from std.bpf import KprobeContext, pid_tgid
+
+map opens: Hash[u32, u64](max_entries=10240)
+
+@kprobe("do_sys_openat2")
+def count_opens(ctx: KprobeContext) -> i32:
+    pid = u32(pid_tgid() >> 32)
+    count = opens.get_or_insert(pid, 0)
+    count += 1
+    return 0

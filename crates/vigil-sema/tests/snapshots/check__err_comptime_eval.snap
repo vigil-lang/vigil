@@ -1,0 +1,34 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0414] Error: cannot compute `T`
+    ╭─[ main.vg:11:19 ]
+    │
+  8 │         t[i] = 1
+    │         ──┬─  
+    │           ╰─── fails here, in `table`
+    │ 
+ 11 │ const T: u32[4] = table()
+    │                   ───┬───  
+    │                      ╰───── index 4 is out of bounds (length 4)
+────╯
+[E0414] Error: cannot compute `STAMP`
+    ╭─[ main.vg:20:20 ]
+    │
+ 15 │     return ktime_ns()
+    │            ─────┬────  
+    │                 ╰────── fails here, in `now`
+    │ 
+ 18 │     return now()
+    │            ──┬──  
+    │              ╰──── in `stamp`, this call fails
+    │ 
+ 20 │ const STAMP: u64 = stamp()
+    │                    ───┬───  
+    │                       ╰───── `ktime_ns` cannot be called at compile time
+    │ 
+    │ Note 1: the failing calls: `stamp` → `now`
+    │ 
+    │ Note 2: it is a kernel helper, which only exists in the running program
+────╯

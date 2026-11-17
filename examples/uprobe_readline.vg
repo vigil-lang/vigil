@@ -1,0 +1,14 @@
+# Reports the lines bash reads: a probe on the return of `readline`, whose
+# result is the address of the line in the memory of the process.
+from std.bpf import KprobeContext, pid_tgid, read_user_str
+
+struct Line:
+    pid: u32
+    text: bytes[128]
+
+event lines: RingBuf[Line](size=64 * 1024)
+
+@uretprobe("/bin/bash:readline")
+def on_readline(ctx: KprobeContext) -> i32:
+    lines.emit(Line(pid=u32(pid_tgid() >> 32), text=read_user_str(ctx.ret())))
+    return 0

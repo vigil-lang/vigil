@@ -1,0 +1,44 @@
+---
+source: crates/vigil-sema/tests/check.rs
+assertion_line: 115
+expression: output
+---
+[E0402] Error: the programs of `stages` must have the same program type
+    ╭─[ main.vg:14:5 ]
+    │
+  9 │     stages.tail_call(ctx, 0)
+    │                      ─┬─  
+    │                       ╰─── a tail call with context `XdpContext` here
+    │ 
+ 14 │ def other(ctx: TcContext) -> TcAction:
+    │     ──┬──  
+    │       ╰──── `other` is a TC program
+    │ 
+    │ Note: the kernel refuses a tail call to a program of another type
+────╯
+[E0402] Error: the programs of `probes` must have the same program type
+    ╭─[ main.vg:25:5 ]
+    │
+ 25 │ def enter(ctx: KprobeContext) -> i32:
+    │     ──┬──  
+    │       ╰──── `enter` is a kprobe program
+    │ 
+ 34 │     probes.tail_call(ctx, 0)
+    │                      ─┬─  
+    │                       ╰─── a tail call with context `TcContext` here
+    │ 
+    │ Note: the kernel refuses a tail call to a program of another type
+────╯
+[E0402] Error: the programs of `probes` must have the same program type
+    ╭─[ main.vg:30:5 ]
+    │
+ 30 │ def leave(ctx: KprobeContext) -> i32:
+    │     ──┬──  
+    │       ╰──── `leave` is a kretprobe program
+    │ 
+ 34 │     probes.tail_call(ctx, 0)
+    │                      ─┬─  
+    │                       ╰─── a tail call with context `TcContext` here
+    │ 
+    │ Note: the kernel refuses a tail call to a program of another type
+────╯

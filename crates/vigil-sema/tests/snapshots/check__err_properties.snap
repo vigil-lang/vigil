@@ -1,0 +1,68 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0412] Error: a property is a function that returns `bool`
+   ╭─[ main.vg:7:5 ]
+   │
+ 7 │ def returns_an_integer(x: u32) -> u32:
+   │     ─────────┬────────  
+   │              ╰────────── not a property
+   │ 
+   │ Help: write `@property` before `def name(x: u32, ...) -> bool:`, outside any struct and without generic parameters
+───╯
+[E0412] Error: invalid argument for `@property`
+    ╭─[ main.vg:10:1 ]
+    │
+ 10 │ @property(cases=0)
+    │ ─────────┬─────────  
+    │          ╰─────────── expected `@property`, `@property(cases=N)` or `@property(x=generator)`
+    │ 
+    │ Help: `cases` is the number of values tried, from 1 to 1000000; `x=g` makes the values of the parameter `x` with the function `g`
+────╯
+[E0412] Error: invalid argument for `@property`
+    ╭─[ main.vg:14:1 ]
+    │
+ 14 │ @property(runs=10)
+    │ ─────────┬─────────  
+    │          ╰─────────── expected `@property`, `@property(cases=N)` or `@property(x=generator)`
+    │ 
+    │ Help: `cases` is the number of values tried, from 1 to 1000000; `x=g` makes the values of the parameter `x` with the function `g`
+────╯
+[E0412] Error: the parameters of a property must be data
+    ╭─[ main.vg:19:21 ]
+    │
+ 19 │ def takes_a_context(ctx: XdpContext) -> bool:
+    │                     ─┬─  
+    │                      ╰─── values of this type cannot be generated
+    │ 
+    │ Help: integers, booleans, arrays, structs, enums and options of those; not maps, references, contexts or kernel pointers
+────╯
+[E0600] Error: properties have no `@ensures`
+    ╭─[ main.vg:22:1 ]
+    │
+ 22 │ @ensures(result)
+    │ ────────┬────────  
+    │         ╰────────── the property is what it returns
+    │ 
+    │ Help: `@requires` on a property filters the values it is given
+────╯
+[E0412] Error: a function can be only one program, test, property or helper
+    ╭─[ main.vg:28:1 ]
+    │
+ 27 │ @property
+    │ ─────┬────  
+    │      ╰────── first one here
+ 28 │ @test
+    │ ───┬──  
+    │    ╰──── second decorator
+────╯
+[E0412] Error: a property is a function that returns `bool`
+    ╭─[ main.vg:36:9 ]
+    │
+ 36 │     def method(self) -> bool:
+    │         ───┬──  
+    │            ╰──── not a property
+    │ 
+    │ Help: write `@property` before `def name(x: u32, ...) -> bool:`, outside any struct and without generic parameters
+────╯

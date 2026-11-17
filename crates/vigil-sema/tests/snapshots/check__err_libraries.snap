@@ -1,0 +1,118 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0390] Error: `f64` is only allowed in comptime functions
+    ╭─[ main.vg:15:19 ]
+    │
+ 15 │ def uses_float(x: f64) -> u32:
+    │     ─────┬────    ─┬─  
+    │          ╰───────────── a run-time function
+    │                    │   
+    │                    ╰─── the verifier rejects floating point
+    │ 
+    │ Help: mark the function `comptime def`, or use `fixed[I, F]` from `std.fixed`
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:19:16 ]
+    │
+ 19 │ const H: u32 = half()
+    │          ─┬─   ───┬──  
+    │           ╰──────────── the type of the constant
+    │                   │    
+    │                   ╰──── returns `f64`, but the constant is `u32`
+────╯
+[E0414] Error: constants computed by a function need a type
+    ╭─[ main.vg:20:7 ]
+    │
+ 20 │ const N = not_comptime()
+    │       ┬  
+    │       ╰── write `N: T = ...`
+────╯
+[E0414] Error: constants computed by a function need a type
+    ╭─[ main.vg:21:7 ]
+    │
+ 21 │ const UNTYPED = table()
+    │       ───┬───  
+    │          ╰───── write `UNTYPED: T = ...`
+────╯
+[E0402] Error: expected an array length
+    ╭─[ main.vg:26:12 ]
+    │
+ 26 │     v: u32[T[0]]
+    │            ──┬─  
+    │              ╰─── found a type
+────╯
+[E0407] Error: `self` cannot be changed in this method
+    ╭─[ main.vg:30:9 ]
+    │
+ 30 │         self.n = n
+    │         ───┬──  
+    │            ╰──── part of `self`
+    │ 
+    │ Help: decorate the method with `@mut` to change its receiver in place
+────╯
+[E0407] Error: `self` cannot be changed in this method
+    ╭─[ main.vg:37:9 ]
+    │
+ 37 │         self.reset()
+    │         ──┬─  
+    │           ╰─── part of `self`
+    │ 
+    │ Help: decorate the method with `@mut` to change its receiver in place
+────╯
+[E0412] Error: `@mut` applies to methods that take `self`
+    ╭─[ main.vg:39:1 ]
+    │
+ 39 │ @mut
+    │ ──┬──  
+    │   ╰──── `free` does not take `self`
+────╯
+[E0402] Error: `half` runs at compile time
+    ╭─[ main.vg:44:9 ]
+    │
+ 44 │     x = half()
+    │         ──┬─  
+    │           ╰─── comptime functions cannot be called at run time
+    │ 
+    │ Help: compute the value in a constant: `const TABLE: T = half(...)`
+────╯
+[E0390] Error: floating-point numbers are only allowed in comptime code
+    ╭─[ main.vg:45:9 ]
+    │
+ 45 │     y = 2.5
+    │         ─┬─  
+    │          ╰─── the verifier rejects floating point
+    │ 
+    │ Help: compute the value in a `comptime def`, or use `fixed[I, F]` from `std.fixed`
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:47:18 ]
+    │
+ 47 │     v = m.matvec(Vector[u32, 2]([1, 2]))
+    │                  ───────────┬──────────  
+    │                             ╰──────────── expected `Vector[u32, 3]`, found `Vector[u32, 2]`
+────╯
+[E0402] Error: `reset` changes its receiver
+    ╭─[ main.vg:48:5 ]
+    │
+ 48 │     S(T, 1).reset()
+    │     ───┬───  
+    │        ╰───── not a variable
+    │ 
+    │ Help: store the value in a variable first
+────╯
+[E0404] Error: `+` cannot be applied to `{integer}[4]`
+    ╭─[ main.vg:49:9 ]
+    │
+ 49 │     z = [1] * LEN + 1
+    │         ────┬────  
+    │             ╰────── `+` applies to integers
+────╯
+[E0404] Error: `*` cannot be applied to `f64`
+    ╭─[ main.vg:50:15 ]
+    │
+ 50 │     w = [0] * x
+    │               ┬  
+    │               ╰── `*` applies to integers
+────╯

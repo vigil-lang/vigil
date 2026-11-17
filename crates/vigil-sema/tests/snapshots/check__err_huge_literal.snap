@@ -1,0 +1,11 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0406] Error: `340282366920938463463374607431768211455` does not fit in `u64`
+   ╭─[ main.vg:3:12 ]
+   │
+ 3 │     return 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+   │            ─────────────────┬────────────────  
+   │                             ╰────────────────── `u64` goes from 0 to 18446744073709551615
+───╯

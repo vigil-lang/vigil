@@ -1,0 +1,40 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0302] Error: the module `std.mine` has the name of the standard library
+   ╭─[ std/mine.vg:1:1 ]
+   │
+ 1 │ @helper(14)
+   │ │ 
+   │ ╰─ in this file
+   │ 
+   │ Help: rename the directory `std/`
+   │ 
+   │ Note: `std` and the modules under it are the standard library
+───╯
+[E0412] Error: `@helper` is reserved to the standard library
+   ╭─[ std/mine.vg:1:1 ]
+   │
+ 1 │ @helper(14)
+   │ ──────┬─────  
+   │       ╰─────── not allowed here
+───╯
+[E0412] Error: `@context` is reserved to the standard library
+   ╭─[ std/mine.vg:4:1 ]
+   │
+ 4 │ @context("xdp")
+   │ ────────┬───────  
+   │         ╰───────── not allowed here
+───╯
+[E0302] Error: the module `std` has the name of the standard library
+   ╭─[ std.vg:1:1 ]
+   │
+ 1 │ const X: u32 = 1
+   │ │ 
+   │ ╰─ in this file
+   │ 
+   │ Help: rename `std.vg`
+   │ 
+   │ Note: `std` and the modules under it are the standard library
+───╯

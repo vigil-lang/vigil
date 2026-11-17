@@ -1,0 +1,41 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0400] Error: `A` does not implement `Scorer`
+   ╭─[ main.vg:6:10 ]
+   │
+ 2 │     def score(self, x: u32) -> i64: ...
+   │         ──┬──  
+   │           ╰──── required here
+   │ 
+ 6 │ struct A(Scorer):
+   │          ───┬──  
+   │             ╰──── `score` takes `x: u16`, the protocol requires `u32`
+   │ 
+ 9 │     def score(self, x: u16) -> i64:
+   │         ──┬──  
+   │           ╰──── implemented here
+───╯
+[E0400] Error: `B` does not implement `Scorer`
+    ╭─[ main.vg:16:10 ]
+    │
+  2 │     def score(self, x: u32) -> i64: ...
+    │         ──┬──  
+    │           ╰──── required here
+    │ 
+ 16 │ struct B(Scorer):
+    │          ───┬──  
+    │             ╰──── `score` returns `i32`, the protocol requires `i64`
+    │ 
+ 19 │     def score(self, x: u32) -> i32:
+    │         ──┬──  
+    │           ╰──── implemented here
+────╯
+[E0300] Error: cannot find type `Unknown`
+    ╭─[ main.vg:36:20 ]
+    │
+ 36 │     def f(self, x: Unknown) -> u8: ...
+    │                    ───┬───  
+    │                       ╰───── not found in this scope
+────╯

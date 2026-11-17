@@ -1,0 +1,52 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0414] Error: `now` is not known at compile time
+   ╭─[ main.vg:7:16 ]
+   │
+ 7 │         late = now + 1
+   │                ─┬─  
+   │                 ╰─── a variable of the run-time code
+   │ 
+   │ Help: comptime blocks read constants and the variables of comptime blocks
+───╯
+[E0414] Error: `now` is not known at compile time
+   ╭─[ main.vg:8:9 ]
+   │
+ 8 │         now = 3
+   │         ─┬─  
+   │          ╰─── a variable of the run-time code
+   │ 
+   │ Help: comptime blocks change only their own variables
+───╯
+[E0414] Error: index 2 is out of bounds
+    ╭─[ main.vg:11:15 ]
+    │
+ 11 │         table[2] = 1
+    │               ┬  
+    │               ╰── the array has 2 elements
+────╯
+[E0390] Error: floating-point numbers are only allowed in comptime code
+    ╭─[ main.vg:12:9 ]
+    │
+ 12 │     x = ratio
+    │         ──┬──  
+    │           ╰──── the verifier rejects floating point
+    │ 
+    │ Help: compute the value in a `comptime def`, or use `fixed[I, F]` from `std.fixed`
+────╯
+[E0411] Error: `break` outside of a loop
+    ╭─[ main.vg:15:13 ]
+    │
+ 15 │             break
+    │             ───┬──  
+    │                ╰──── not in a `for` or `while` loop
+────╯
+[E0414] Error: `return` cannot leave a comptime block
+    ╭─[ main.vg:17:9 ]
+    │
+ 17 │         return 1
+    │         ────┬────  
+    │             ╰────── the block runs in the compiler
+────╯

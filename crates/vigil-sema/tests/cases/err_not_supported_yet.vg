@@ -1,0 +1,17 @@
+map counters: Hash[u32, u64](max_entries=16)
+event alerts: RingBuf[u32](size=4096)
+
+protocol Model:
+    def predict(self) -> u32: ...
+
+struct Mlp[T](Model):
+    w: u32
+
+def generic[T](x: T) -> T:
+    return x
+
+def floats() -> u32:
+    x = 1.5
+    comptime:
+        pass
+    return 0

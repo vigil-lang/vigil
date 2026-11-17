@@ -1,0 +1,23 @@
+from std.bpf import KprobeContext
+from std.ml.tensor import Vector, Matrix
+
+type Vec4[T] = Vector[T, 4]
+type Square[T, N: usize] = Matrix[T, N, N]
+type Bytes[N: usize] = u8[N]
+
+def first(v: Vec4[i32]) -> i32:
+    return v.get(0)
+
+def diag[N: usize](m: Square[i32, N]) -> i32:
+    total: i32 = 0
+    for i in range(N):
+        total += m.get(i, i)
+    return total
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    v: Vec4[i32] = Vector[i32, 4]([1, 2, 3, 4])
+    m = Matrix[i32, 2, 2]([[1, 2], [3, 4]])
+    b: Bytes[3] = [u8(1), u8(2), u8(3)]
+    print(f"{first(v)} {diag(m)} {b[2]}")
+    return 0

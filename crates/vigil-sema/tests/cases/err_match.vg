@@ -1,0 +1,39 @@
+enum Color:
+    Red
+    Green
+    Blue(u8)
+
+def colors(c: Color) -> u32:
+    match c:
+        case Color.Red:
+            return 1
+        case Color.Blue(x, y):
+            return 2
+
+def numbers(n: u8) -> u32:
+    match n:
+        case 1:
+            return 1
+        case 300:
+            return 2
+
+def unreachable(o: u32?) -> u32:
+    match o:
+        case _:
+            return 0
+        case None:
+            return 1
+
+def or_bindings(o: u32?) -> u32:
+    match o:
+        case Some(x) | None:
+            return 0
+
+def wrong_kind(c: Color) -> u32:
+    match c:
+        case Color.Blue:
+            return 0
+        case Some(_):
+            return 1
+        case _:
+            return 2

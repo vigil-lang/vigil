@@ -1,0 +1,35 @@
+const LIMIT: u32 = 10
+
+def scopes(c: bool) -> u32:
+    if c:
+        inner = 1
+    LIMIT = 3
+    total: u32 = 0
+    total: u32 = 1
+    break
+    return inner
+
+def missing_return(c: bool) -> u32:
+    if c:
+        return 1
+
+def bad_returns(x: u32) -> u32:
+    return
+
+def no_value():
+    return 1
+
+def no_value_assign() -> u32:
+    x = no_value()
+    return 0
+
+def try_outside(xs: u32?) -> u32:
+    return xs?
+
+def try_on_value(x: u32) -> u32?:
+    y = x?
+    return None
+
+def no_initial_value() -> u32:
+    y: u32
+    return y + 1

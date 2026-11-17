@@ -1,0 +1,11 @@
+# target: 5.3
+from std.bpf import KprobeContext, read_user_str, read_kernel_str, pid_tgid
+
+event too_new: RingBuf[u64](size=4096)
+
+@kprobe("do_sys_openat2")
+def open(ctx: KprobeContext) -> i32:
+    name = read_user_str(ctx.arg(1))
+    other = read_kernel_str(ctx.arg(2))
+    pid = pid_tgid()
+    return 0

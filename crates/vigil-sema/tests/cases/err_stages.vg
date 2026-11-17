@@ -1,0 +1,16 @@
+from std.net import XdpContext, XdpAction, EthHdr, Ipv4Hdr, ETH_HLEN
+
+def helper() -> u32:
+    stage()
+    return 0
+
+@xdp
+def split(ctx: XdpContext) -> XdpAction:
+    eth = ctx.parse[EthHdr](0)?
+    ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+    if ip.ttl > 3:
+        stage()
+    stage()
+    if ip.ttl == 1:
+        return XdpAction.DROP
+    return XdpAction.PASS

@@ -1,0 +1,45 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0300] Error: `missing` not found in module `lib`
+   ╭─[ main.vg:2:25 ]
+   │
+ 2 │ from lib import helper, missing, _secret
+   │                         ───┬───  
+   │                            ╰───── not found
+───╯
+[E0303] Error: `_secret` is private
+   ╭─[ main.vg:2:34 ]
+   │
+ 2 │ from lib import helper, missing, _secret
+   │                                  ───┬───  
+   │                                     ╰───── private to its module
+   │ 
+   │ Note: names starting with `_` cannot be imported
+───╯
+[E0301] Error: unresolved module `nowhere`
+   ╭─[ main.vg:3:8 ]
+   │
+ 3 │ import nowhere.at_all
+   │        ───┬───  
+   │           ╰───── no such module
+───╯
+[E0302] Error: `helper` is defined twice
+   ╭─[ main.vg:5:5 ]
+   │
+ 2 │ from lib import helper, missing, _secret
+   │                 ───┬──  
+   │                    ╰──── first defined here
+   │ 
+ 5 │ def helper() -> u32:
+   │     ───┬──  
+   │        ╰──── redefined here
+───╯
+[E0300] Error: cannot find `lib` in this scope
+   ╭─[ main.vg:9:12 ]
+   │
+ 9 │     return lib.helper()
+   │            ─┬─  
+   │             ╰─── not found
+───╯

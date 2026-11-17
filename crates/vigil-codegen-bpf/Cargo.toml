@@ -1,0 +1,11 @@
+[package]
+name = "vigil-codegen-bpf"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+vigil-core.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+object.workspace = true

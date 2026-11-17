@@ -1,0 +1,28 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0413] Error: `LIMIT` binds a new name here
+   ╭─[ main.vg:5:14 ]
+   │
+ 5 │         case LIMIT:
+   │              ──┬──  
+   │                ╰──── this pattern matches every value
+   │ 
+   │ Help: compare with a dotted name (`module.NAME`) or a guard (`case x if x == NAME:`)
+   │ 
+   │ Note: a name in a pattern captures the value; it does not compare with the constant `LIMIT`
+───╯
+[W0100] Warning: unreachable pattern
+   ╭─[ main.vg:7:14 ]
+   │
+ 5 │         case LIMIT:
+   │              ──┬──  
+   │                ╰──── this arm matches every value
+   │ 
+ 7 │         case _:
+   │              ┬  
+   │              ╰── never matched
+   │ 
+   │ Help: remove this arm, or move it before the arms that match its values
+───╯

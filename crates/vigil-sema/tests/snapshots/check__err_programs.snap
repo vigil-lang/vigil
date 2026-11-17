@@ -1,0 +1,104 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0412] Error: a kprobe program takes one parameter of type `KprobeContext`
+   ╭─[ main.vg:4:24 ]
+   │
+ 4 │ def wrong_context(ctx: TracepointContext) -> i32:
+   │                        ────────┬────────  
+   │                                ╰────────── found `TracepointContext`
+   │ 
+   │ Help: write `def wrong_context(ctx: KprobeContext)`, with `from std.bpf import KprobeContext`
+───╯
+[E0412] Error: a kprobe program returns an integer
+   ╭─[ main.vg:8:5 ]
+   │
+ 8 │ def no_return_type(ctx: KprobeContext):
+   │     ─────────┬────────  
+   │              ╰────────── no return type
+   │ 
+   │ Help: declare the return type, as in `-> i32`
+───╯
+[E0412] Error: invalid arguments for `@kprobe`
+    ╭─[ main.vg:11:1 ]
+    │
+ 11 │ @kprobe
+    │ ────┬───  
+    │     ╰───── expected `@kprobe("kernel_function")`
+────╯
+[E0412] Error: invalid arguments for `@tracepoint`
+    ╭─[ main.vg:15:1 ]
+    │
+ 15 │ @tracepoint("sched_switch")
+    │ ──────────────┬─────────────  
+    │               ╰─────────────── expected `@tracepoint("category/name")`
+────╯
+[E0412] Error: an XDP program takes one parameter of type `XdpContext`
+    ╭─[ main.vg:20:18 ]
+    │
+ 20 │ def not_yet(ctx: u64) -> i32:
+    │                  ─┬─  
+    │                   ╰─── found `u64`
+    │ 
+    │ Help: write `def not_yet(ctx: XdpContext)`, with `from std.net import XdpContext`
+────╯
+[E0412] Error: `@helper` is reserved to the standard library
+    ╭─[ main.vg:23:1 ]
+    │
+ 23 │ @helper(14)
+    │ ──────┬─────  
+    │       ╰─────── not allowed here
+────╯
+[E0412] Error: `@context` is reserved to the standard library
+    ╭─[ main.vg:26:1 ]
+    │
+ 26 │ @context("kprobe")
+    │ ─────────┬─────────  
+    │          ╰─────────── not allowed here
+────╯
+[E0416] Error: strings can only be passed to `print`
+    ╭─[ main.vg:31:9 ]
+    │
+ 31 │     s = "hello"
+    │         ───┬───  
+    │            ╰───── eBPF programs have no string values
+    │ 
+    │ Help: write the string directly in `print(...)`
+────╯
+[E0416] Error: strings can only be passed to `print`
+    ╭─[ main.vg:32:9 ]
+    │
+ 32 │     t = f"x {s}"
+    │         ────┬───  
+    │             ╰───── eBPF programs have no string values
+    │ 
+    │ Help: write the string directly in `print(...)`
+────╯
+[E0402] Error: `KprobeContext` cannot be constructed
+    ╭─[ main.vg:33:11 ]
+    │
+ 33 │     ctx = KprobeContext()
+    │           ──────┬──────  
+    │                 ╰──────── contexts are created by the kernel
+    │ 
+    │ Help: take it as the parameter of a program
+────╯
+[E0415] Error: `even` is recursive
+    ╭─[ main.vg:36:5 ]
+    │
+ 36 │ def even(n: u32) -> bool:
+    │     ──┬─  
+    │       ╰─── calls itself through `even` → `odd` → `even`
+    │ 
+    │ Note: the verifier rejects recursion; use a bounded loop instead
+────╯
+[E0415] Error: `fact` is recursive
+    ╭─[ main.vg:46:5 ]
+    │
+ 46 │ def fact(n: u64) -> u64:
+    │     ──┬─  
+    │       ╰─── calls itself through `fact` → `fact`
+    │ 
+    │ Note: the verifier rejects recursion; use a bounded loop instead
+────╯

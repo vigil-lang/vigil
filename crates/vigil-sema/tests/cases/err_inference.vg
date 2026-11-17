@@ -1,0 +1,10 @@
+def f() -> u32:
+    x = None
+    y = []
+    z = 300
+    w: u8 = z
+    v = 5
+    v = True
+    o = None
+    o = Some(1)
+    return u32(w)

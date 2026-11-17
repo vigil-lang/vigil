@@ -1,0 +1,17 @@
+from std.bpf import KprobeContext
+
+@kprobe("do_sys_openat2")
+def entry(ctx: KprobeContext) -> i32:
+    if ctx.ret() == 0:
+        return 1
+    return 0
+
+# Helpers may read it: their callers decide.
+def failed(ctx: KprobeContext) -> bool:
+    return i64(ctx.ret()) < 0
+
+@kretprobe("do_sys_openat2")
+def exit(ctx: KprobeContext) -> i32:
+    if failed(ctx):
+        return 1
+    return 0

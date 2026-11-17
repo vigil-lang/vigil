@@ -1,0 +1,52 @@
+# `@property` functions: their parameters are data, which `vigil test`
+# generates, and `@requires` filters the cases.
+from std.fixed import q8_8
+
+struct Point:
+    x: i32
+    y: i32
+
+enum Shape:
+    Circle(u32)
+    Rect(u32, u32)
+    Empty
+
+@property
+def no_parameters() -> bool:
+    return True
+
+@property(cases=500)
+def integers(a: u8, b: i64, c: bool) -> bool:
+    return c or a == a or b == b
+
+@requires(lo <= hi)
+@property
+def ordered(lo: u32, hi: u32) -> bool:
+    return lo + (hi - lo) // 2 >= lo
+
+@property
+def composite(p: Point, s: Shape, xs: u16[4], o: u32?, f: q8_8) -> bool:
+    return True
+
+# Generators: a function whose parameters are drawn makes the values of a
+# parameter; `None` from a generator of options discards the case.
+struct Range:
+    lo: u32
+    hi: u32
+
+    def ordered(a: u32, b: u32) -> Range:
+        if a <= b:
+            return Range(a, b)
+        return Range(b, a)
+
+def even(half: u16) -> u32:
+    return u32(half) * 2
+
+def odd(n: u32) -> Option[u32]:
+    if n % 2 == 0:
+        return None
+    return Some(n)
+
+@property(r=Range.ordered, e=even, o=odd, cases=50)
+def generated(r: Range, e: u32, o: u32, free: u8) -> bool:
+    return r.lo <= r.hi and e % 2 == 0 and o % 2 == 1

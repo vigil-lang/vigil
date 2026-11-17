@@ -1,0 +1,8 @@
+# the first definition in the file is the first one
+from util import ONE
+const ONE: u32 = 2
+const TWO: u32 = 2
+from util import TWO
+# module: util
+const ONE: u32 = 1
+const TWO: u32 = 2

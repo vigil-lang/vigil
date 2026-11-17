@@ -1,0 +1,33 @@
+---
+source: crates/vigil-sema/tests/check.rs
+assertion_line: 115
+expression: output
+---
+[E0406] Error: `-129` does not fit in `i8`
+   ╭─[ main.vg:2:13 ]
+   │
+ 2 │     x: i8 = -129
+   │             ──┬─  
+   │               ╰─── `i8` goes from -128 to 127
+───╯
+[E0406] Error: `-129` does not fit in `i8`
+   ╭─[ main.vg:3:13 ]
+   │
+ 3 │     y: i8 = -0x81
+   │             ──┬──  
+   │               ╰──── `i8` goes from -128 to 127
+───╯
+[E0404] Error: cannot negate a value of type `u8`
+   ╭─[ main.vg:4:13 ]
+   │
+ 4 │     z: u8 = -1
+   │             ─┬  
+   │              ╰── unsigned integers have no negative values
+───╯
+[E0406] Error: `128` does not fit in `i8`
+   ╭─[ main.vg:8:17 ]
+   │
+ 8 │     return q == 128
+   │                 ─┬─  
+   │                  ╰─── `i8` goes from -128 to 127
+───╯

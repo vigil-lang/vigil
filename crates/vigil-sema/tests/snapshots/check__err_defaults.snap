@@ -1,0 +1,49 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: `y` needs a default value, like the parameters before it
+   ╭─[ main.vg:1:19 ]
+   │
+ 1 │ def a(x: u32 = 1, y: u32) -> u32:
+   │                ┬  ┬  
+   │                ╰───── the first default value
+   │                   │  
+   │                   ╰── no default value
+───╯
+[E0406] Error: `300` does not fit in `u8`
+   ╭─[ main.vg:4:15 ]
+   │
+ 4 │ def b(x: u8 = 300) -> u8:
+   │               ─┬─  
+   │                ╰─── `u8` goes from 0 to 255
+───╯
+[E0400] Error: mismatched types
+   ╭─[ main.vg:7:17 ]
+   │
+ 7 │ def c(x: bool = 3) -> bool:
+   │                 ┬  
+   │                 ╰── expected `bool`, found an integer
+───╯
+[E0403] Error: missing argument `x`
+    ╭─[ main.vg:14:12 ]
+    │
+ 10 │ def d(x: u32, y: u32 = 2) -> u32:
+    │     ┬  
+    │     ╰── `d` declared here
+    │ 
+ 14 │     return d()
+    │            ─┬─  
+    │             ╰─── add `x=...`
+────╯
+[E0403] Error: missing argument `x`
+    ╭─[ main.vg:17:12 ]
+    │
+ 10 │ def d(x: u32, y: u32 = 2) -> u32:
+    │     ┬  
+    │     ╰── `d` declared here
+    │ 
+ 17 │     return d(y=1)
+    │            ───┬──  
+    │               ╰──── add `x=...`
+────╯

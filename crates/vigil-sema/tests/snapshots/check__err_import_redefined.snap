@@ -1,0 +1,24 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0302] Error: `ONE` is defined twice
+   ╭─[ main.vg:3:7 ]
+   │
+ 2 │ from util import ONE
+   │                  ─┬─  
+   │                   ╰─── first defined here
+ 3 │ const ONE: u32 = 2
+   │       ─┬─  
+   │        ╰─── redefined here
+───╯
+[E0302] Error: `TWO` is defined twice
+   ╭─[ main.vg:5:18 ]
+   │
+ 4 │ const TWO: u32 = 2
+   │       ─┬─  
+   │        ╰─── first defined here
+ 5 │ from util import TWO
+   │                  ─┬─  
+   │                   ╰─── redefined here
+───╯

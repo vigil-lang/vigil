@@ -1,0 +1,64 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0300] Error: `no_such_struct` is not a struct or union of the kernel
+   ╭─[ main.vg:2:33 ]
+   │
+ 2 │ from kernel import task_struct, no_such_struct
+   │                                 ───────┬──────  
+   │                                        ╰──────── not found in the kernel's BTF
+───╯
+[E0402] Error: `task_struct` lives in kernel memory
+   ╭─[ main.vg:5:11 ]
+   │
+ 5 │     task: task_struct
+   │           ─────┬─────  
+   │                ╰─────── use `kptr[task_struct]`
+───╯
+[E0407] Error: kernel memory is read-only
+    ╭─[ main.vg:10:5 ]
+    │
+ 10 │     t.pid = 1
+    │     ──┬──  
+    │       ╰──── a field of a kernel struct
+    │ 
+    │ Note: programs read kernel structs with `bpf_probe_read_kernel`, which cannot write them
+────╯
+[E0401] Error: `struct task_struct` has no field `no_such_field`
+    ╭─[ main.vg:11:11 ]
+    │
+ 11 │     x = t.no_such_field
+    │           ──────┬──────  
+    │                 ╰──────── not in the kernel's BTF
+────╯
+[E0402] Error: `kptr` points to a struct of the kernel
+    ╭─[ main.vg:12:9 ]
+    │
+ 12 │     y = kptr[u32](0)
+    │         ──────┬─────  
+    │               ╰─────── write `kptr[task_struct](address)`, importing the struct from `kernel`
+────╯
+[E0403] Error: `arg` takes the position of the argument
+    ╭─[ main.vg:13:9 ]
+    │
+ 13 │     z = ctx.arg(9)
+    │         ─────┬────  
+    │              ╰────── expected `ctx.arg(n)` with `n` a literal from 0 to 5
+────╯
+[E0402] Error: expected a value, found a kernel type
+    ╭─[ main.vg:14:9 ]
+    │
+ 14 │     w = task_struct
+    │         ─────┬─────  
+    │              ╰─────── not a value
+    │ 
+    │ Help: reach kernel structs through `kptr[T](address)`
+────╯
+[E0402] Error: tracepoint contexts are typed by a struct of the kernel
+    ╭─[ main.vg:18:12 ]
+    │
+ 18 │ def q(ctx: TracepointContext[u32]) -> i32:
+    │            ───────────┬──────────  
+    │                       ╰──────────── write `TracepointContext[trace_event_raw_<event>]`
+────╯

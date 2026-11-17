@@ -1,0 +1,31 @@
+# A packet pipeline split into programs joined by tail calls: the entry
+# program dispatches on the EtherType, a stage per protocol decides. Each
+# program is checked by the verifier on its own, so the stages can grow
+# without adding up against the limits of one program.
+from std.net import XdpContext, XdpAction, EthHdr, Ipv4Hdr, TcpHdr, ETH_HLEN, ETH_P_IP, ETH_P_IPV6, IPPROTO_TCP
+
+const IPV4: u32 = 0
+const IPV6: u32 = 1         # no stage yet: those packets pass
+
+map stages: ProgArray(max_entries=4)
+
+@xdp(iface="eth0")
+def dispatch(ctx: XdpContext) -> XdpAction:
+    eth = ctx.parse[EthHdr](0)?
+    if eth.proto == ETH_P_IP:
+        stages.tail_call(ctx, IPV4)
+    elif eth.proto == ETH_P_IPV6:
+        stages.tail_call(ctx, IPV6)
+    return XdpAction.PASS
+
+# Drops telnet.
+@xdp
+@tail(stages, IPV4)
+def ipv4(ctx: XdpContext) -> XdpAction:
+    ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+    if ip.protocol != IPPROTO_TCP:
+        return XdpAction.PASS
+    tcp = ctx.parse[TcpHdr](ETH_HLEN + ip.header_len())?
+    if tcp.dport == 23:
+        return XdpAction.DROP
+    return XdpAction.PASS

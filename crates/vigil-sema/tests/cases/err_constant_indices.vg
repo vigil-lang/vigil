@@ -1,0 +1,12 @@
+# A constant index past the end is found at compile time, as a literal.
+const I: u32 = 5
+const J: u32 = 2
+
+def f() -> u32:
+    a: u32[4] = [1, 2, 3, 4]
+    x = a[I]
+    y = a[J * 2]
+    a[I - 1] = 0
+    z = a[J + 1]
+    w = a[3]
+    return a[4]

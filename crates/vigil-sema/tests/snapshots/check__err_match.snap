@@ -1,0 +1,70 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0410] Error: non-exhaustive match
+   ╭─[ main.vg:7:11 ]
+   │
+ 7 │     match c:
+   │           ┬  
+   │           ╰── not covered: `Color.Green`
+   │ 
+   │ Help: add `case Color.Green:`, or `case _:` for every other value
+───╯
+[E0413] Error: wrong number of fields
+    ╭─[ main.vg:10:14 ]
+    │
+ 10 │         case Color.Blue(x, y):
+    │              ────────┬───────  
+    │                      ╰───────── expected 1, found 2
+────╯
+[E0410] Error: non-exhaustive match
+    ╭─[ main.vg:14:11 ]
+    │
+ 14 │     match n:
+    │           ┬  
+    │           ╰── not every `u8` is matched
+    │ 
+    │ Help: add a `case _:` arm for the remaining values
+────╯
+[E0406] Error: `300` does not fit in `u8`
+    ╭─[ main.vg:17:14 ]
+    │
+ 17 │         case 300:
+    │              ─┬─  
+    │               ╰─── `u8` goes from 0 to 255
+────╯
+[W0100] Warning: unreachable pattern
+    ╭─[ main.vg:24:14 ]
+    │
+ 22 │         case _:
+    │              ┬  
+    │              ╰── this arm matches every value
+    │ 
+ 24 │         case None:
+    │              ──┬─  
+    │                ╰─── never matched
+    │ 
+    │ Help: remove this arm, or move it before the arms that match its values
+────╯
+[E0413] Error: alternatives cannot bind names
+    ╭─[ main.vg:29:19 ]
+    │
+ 29 │         case Some(x) | None:
+    │                   ┬  
+    │                   ╰── use a separate `case`
+────╯
+[E0413] Error: variant `Color.Blue` has fields
+    ╭─[ main.vg:34:14 ]
+    │
+ 34 │         case Color.Blue:
+    │              ─────┬────  
+    │                   ╰────── write `Color.Blue(_)`
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:36:14 ]
+    │
+ 36 │         case Some(_):
+    │              ───┬───  
+    │                 ╰───── expected `Color`, found an `Option`
+────╯

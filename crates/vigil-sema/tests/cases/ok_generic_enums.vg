@@ -1,0 +1,42 @@
+from std.bpf import KprobeContext
+
+enum Maybe[T]:
+    Nothing
+    Just(T)
+
+    def or_else(self, other: T) -> T:
+        match self:
+            case Maybe.Just(v):
+                return v
+            case Maybe.Nothing:
+                return other
+
+enum Result[T, E]:
+    Ok(T)
+    Err(E)
+
+def half(x: u32) -> Result[u32, u8]:
+    if x % 2 == 1:
+        return Result[u32, u8].Err(1)
+    # From the expected type.
+    return Result.Ok(x // 2)
+
+def value[T](m: Maybe[T], default: T) -> T:
+    return m.or_else(default)
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    # Explicit arguments, then inferred from the value.
+    a = Maybe[u16].Just(7)
+    b = Maybe.Just(u64(9))
+    c: Maybe[u16] = Maybe.Nothing
+    r = half(10)
+    code: u32 = 0
+    match r:
+        case Result.Ok(v):
+            code = v
+        case Result.Err(e):
+            code = u32(e) + 100
+    print(f"{a.or_else(0)} {value(b, 1)} {c.or_else(3)}")
+    print(f"{code}")
+    return 0

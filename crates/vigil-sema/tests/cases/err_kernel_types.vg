@@ -1,0 +1,19 @@
+from std.bpf import KprobeContext, TracepointContext, current_task
+from kernel import task_struct, no_such_struct
+
+struct Holds:
+    task: task_struct
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    t = kptr[task_struct](current_task())
+    t.pid = 1
+    x = t.no_such_field
+    y = kptr[u32](0)
+    z = ctx.arg(9)
+    w = task_struct
+    return 0
+
+@tracepoint("a/b")
+def q(ctx: TracepointContext[u32]) -> i32:
+    return 0

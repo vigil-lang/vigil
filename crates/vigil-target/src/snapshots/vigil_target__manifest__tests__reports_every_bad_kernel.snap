@@ -1,0 +1,20 @@
+---
+source: crates/vigil-target/src/manifest.rs
+expression: out
+---
+[E0003] Error: kernel linux-4.19 is not supported
+   ╭─[ vigil.toml:5:25 ]
+   │
+ 5 │ kernels = ["linux-6.1", "linux-4.19", "six.one"]
+   │                         ──────┬─────  
+   │                               ╰─────── older than linux-5.3
+   │ 
+   │ Note: Vigil needs bounded loops, available since linux-5.3
+───╯
+[E0002] Error: invalid kernel version `six.one`
+   ╭─[ vigil.toml:5:39 ]
+   │
+ 5 │ kernels = ["linux-6.1", "linux-4.19", "six.one"]
+   │                                       ────┬────  
+   │                                           ╰────── expected a kernel version such as `linux-6.1` or `6.1`
+───╯

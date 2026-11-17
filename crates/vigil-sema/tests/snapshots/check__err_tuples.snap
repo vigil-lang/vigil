@@ -1,0 +1,39 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0200] Error: expected `=` after the targets of an assignment, found `:`
+   ╭─[ main.vg:3:9 ]
+   │
+ 3 │     c, d: i32 = 1, 2
+   │         ┬  
+   │         ╰── expected `=` after the targets of an assignment
+───╯
+[E0200] Error: expected `)`, found `,`
+   ╭─[ main.vg:4:11 ]
+   │
+ 4 │     e = (a, b)
+   │           ┬  
+   │           ╰── expected `)`
+───╯
+[E0407] Error: 2 targets for 3 values
+   ╭─[ main.vg:2:5 ]
+   │
+ 2 │     a, b = 1, 2, 3
+   │     ───────┬───────  
+   │            ╰───────── each target takes one value, as in `a, b = b, a`
+───╯
+[E0300] Error: cannot find `a` in this scope
+   ╭─[ main.vg:4:10 ]
+   │
+ 4 │     e = (a, b)
+   │          ┬  
+   │          ╰── not found
+───╯
+[E0300] Error: cannot find `a` in this scope
+   ╭─[ main.vg:5:12 ]
+   │
+ 5 │     return a
+   │            ┬  
+   │            ╰── not found
+───╯

@@ -1,0 +1,41 @@
+---
+source: crates/vigil-sema/tests/check.rs
+assertion_line: 115
+expression: output
+---
+[E0303] Error: `_is_ntp` is private
+   ╭─[ main.vg:8:22 ]
+   │
+ 8 │     return net.ports._is_ntp(port) or p._is_ntp(port) or ports._is_ntp(port)
+   │                      ───┬───  
+   │                         ╰───── private to its module
+   │ 
+   │ Note: names starting with `_` can only be used in their module
+───╯
+[E0303] Error: `_is_ntp` is private
+   ╭─[ main.vg:8:41 ]
+   │
+ 8 │     return net.ports._is_ntp(port) or p._is_ntp(port) or ports._is_ntp(port)
+   │                                         ───┬───  
+   │                                            ╰───── private to its module
+   │ 
+   │ Note: names starting with `_` can only be used in their module
+───╯
+[E0303] Error: `_is_ntp` is private
+   ╭─[ main.vg:8:64 ]
+   │
+ 8 │     return net.ports._is_ntp(port) or p._is_ntp(port) or ports._is_ntp(port)
+   │                                                                ───┬───  
+   │                                                                   ╰───── private to its module
+   │ 
+   │ Note: names starting with `_` can only be used in their module
+───╯
+[E0303] Error: `_Hidden` is private
+    ╭─[ main.vg:10:17 ]
+    │
+ 10 │ def hidden(h: p._Hidden) -> u32:
+    │                 ───┬───  
+    │                    ╰───── private to its module
+    │ 
+    │ Note: names starting with `_` can only be used in their module
+────╯

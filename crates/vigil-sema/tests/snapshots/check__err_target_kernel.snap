@@ -1,0 +1,38 @@
+---
+source: crates/vigil-sema/tests/check.rs
+assertion_line: 115
+expression: output
+---
+[E0003] Error: ring buffers need linux-5.8
+   ╭─[ main.vg:4:16 ]
+   │
+ 4 │ event too_new: RingBuf[u64](size=4096)
+   │                ───┬───  
+   │                   ╰───── not available in the target kernels
+   │ 
+   │ Help: raise the oldest kernel in `[target] kernels` of vigil.toml
+   │ 
+   │ Note: the oldest kernel of the project is linux-5.3
+───╯
+[E0003] Error: the helper `read_user_str` needs linux-5.5
+   ╭─[ main.vg:8:12 ]
+   │
+ 8 │     name = read_user_str(ctx.arg(1))
+   │            ──────┬──────  
+   │                  ╰──────── not available in the target kernels
+   │ 
+   │ Help: raise the oldest kernel in `[target] kernels` of vigil.toml
+   │ 
+   │ Note: the oldest kernel of the project is linux-5.3
+───╯
+[E0003] Error: the helper `read_kernel_str` needs linux-5.5
+   ╭─[ main.vg:9:13 ]
+   │
+ 9 │     other = read_kernel_str(ctx.arg(2))
+   │             ───────┬───────  
+   │                    ╰───────── not available in the target kernels
+   │ 
+   │ Help: raise the oldest kernel in `[target] kernels` of vigil.toml
+   │ 
+   │ Note: the oldest kernel of the project is linux-5.3
+───╯

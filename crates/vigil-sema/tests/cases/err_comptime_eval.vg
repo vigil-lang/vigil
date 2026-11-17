@@ -1,0 +1,20 @@
+# Errors found by running comptime functions, in a package without type
+# errors.
+from std.bpf import ktime_ns
+
+comptime def table() -> u32[4]:
+    t = [0] * 4
+    for i in range(5):
+        t[i] = 1
+    return t
+
+const T: u32[4] = table()
+
+# A helper reached through a run-time function.
+def now() -> u64:
+    return ktime_ns()
+
+comptime def stamp() -> u64:
+    return now()
+
+const STAMP: u64 = stamp()

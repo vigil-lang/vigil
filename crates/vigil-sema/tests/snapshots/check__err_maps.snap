@@ -1,0 +1,104 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0402] Error: unknown map kind `Tree`
+   ╭─[ main.vg:3:15 ]
+   │
+ 3 │ map bad_kind: Tree[u32, u64](max_entries=4)
+   │               ──┬─  
+   │                 ╰─── not a map kind
+   │ 
+   │ Note: the kinds are `Hash`, `LruHash`, `PerCpuHash`, `Array`, `PerCpuArray`, `RingBuf`, `ProgArray`
+───╯
+[E0403] Error: `no_size` needs its size
+   ╭─[ main.vg:4:5 ]
+   │
+ 4 │ map no_size: Hash[u32, u64]
+   │     ───┬───  
+   │        ╰───── add `(max_entries=N)`
+───╯
+[E0403] Error: unexpected map parameter
+   ╭─[ main.vg:5:31 ]
+   │
+ 5 │ map bad_param: Hash[u32, u64](entries=4)
+   │                               ───┬───  
+   │                                  ╰───── expected `max_entries=N`
+───╯
+[E0402] Error: `Option[KprobeContext]` cannot be stored in a map
+   ╭─[ main.vg:6:26 ]
+   │
+ 6 │ map bad_value: Hash[u32, Option[KprobeContext]](max_entries=4)
+   │                          ──────────┬──────────  
+   │                                    ╰──────────── invalid value type
+   │ 
+   │ Note: maps store integers, booleans, and structs, enums, options and arrays of them
+───╯
+[E0402] Error: ring buffers are declared with `event`, not `map`
+   ╭─[ main.vg:7:18 ]
+   │
+ 7 │ map ring_as_map: RingBuf[u32](size=4096)
+   │                  ───┬───  
+   │                     ╰───── expected `event name: RingBuf[T](size=N)`
+───╯
+[E0414] Error: the size of a ring buffer is a power of two and a multiple of 4096
+   ╭─[ main.vg:8:35 ]
+   │
+ 8 │ event odd_ring: RingBuf[u32](size=5000)
+   │                                   ──┬─  
+   │                                     ╰─── 5000 bytes
+   │ 
+   │ Help: use 8192 bytes
+───╯
+[E0402] Error: expected a value, found a map
+    ╭─[ main.vg:14:9 ]
+    │
+ 14 │     x = h
+    │         ┬  
+    │         ╰── not a value
+    │ 
+    │ Help: use its methods, as in `name.get(key)`
+────╯
+[E0401] Error: `Hash` maps have no method `emit`
+    ╭─[ main.vg:15:7 ]
+    │
+ 15 │     h.emit(1)
+    │       ──┬─  
+    │         ╰─── not a method of `h`
+    │ 
+    │ Note: the methods are `get`, `get_or_insert`, `insert`, `remove`, `contains`
+────╯
+[E0401] Error: `Array` maps have no method `remove`
+    ╭─[ main.vg:16:9 ]
+    │
+ 16 │     arr.remove(1)
+    │         ───┬──  
+    │            ╰──── not a method of `arr`
+    │ 
+    │ Note: the methods are `get`, `insert`, `contains`
+────╯
+[E0402] Error: only array maps can be indexed
+    ╭─[ main.vg:17:9 ]
+    │
+ 17 │     y = h[1]
+    │         ──┬─  
+    │           ╰─── use `h.get(key)`
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:18:17 ]
+    │
+ 18 │     z = arr.get(True)
+    │                 ──┬─  
+    │                   ╰─── expected `u32`, found `bool`
+    │ 
+    │ Help: convert the value with `u32(...)`
+────╯
+[E0416] Error: strings can only be passed to `print`
+    ╭─[ main.vg:19:14 ]
+    │
+ 19 │     h.insert("k", 1)
+    │              ─┬─  
+    │               ╰─── eBPF programs have no string values
+    │ 
+    │ Help: write the string directly in `print(...)`
+────╯

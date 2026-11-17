@@ -1,0 +1,28 @@
+# A packet program split in stages by `stage()`. Each stage is a program of
+# its own, which the verifier checks on its own: stages can grow (a large
+# model in one of them) without adding up against the limits of a single
+# program. The compiler joins them by tail calls, and carries the variables
+# they share; pointers (the headers) cannot cross, so a stage keeps what it
+# needs of them.
+from std.net import XdpContext, XdpAction, EthHdr, Ipv4Hdr, ETH_HLEN, ETH_P_IP, IPPROTO_UDP
+
+@xdp(iface="eth0")
+def guard(ctx: XdpContext) -> XdpAction:
+    eth = ctx.parse[EthHdr](0)?
+    if eth.proto != ETH_P_IP:
+        return XdpAction.PASS
+    ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+    ttl = ip.ttl
+    protocol = ip.protocol
+    stage()
+    # A score from the fields of the header.
+    score: u32 = 0
+    if ttl < 32:
+        score += 2
+    if protocol == IPPROTO_UDP:
+        score += 1
+    stage()
+    # The decision.
+    if score >= 3:
+        return XdpAction.DROP
+    return XdpAction.PASS

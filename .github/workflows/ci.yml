@@ -1,0 +1,33 @@
+# The tests of the compiler, on every push and pull request.
+#
+# The compiler embeds the standard library from `../std`, a separate
+# repository, so the job lays the two out side by side, as they are on a
+# developer's machine: this repository in `compiler/`, the library, at the
+# branch or tag named in `std.ref`, in `std/`.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  STD_REPO: https://github.com/vigil-lang/std
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: compiler
+      - name: Check out the standard library
+        run: git clone --depth 1 --branch "$(cat compiler/std.ref)" "$STD_REPO" std
+      - name: Install clang
+        run: sudo apt-get update && sudo apt-get install -y clang-18 && sudo ln -sf /usr/bin/clang-18 /usr/local/bin/clang
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: compiler
+      - working-directory: compiler
+        run: cargo test --workspace --locked

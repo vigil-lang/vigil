@@ -1,0 +1,16 @@
+[package]
+name = "vigil-sema"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+vigil-diagnostics.workspace = true
+vigil-target.workspace = true
+vigil-syntax.workspace = true
+la-arena.workspace = true
+vigil-btf.workspace = true
+rowan.workspace = true
+
+[dev-dependencies]
+insta.workspace = true
+vigil-btf.workspace = true

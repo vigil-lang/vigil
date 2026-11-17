@@ -1,0 +1,766 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..1392
+  IMPORT@142..242
+    FROM_KW@142..146 "from"
+    PATH@147..154
+      NAME_REF@147..150
+        IDENT@147..150 "std"
+      DOT@150..151 "."
+      NAME_REF@151..154
+        IDENT@151..154 "net"
+    IMPORT_KW@155..161 "import"
+    IMPORT_NAME@162..172
+      NAME_REF@162..172
+        IDENT@162..172 "XdpContext"
+    COMMA@172..173 ","
+    IMPORT_NAME@174..183
+      NAME_REF@174..183
+        IDENT@174..183 "XdpAction"
+    COMMA@183..184 ","
+    IMPORT_NAME@185..191
+      NAME_REF@185..191
+        IDENT@185..191 "EthHdr"
+    COMMA@191..192 ","
+    IMPORT_NAME@193..200
+      NAME_REF@193..200
+        IDENT@193..200 "Ipv4Hdr"
+    COMMA@200..201 ","
+    IMPORT_NAME@202..208
+      NAME_REF@202..208
+        IDENT@202..208 "TcpHdr"
+    COMMA@208..209 ","
+    IMPORT_NAME@210..218
+      NAME_REF@210..218
+        IDENT@210..218 "ETH_HLEN"
+    COMMA@218..219 ","
+    IMPORT_NAME@220..228
+      NAME_REF@220..228
+        IDENT@220..228 "ETH_P_IP"
+    COMMA@228..229 ","
+    IMPORT_NAME@230..241
+      NAME_REF@230..241
+        IDENT@230..241 "IPPROTO_TCP"
+    NEWLINE@241..242 "\n"
+  IMPORT@242..274
+    FROM_KW@242..246 "from"
+    PATH@247..253
+      NAME_REF@247..250
+        IDENT@247..250 "std"
+      DOT@250..251 "."
+      NAME_REF@251..253
+        IDENT@251..253 "ml"
+    IMPORT_KW@254..260 "import"
+    IMPORT_NAME@261..273
+      NAME_REF@261..273
+        IDENT@261..273 "DecisionTree"
+    NEWLINE@273..274 "\n"
+  IMPORT@274..307
+    FROM_KW@274..278 "from"
+    PATH@279..292
+      NAME_REF@279..282
+        IDENT@279..282 "std"
+      DOT@282..283 "."
+      NAME_REF@283..285
+        IDENT@283..285 "ml"
+      DOT@285..286 "."
+      NAME_REF@286..292
+        IDENT@286..292 "tensor"
+    IMPORT_KW@293..299 "import"
+    IMPORT_NAME@300..306
+      NAME_REF@300..306
+        IDENT@300..306 "Vector"
+    NEWLINE@306..307 "\n"
+  IMPORT@307..339
+    FROM_KW@307..311 "from"
+    PATH@312..322
+      NAME_REF@312..315
+        IDENT@312..315 "std"
+      DOT@315..316 "."
+      NAME_REF@316..322
+        IDENT@316..322 "sketch"
+    IMPORT_KW@323..329 "import"
+    IMPORT_NAME@330..338
+      NAME_REF@330..338
+        IDENT@330..338 "CountMin"
+    NEWLINE@338..339 "\n"
+  CONST_DEF@340..368
+    CONST_KW@340..345 "const"
+    NAME@346..355
+      IDENT@346..355 "MAX_NODES"
+    COLON@355..356 ":"
+    PATH_TYPE@357..362
+      PATH@357..362
+        NAME_REF@357..362
+          IDENT@357..362 "usize"
+    EQ@363..364 "="
+    LITERAL@365..367
+      INT@365..367 "64"
+    NEWLINE@367..368 "\n"
+  CONST_DEF@368..391
+    CONST_KW@368..373 "const"
+    NAME@374..379
+      IDENT@374..379 "DEPTH"
+    COLON@379..380 ":"
+    PATH_TYPE@381..386
+      PATH@381..386
+        NAME_REF@381..386
+          IDENT@381..386 "usize"
+    EQ@387..388 "="
+    LITERAL@389..390
+      INT@389..390 "8"
+    NEWLINE@390..391 "\n"
+  FN_DEF@392..494
+    COMPTIME_KW@392..400 "comptime"
+    DEF_KW@401..404 "def"
+    NAME@405..416
+      IDENT@405..416 "prefix_mask"
+    PARAM_LIST@416..427
+      L_PAREN@416..417 "("
+      PARAM@417..426
+        NAME@417..421
+          IDENT@417..421 "bits"
+        COLON@421..422 ":"
+        PATH_TYPE@423..426
+          PATH@423..426
+            NAME_REF@423..426
+              IDENT@423..426 "u32"
+      R_PAREN@426..427 ")"
+    RET_TYPE@428..434
+      ARROW@428..430 "->"
+      PATH_TYPE@431..434
+        PATH@431..434
+          NAME_REF@431..434
+            IDENT@431..434 "u32"
+    COLON@434..435 ":"
+    BLOCK@435..494
+      NEWLINE@435..436 "\n"
+      INDENT@440..440 ""
+      RETURN_STMT@440..493
+        RETURN_KW@440..446 "return"
+        CALL_EXPR@447..492
+          NAME_EXPR@447..450
+            NAME_REF@447..450
+              IDENT@447..450 "u32"
+          ARG_LIST@450..492
+            L_PAREN@450..451 "("
+            ARG@451..491
+              BIN_EXPR@451..491
+                PAREN_EXPR@451..473
+                  L_PAREN@451..452 "("
+                  BIN_EXPR@452..472
+                    PAREN_EXPR@452..468
+                      L_PAREN@452..453 "("
+                      BIN_EXPR@453..467
+                        LITERAL@453..454
+                          INT@453..454 "1"
+                        SHL@455..457 "<<"
+                        CALL_EXPR@458..467
+                          NAME_EXPR@458..461
+                            NAME_REF@458..461
+                              IDENT@458..461 "u64"
+                          ARG_LIST@461..467
+                            L_PAREN@461..462 "("
+                            ARG@462..466
+                              NAME_EXPR@462..466
+                                NAME_REF@462..466
+                                  IDENT@462..466 "bits"
+                            R_PAREN@466..467 ")"
+                      R_PAREN@467..468 ")"
+                    MINUS@469..470 "-"
+                    LITERAL@471..472
+                      INT@471..472 "1"
+                  R_PAREN@472..473 ")"
+                SHL@474..476 "<<"
+                CALL_EXPR@477..491
+                  NAME_EXPR@477..480
+                    NAME_REF@477..480
+                      IDENT@477..480 "u64"
+                  ARG_LIST@480..491
+                    L_PAREN@480..481 "("
+                    ARG@481..490
+                      BIN_EXPR@481..490
+                        LITERAL@481..483
+                          INT@481..483 "32"
+                        MINUS@484..485 "-"
+                        NAME_EXPR@486..490
+                          NAME_REF@486..490
+                            IDENT@486..490 "bits"
+                    R_PAREN@490..491 ")"
+            R_PAREN@491..492 ")"
+        NEWLINE@492..493 "\n"
+      DEDENT@494..494 ""
+  CONST_DEF@494..532
+    CONST_KW@494..499 "const"
+    NAME@500..508
+      IDENT@500..508 "SLASH_24"
+    COLON@508..509 ":"
+    PATH_TYPE@510..513
+      PATH@510..513
+        NAME_REF@510..513
+          IDENT@510..513 "u32"
+    EQ@514..515 "="
+    CALL_EXPR@516..531
+      NAME_EXPR@516..527
+        NAME_REF@516..527
+          IDENT@516..527 "prefix_mask"
+      ARG_LIST@527..531
+        L_PAREN@527..528 "("
+        ARG@528..530
+          LITERAL@528..530
+            INT@528..530 "24"
+        R_PAREN@530..531 ")"
+    NEWLINE@531..532 "\n"
+  MAP_DECL@533..592
+    MAP_KW@533..536 "map"
+    NAME@537..541
+      IDENT@537..541 "tree"
+    COLON@541..542 ":"
+    PATH_TYPE@543..591
+      PATH@543..548
+        NAME_REF@543..548
+          IDENT@543..548 "Array"
+      GENERIC_ARG_LIST@548..591
+        L_BRACK@548..549 "["
+        TYPE_ARG@549..587
+          PATH_TYPE@549..587
+            PATH@549..561
+              NAME_REF@549..561
+                IDENT@549..561 "DecisionTree"
+            GENERIC_ARG_LIST@561..587
+              L_BRACK@561..562 "["
+              TYPE_ARG@562..565
+                PATH_TYPE@562..565
+                  PATH@562..565
+                    NAME_REF@562..565
+                      IDENT@562..565 "u32"
+              COMMA@565..566 ","
+              CONST_ARG@567..568
+                LITERAL@567..568
+                  INT@567..568 "4"
+              COMMA@568..569 ","
+              TYPE_ARG@570..579
+                PATH_TYPE@570..579
+                  PATH@570..579
+                    NAME_REF@570..579
+                      IDENT@570..579 "MAX_NODES"
+              COMMA@579..580 ","
+              TYPE_ARG@581..586
+                PATH_TYPE@581..586
+                  PATH@581..586
+                    NAME_REF@581..586
+                      IDENT@581..586 "DEPTH"
+              R_BRACK@586..587 "]"
+        COMMA@587..588 ","
+        CONST_ARG@589..590
+          LITERAL@589..590
+            INT@589..590 "1"
+        R_BRACK@590..591 "]"
+    NEWLINE@591..592 "\n"
+  MAP_DECL@592..636
+    MAP_KW@592..595 "map"
+    NAME@596..600
+      IDENT@596..600 "syns"
+    COLON@600..601 ":"
+    PATH_TYPE@602..635
+      PATH@602..613
+        NAME_REF@602..613
+          IDENT@602..613 "PerCpuArray"
+      GENERIC_ARG_LIST@613..635
+        L_BRACK@613..614 "["
+        TYPE_ARG@614..631
+          PATH_TYPE@614..631
+            PATH@614..622
+              NAME_REF@614..622
+                IDENT@614..622 "CountMin"
+            GENERIC_ARG_LIST@622..631
+              L_BRACK@622..623 "["
+              CONST_ARG@623..624
+                LITERAL@623..624
+                  INT@623..624 "4"
+              COMMA@624..625 ","
+              CONST_ARG@626..630
+                LITERAL@626..630
+                  INT@626..630 "1024"
+              R_BRACK@630..631 "]"
+        COMMA@631..632 ","
+        CONST_ARG@633..634
+          LITERAL@633..634
+            INT@633..634 "1"
+        R_BRACK@634..635 "]"
+    NEWLINE@635..636 "\n"
+  FN_DEF@637..1392
+    DECORATOR@637..656
+      AT@637..638 "@"
+      PATH@638..641
+        NAME_REF@638..641
+          IDENT@638..641 "xdp"
+      ARG_LIST@641..655
+        L_PAREN@641..642 "("
+        ARG@642..654
+          NAME@642..647
+            IDENT@642..647 "iface"
+          EQ@647..648 "="
+          LITERAL@648..654
+            STRING@648..654 "\"eth0\""
+        R_PAREN@654..655 ")"
+      NEWLINE@655..656 "\n"
+    DEF_KW@656..659 "def"
+    NAME@660..669
+      IDENT@660..669 "syn_guard"
+    PARAM_LIST@669..686
+      L_PAREN@669..670 "("
+      PARAM@670..685
+        NAME@670..673
+          IDENT@670..673 "ctx"
+        COLON@673..674 ":"
+        PATH_TYPE@675..685
+          PATH@675..685
+            NAME_REF@675..685
+              IDENT@675..685 "XdpContext"
+      R_PAREN@685..686 ")"
+    RET_TYPE@687..699
+      ARROW@687..689 "->"
+      PATH_TYPE@690..699
+        PATH@690..699
+          NAME_REF@690..699
+            IDENT@690..699 "XdpAction"
+    COLON@699..700 ":"
+    BLOCK@700..1392
+      NEWLINE@700..701 "\n"
+      INDENT@705..705 ""
+      ASSIGN_STMT@705..733
+        NAME_EXPR@705..708
+          NAME_REF@705..708
+            IDENT@705..708 "eth"
+        EQ@709..710 "="
+        TRY_EXPR@711..732
+          CALL_EXPR@711..731
+            INDEX_EXPR@711..728
+              FIELD_EXPR@711..720
+                NAME_EXPR@711..714
+                  NAME_REF@711..714
+                    IDENT@711..714 "ctx"
+                DOT@714..715 "."
+                NAME_REF@715..720
+                  IDENT@715..720 "parse"
+              INDEX_LIST@720..728
+                L_BRACK@720..721 "["
+                NAME_EXPR@721..727
+                  NAME_REF@721..727
+                    IDENT@721..727 "EthHdr"
+                R_BRACK@727..728 "]"
+            ARG_LIST@728..731
+              L_PAREN@728..729 "("
+              ARG@729..730
+                LITERAL@729..730
+                  INT@729..730 "0"
+              R_PAREN@730..731 ")"
+          QUESTION@731..732 "?"
+        NEWLINE@732..733 "\n"
+      IF_STMT@737..797
+        IF_KW@737..739 "if"
+        BIN_EXPR@740..761
+          FIELD_EXPR@740..749
+            NAME_EXPR@740..743
+              NAME_REF@740..743
+                IDENT@740..743 "eth"
+            DOT@743..744 "."
+            NAME_REF@744..749
+              IDENT@744..749 "proto"
+          NEQ@750..752 "!="
+          NAME_EXPR@753..761
+            NAME_REF@753..761
+              IDENT@753..761 "ETH_P_IP"
+        COLON@761..762 ":"
+        BLOCK@762..797
+          NEWLINE@762..763 "\n"
+          INDENT@771..771 ""
+          RETURN_STMT@771..793
+            RETURN_KW@771..777 "return"
+            FIELD_EXPR@778..792
+              NAME_EXPR@778..787
+                NAME_REF@778..787
+                  IDENT@778..787 "XdpAction"
+              DOT@787..788 "."
+              NAME_REF@788..792
+                IDENT@788..792 "PASS"
+            NEWLINE@792..793 "\n"
+          DEDENT@797..797 ""
+      ASSIGN_STMT@797..832
+        NAME_EXPR@797..799
+          NAME_REF@797..799
+            IDENT@797..799 "ip"
+        EQ@800..801 "="
+        TRY_EXPR@802..831
+          CALL_EXPR@802..830
+            INDEX_EXPR@802..820
+              FIELD_EXPR@802..811
+                NAME_EXPR@802..805
+                  NAME_REF@802..805
+                    IDENT@802..805 "ctx"
+                DOT@805..806 "."
+                NAME_REF@806..811
+                  IDENT@806..811 "parse"
+              INDEX_LIST@811..820
+                L_BRACK@811..812 "["
+                NAME_EXPR@812..819
+                  NAME_REF@812..819
+                    IDENT@812..819 "Ipv4Hdr"
+                R_BRACK@819..820 "]"
+            ARG_LIST@820..830
+              L_PAREN@820..821 "("
+              ARG@821..829
+                NAME_EXPR@821..829
+                  NAME_REF@821..829
+                    IDENT@821..829 "ETH_HLEN"
+              R_PAREN@829..830 ")"
+          QUESTION@830..831 "?"
+        NEWLINE@831..832 "\n"
+      IF_STMT@836..901
+        IF_KW@836..838 "if"
+        BIN_EXPR@839..865
+          FIELD_EXPR@839..850
+            NAME_EXPR@839..841
+              NAME_REF@839..841
+                IDENT@839..841 "ip"
+            DOT@841..842 "."
+            NAME_REF@842..850
+              IDENT@842..850 "protocol"
+          NEQ@851..853 "!="
+          NAME_EXPR@854..865
+            NAME_REF@854..865
+              IDENT@854..865 "IPPROTO_TCP"
+        COLON@865..866 ":"
+        BLOCK@866..901
+          NEWLINE@866..867 "\n"
+          INDENT@875..875 ""
+          RETURN_STMT@875..897
+            RETURN_KW@875..881 "return"
+            FIELD_EXPR@882..896
+              NAME_EXPR@882..891
+                NAME_REF@882..891
+                  IDENT@882..891 "XdpAction"
+              DOT@891..892 "."
+              NAME_REF@892..896
+                IDENT@892..896 "PASS"
+            NEWLINE@896..897 "\n"
+          DEDENT@901..901 ""
+      ASSIGN_STMT@901..954
+        NAME_EXPR@901..904
+          NAME_REF@901..904
+            IDENT@901..904 "tcp"
+        EQ@905..906 "="
+        TRY_EXPR@907..953
+          CALL_EXPR@907..952
+            INDEX_EXPR@907..924
+              FIELD_EXPR@907..916
+                NAME_EXPR@907..910
+                  NAME_REF@907..910
+                    IDENT@907..910 "ctx"
+                DOT@910..911 "."
+                NAME_REF@911..916
+                  IDENT@911..916 "parse"
+              INDEX_LIST@916..924
+                L_BRACK@916..917 "["
+                NAME_EXPR@917..923
+                  NAME_REF@917..923
+                    IDENT@917..923 "TcpHdr"
+                R_BRACK@923..924 "]"
+            ARG_LIST@924..952
+              L_PAREN@924..925 "("
+              ARG@925..951
+                BIN_EXPR@925..951
+                  NAME_EXPR@925..933
+                    NAME_REF@925..933
+                      IDENT@925..933 "ETH_HLEN"
+                  PLUS@934..935 "+"
+                  CALL_EXPR@936..951
+                    FIELD_EXPR@936..949
+                      NAME_EXPR@936..938
+                        NAME_REF@936..938
+                          IDENT@936..938 "ip"
+                      DOT@938..939 "."
+                      NAME_REF@939..949
+                        IDENT@939..949 "header_len"
+                    ARG_LIST@949..951
+                      L_PAREN@949..950 "("
+                      R_PAREN@950..951 ")"
+              R_PAREN@951..952 ")"
+          QUESTION@952..953 "?"
+        NEWLINE@953..954 "\n"
+      IF_STMT@958..1024
+        IF_KW@958..960 "if"
+        BIN_EXPR@961..987
+          PREFIX_EXPR@961..974
+            NOT_KW@961..964 "not"
+            CALL_EXPR@965..974
+              FIELD_EXPR@965..972
+                NAME_EXPR@965..968
+                  NAME_REF@965..968
+                    IDENT@965..968 "tcp"
+                DOT@968..969 "."
+                NAME_REF@969..972
+                  IDENT@969..972 "syn"
+              ARG_LIST@972..974
+                L_PAREN@972..973 "("
+                R_PAREN@973..974 ")"
+          OR_KW@975..977 "or"
+          CALL_EXPR@978..987
+            FIELD_EXPR@978..985
+              NAME_EXPR@978..981
+                NAME_REF@978..981
+                  IDENT@978..981 "tcp"
+              DOT@981..982 "."
+              NAME_REF@982..985
+                IDENT@982..985 "ack"
+            ARG_LIST@985..987
+              L_PAREN@985..986 "("
+              R_PAREN@986..987 ")"
+        COLON@987..988 ":"
+        BLOCK@988..1024
+          NEWLINE@988..989 "\n"
+          INDENT@997..997 ""
+          RETURN_STMT@997..1019
+            RETURN_KW@997..1003 "return"
+            FIELD_EXPR@1004..1018
+              NAME_EXPR@1004..1013
+                NAME_REF@1004..1013
+                  IDENT@1004..1013 "XdpAction"
+              DOT@1013..1014 "."
+              NAME_REF@1014..1018
+                IDENT@1014..1018 "PASS"
+            NEWLINE@1018..1019 "\n"
+          DEDENT@1024..1024 ""
+      ASSIGN_STMT@1024..1042
+        NAME_EXPR@1024..1030
+          NAME_REF@1024..1030
+            IDENT@1024..1030 "sketch"
+        EQ@1031..1032 "="
+        TRY_EXPR@1033..1041
+          INDEX_EXPR@1033..1040
+            NAME_EXPR@1033..1037
+              NAME_REF@1033..1037
+                IDENT@1033..1037 "syns"
+            INDEX_LIST@1037..1040
+              L_BRACK@1037..1038 "["
+              LITERAL@1038..1039
+                INT@1038..1039 "0"
+              R_BRACK@1039..1040 "]"
+          QUESTION@1040..1041 "?"
+        NEWLINE@1041..1042 "\n"
+      EXPR_STMT@1046..1067
+        CALL_EXPR@1046..1066
+          FIELD_EXPR@1046..1056
+            NAME_EXPR@1046..1052
+              NAME_REF@1046..1052
+                IDENT@1046..1052 "sketch"
+            DOT@1052..1053 "."
+            NAME_REF@1053..1056
+              IDENT@1053..1056 "add"
+          ARG_LIST@1056..1066
+            L_PAREN@1056..1057 "("
+            ARG@1057..1065
+              FIELD_EXPR@1057..1065
+                NAME_EXPR@1057..1059
+                  NAME_REF@1057..1059
+                    IDENT@1057..1059 "ip"
+                DOT@1059..1060 "."
+                NAME_REF@1060..1065
+                  IDENT@1060..1065 "saddr"
+            R_PAREN@1065..1066 ")"
+        NEWLINE@1066..1067 "\n"
+      ASSIGN_STMT@1071..1185
+        NAME_EXPR@1071..1072
+          NAME_REF@1071..1072
+            IDENT@1071..1072 "x"
+        EQ@1073..1074 "="
+        CALL_EXPR@1075..1184
+          INDEX_EXPR@1075..1089
+            NAME_EXPR@1075..1081
+              NAME_REF@1075..1081
+                IDENT@1075..1081 "Vector"
+            INDEX_LIST@1081..1089
+              L_BRACK@1081..1082 "["
+              NAME_EXPR@1082..1085
+                NAME_REF@1082..1085
+                  IDENT@1082..1085 "u32"
+              COMMA@1085..1086 ","
+              LITERAL@1087..1088
+                INT@1087..1088 "4"
+              R_BRACK@1088..1089 "]"
+          ARG_LIST@1089..1184
+            L_PAREN@1089..1090 "("
+            ARG@1099..1177
+              ARRAY_EXPR@1099..1177
+                L_BRACK@1099..1100 "["
+                CALL_EXPR@1100..1125
+                  FIELD_EXPR@1100..1115
+                    NAME_EXPR@1100..1106
+                      NAME_REF@1100..1106
+                        IDENT@1100..1106 "sketch"
+                    DOT@1106..1107 "."
+                    NAME_REF@1107..1115
+                      IDENT@1107..1115 "estimate"
+                  ARG_LIST@1115..1125
+                    L_PAREN@1115..1116 "("
+                    ARG@1116..1124
+                      FIELD_EXPR@1116..1124
+                        NAME_EXPR@1116..1118
+                          NAME_REF@1116..1118
+                            IDENT@1116..1118 "ip"
+                        DOT@1118..1119 "."
+                        NAME_REF@1119..1124
+                          IDENT@1119..1124 "saddr"
+                    R_PAREN@1124..1125 ")"
+                COMMA@1125..1126 ","
+                BIN_EXPR@1127..1146
+                  FIELD_EXPR@1127..1135
+                    NAME_EXPR@1127..1129
+                      NAME_REF@1127..1129
+                        IDENT@1127..1129 "ip"
+                    DOT@1129..1130 "."
+                    NAME_REF@1130..1135
+                      IDENT@1130..1135 "saddr"
+                  AMP@1136..1137 "&"
+                  NAME_EXPR@1138..1146
+                    NAME_REF@1138..1146
+                      IDENT@1138..1146 "SLASH_24"
+                COMMA@1146..1147 ","
+                CALL_EXPR@1148..1163
+                  NAME_EXPR@1148..1151
+                    NAME_REF@1148..1151
+                      IDENT@1148..1151 "u32"
+                  ARG_LIST@1151..1163
+                    L_PAREN@1151..1152 "("
+                    ARG@1152..1162
+                      FIELD_EXPR@1152..1162
+                        NAME_EXPR@1152..1155
+                          NAME_REF@1152..1155
+                            IDENT@1152..1155 "tcp"
+                        DOT@1155..1156 "."
+                        NAME_REF@1156..1162
+                          IDENT@1156..1162 "window"
+                    R_PAREN@1162..1163 ")"
+                COMMA@1163..1164 ","
+                CALL_EXPR@1165..1176
+                  NAME_EXPR@1165..1168
+                    NAME_REF@1165..1168
+                      IDENT@1165..1168 "u32"
+                  ARG_LIST@1168..1176
+                    L_PAREN@1168..1169 "("
+                    ARG@1169..1175
+                      FIELD_EXPR@1169..1175
+                        NAME_EXPR@1169..1171
+                          NAME_REF@1169..1171
+                            IDENT@1169..1171 "ip"
+                        DOT@1171..1172 "."
+                        NAME_REF@1172..1175
+                          IDENT@1172..1175 "ttl"
+                    R_PAREN@1175..1176 ")"
+                R_BRACK@1176..1177 "]"
+            COMMA@1177..1178 ","
+            R_PAREN@1183..1184 ")"
+        NEWLINE@1184..1185 "\n"
+      ASSIGN_STMT@1189..1206
+        NAME_EXPR@1189..1194
+          NAME_REF@1189..1194
+            IDENT@1189..1194 "model"
+        EQ@1195..1196 "="
+        TRY_EXPR@1197..1205
+          INDEX_EXPR@1197..1204
+            NAME_EXPR@1197..1201
+              NAME_REF@1197..1201
+                IDENT@1197..1201 "tree"
+            INDEX_LIST@1201..1204
+              L_BRACK@1201..1202 "["
+              LITERAL@1202..1203
+                INT@1202..1203 "0"
+              R_BRACK@1203..1204 "]"
+          QUESTION@1204..1205 "?"
+        NEWLINE@1205..1206 "\n"
+      MATCH_STMT@1210..1392
+        MATCH_KW@1210..1215 "match"
+        CALL_EXPR@1216..1233
+          FIELD_EXPR@1216..1230
+            NAME_EXPR@1216..1221
+              NAME_REF@1216..1221
+                IDENT@1216..1221 "model"
+            DOT@1221..1222 "."
+            NAME_REF@1222..1230
+              IDENT@1222..1230 "classify"
+          ARG_LIST@1230..1233
+            L_PAREN@1230..1231 "("
+            ARG@1231..1232
+              NAME_EXPR@1231..1232
+                NAME_REF@1231..1232
+                  IDENT@1231..1232 "x"
+            R_PAREN@1232..1233 ")"
+        COLON@1233..1234 ":"
+        NEWLINE@1234..1235 "\n"
+        INDENT@1243..1243 ""
+        MATCH_ARM@1243..1293
+          CASE_KW@1243..1247 "case"
+          LITERAL_PAT@1248..1249
+            INT@1248..1249 "0"
+          COLON@1249..1250 ":"
+          BLOCK@1250..1293
+            NEWLINE@1250..1251 "\n"
+            INDENT@1263..1263 ""
+            RETURN_STMT@1263..1285
+              RETURN_KW@1263..1269 "return"
+              FIELD_EXPR@1270..1284
+                NAME_EXPR@1270..1279
+                  NAME_REF@1270..1279
+                    IDENT@1270..1279 "XdpAction"
+                DOT@1279..1280 "."
+                NAME_REF@1280..1284
+                  IDENT@1280..1284 "PASS"
+              NEWLINE@1284..1285 "\n"
+            DEDENT@1293..1293 ""
+        MATCH_ARM@1293..1347
+          CASE_KW@1293..1297 "case"
+          OR_PAT@1298..1303
+            LITERAL_PAT@1298..1299
+              INT@1298..1299 "1"
+            PIPE@1300..1301 "|"
+            LITERAL_PAT@1302..1303
+              INT@1302..1303 "2"
+          COLON@1303..1304 ":"
+          BLOCK@1304..1347
+            NEWLINE@1304..1305 "\n"
+            INDENT@1317..1317 ""
+            RETURN_STMT@1317..1339
+              RETURN_KW@1317..1323 "return"
+              FIELD_EXPR@1324..1338
+                NAME_EXPR@1324..1333
+                  NAME_REF@1324..1333
+                    IDENT@1324..1333 "XdpAction"
+                DOT@1333..1334 "."
+                NAME_REF@1334..1338
+                  IDENT@1334..1338 "DROP"
+              NEWLINE@1338..1339 "\n"
+            DEDENT@1347..1347 ""
+        MATCH_ARM@1347..1392
+          CASE_KW@1347..1351 "case"
+          WILDCARD_PAT@1352..1353
+            IDENT@1352..1353 "_"
+          COLON@1353..1354 ":"
+          BLOCK@1354..1392
+            NEWLINE@1354..1355 "\n"
+            INDENT@1367..1367 ""
+            RETURN_STMT@1367..1392
+              RETURN_KW@1367..1373 "return"
+              FIELD_EXPR@1374..1391
+                NAME_EXPR@1374..1383
+                  NAME_REF@1374..1383
+                    IDENT@1374..1383 "XdpAction"
+                DOT@1383..1384 "."
+                NAME_REF@1384..1391
+                  IDENT@1384..1391 "ABORTED"
+              NEWLINE@1391..1392 "\n"
+            DEDENT@1392..1392 ""
+        DEDENT@1392..1392 ""
+      DEDENT@1392..1392 ""

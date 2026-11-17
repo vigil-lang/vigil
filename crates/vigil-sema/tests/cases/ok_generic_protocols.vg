@@ -1,0 +1,44 @@
+from std.bpf import KprobeContext
+from std.ml import Linear, Classifier
+from std.ml.tensor import Vector, Matrix
+
+protocol Scorer[In]:
+    def score(self, x: In) -> i64: ...
+
+struct Doubler(Scorer[u32]):
+    k: u32
+
+    def score(self, x: u32) -> i64:
+        return i64(x * self.k)
+
+# A protocol on an enum.
+enum Sign(Scorer[i32]):
+    Plus
+    Minus
+
+    def score(self, x: i32) -> i64:
+        match self:
+            case Sign.Plus:
+                return i64(x)
+            case Sign.Minus:
+                return -i64(x)
+
+# The bound names the parameter before it.
+def total[T, M: Scorer[T], N: usize](m: M, xs: T[N]) -> i64:
+    t: i64 = 0
+    for x in xs:
+        t += m.score(x)
+    return t
+
+def pick[M: Classifier[Vector[i32, 2]]](m: M, x: Vector[i32, 2]) -> usize:
+    return m.classify(x)
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    d = Doubler(3)
+    model = Linear[i32, 2, 2](Matrix[i32, 2, 2]([[1, 0], [0, 1]]), Vector[i32, 2]([0, 0]))
+    a = total[u32, Doubler, 3](d, [u32(1), u32(2), u32(3)])
+    b = total[i32, Sign, 2](Sign.Minus, [4, 5])
+    c = pick[Linear[i32, 2, 2]](model, Vector[i32, 2]([1, 7]))
+    print(f"{a} {b} {c}")
+    return 0

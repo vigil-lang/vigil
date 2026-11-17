@@ -1,0 +1,17 @@
+# module: lib
+def _secret() -> u32:
+    return 1
+
+def helper() -> u32:
+    return 2
+
+# module: main
+from std.net import XdpContext
+from lib import helper, missing, _secret
+import nowhere.at_all
+
+def helper() -> u32:
+    return 3
+
+def uses(ctx: XdpContext) -> u32:
+    return lib.helper()

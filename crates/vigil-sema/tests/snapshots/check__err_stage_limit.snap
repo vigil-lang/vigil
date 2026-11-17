@@ -1,0 +1,13 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0501] Error: `too_long` has too many stages
+    ╭─[ main.vg:42:5 ]
+    │
+ 42 │ def too_long(ctx: XdpContext) -> XdpAction:
+    │     ────┬───  
+    │         ╰───── 35 stages, at most 34
+    │ 
+    │ Note: linux-6.1 follows 33 tail calls at most, one per stage after the first
+────╯

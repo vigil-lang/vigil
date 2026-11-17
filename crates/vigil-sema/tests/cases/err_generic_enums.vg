@@ -1,0 +1,17 @@
+enum Maybe[T]:
+    Nothing
+    Just(T)
+
+def a() -> u8:
+    m = Maybe.Nothing
+    return 0
+
+def b(m: Maybe) -> u8:
+    return 0
+
+def c() -> u8:
+    m = Maybe[u8, u16].Just(1)
+    return 0
+
+def d() -> Maybe[u8]:
+    return Maybe.Just(True)

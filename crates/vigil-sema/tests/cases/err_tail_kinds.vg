@@ -1,0 +1,34 @@
+from std.net import XdpContext, XdpAction, TcContext, TcAction
+from std.bpf import KprobeContext
+
+map stages: ProgArray(max_entries=2)
+map probes: ProgArray(max_entries=2)
+
+@xdp
+def entry(ctx: XdpContext) -> XdpAction:
+    stages.tail_call(ctx, 0)
+    return XdpAction.PASS
+
+@tc
+@tail(stages, 0)
+def other(ctx: TcContext) -> TcAction:
+    return TcAction.OK
+
+@xdp
+@tail(stages, 1)
+def same(ctx: XdpContext) -> XdpAction:
+    return XdpAction.PASS
+
+# kprobes and kretprobes share the kernel's program type
+@kprobe("do_sys_openat2")
+@tail(probes, 0)
+def enter(ctx: KprobeContext) -> i32:
+    return 0
+
+@kretprobe("do_sys_openat2")
+@tail(probes, 1)
+def leave(ctx: KprobeContext) -> i32:
+    return 0
+
+def jump(ctx: TcContext):
+    probes.tail_call(ctx, 0)

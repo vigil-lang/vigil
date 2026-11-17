@@ -1,0 +1,13 @@
+# a count of one takes the singular
+enum E:
+    One(u32)
+    Two
+
+const C: u32[1] = [1, 2]
+
+def f(x: u32) -> u32:
+    a, b = 1
+    a, b = x, x, x
+    e = E.One
+    xs: u32[1] = [7]
+    return xs[1]

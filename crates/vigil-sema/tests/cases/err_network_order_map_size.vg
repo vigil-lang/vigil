@@ -1,0 +1,13 @@
+from std.bpf import KprobeContext
+
+# 1 + 256 = 257 bytes without padding, one more than a hash value may have
+@network_order
+struct Packed:
+    a: u8
+    b: u32[64]
+
+map values: Hash[u32, Packed](max_entries=8)
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    return 0

@@ -1,0 +1,10 @@
+[package]
+name = "vigil-diagnostics"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+ariadne.workspace = true
+
+[dev-dependencies]
+insta.workspace = true

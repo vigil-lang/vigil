@@ -1,0 +1,79 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "check(\"map m: Array[Mlp[q8_8, N, 2 * N], 1](pinned=True)\\ntype T = Option[u32]?\\n\")"
+---
+SOURCE_FILE@0..72
+  MAP_DECL@0..50
+    MAP_KW@0..3 "map"
+    NAME@4..5
+      IDENT@4..5 "m"
+    COLON@5..6 ":"
+    PATH_TYPE@7..36
+      PATH@7..12
+        NAME_REF@7..12
+          IDENT@7..12 "Array"
+      GENERIC_ARG_LIST@12..36
+        L_BRACK@12..13 "["
+        TYPE_ARG@13..32
+          PATH_TYPE@13..32
+            PATH@13..16
+              NAME_REF@13..16
+                IDENT@13..16 "Mlp"
+            GENERIC_ARG_LIST@16..32
+              L_BRACK@16..17 "["
+              TYPE_ARG@17..21
+                PATH_TYPE@17..21
+                  PATH@17..21
+                    NAME_REF@17..21
+                      IDENT@17..21 "q8_8"
+              COMMA@21..22 ","
+              TYPE_ARG@23..24
+                PATH_TYPE@23..24
+                  PATH@23..24
+                    NAME_REF@23..24
+                      IDENT@23..24 "N"
+              COMMA@24..25 ","
+              CONST_ARG@26..31
+                BIN_EXPR@26..31
+                  LITERAL@26..27
+                    INT@26..27 "2"
+                  STAR@28..29 "*"
+                  NAME_EXPR@30..31
+                    NAME_REF@30..31
+                      IDENT@30..31 "N"
+              R_BRACK@31..32 "]"
+        COMMA@32..33 ","
+        CONST_ARG@34..35
+          LITERAL@34..35
+            INT@34..35 "1"
+        R_BRACK@35..36 "]"
+    ARG_LIST@36..49
+      L_PAREN@36..37 "("
+      ARG@37..48
+        NAME@37..43
+          IDENT@37..43 "pinned"
+        EQ@43..44 "="
+        LITERAL@44..48
+          TRUE_KW@44..48 "True"
+      R_PAREN@48..49 ")"
+    NEWLINE@49..50 "\n"
+  TYPE_ALIAS@50..72
+    TYPE_KW@50..54 "type"
+    NAME@55..56
+      IDENT@55..56 "T"
+    EQ@57..58 "="
+    OPTION_TYPE@59..71
+      PATH_TYPE@59..70
+        PATH@59..65
+          NAME_REF@59..65
+            IDENT@59..65 "Option"
+        GENERIC_ARG_LIST@65..70
+          L_BRACK@65..66 "["
+          TYPE_ARG@66..69
+            PATH_TYPE@66..69
+              PATH@66..69
+                NAME_REF@66..69
+                  IDENT@66..69 "u32"
+          R_BRACK@69..70 "]"
+      QUESTION@70..71 "?"
+    NEWLINE@71..72 "\n"

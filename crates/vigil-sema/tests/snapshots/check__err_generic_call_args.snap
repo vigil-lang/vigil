@@ -1,0 +1,53 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: missing argument `y`
+   ╭─[ main.vg:7:12 ]
+   │
+ 3 │ def gen[T](x: T, y: T) -> T:
+   │     ─┬─  
+   │      ╰─── `gen` declared here
+   │ 
+ 7 │     return gen(u32(1), x=u32(2))
+   │            ──────────┬──────────  
+   │                      ╰──────────── add `y=...`
+───╯
+[E0403] Error: argument `x` given twice
+   ╭─[ main.vg:7:26 ]
+   │
+ 7 │     return gen(u32(1), x=u32(2))
+   │                ───┬──    ───┬──  
+   │                   ╰────────────── first given here
+   │                             │    
+   │                             ╰──── given again here
+───╯
+[E0403] Error: missing argument `y`
+    ╭─[ main.vg:10:12 ]
+    │
+  3 │ def gen[T](x: T, y: T) -> T:
+    │     ─┬─  
+    │      ╰─── `gen` declared here
+    │ 
+ 10 │     return gen(x=u32(1), u32(2))
+    │            ──────────┬──────────  
+    │                      ╰──────────── add `y=...`
+────╯
+[E0403] Error: positional argument after a keyword argument
+    ╭─[ main.vg:10:26 ]
+    │
+ 10 │     return gen(x=u32(1), u32(2))
+    │                          ───┬──  
+    │                             ╰──── move it before the keyword arguments
+────╯
+[E0403] Error: missing argument `y`
+    ╭─[ main.vg:16:12 ]
+    │
+  3 │ def gen[T](x: T, y: T) -> T:
+    │     ─┬─  
+    │      ╰─── `gen` declared here
+    │ 
+ 16 │     return gen(u32(1))
+    │            ─────┬─────  
+    │                 ╰─────── add `y=...`
+────╯

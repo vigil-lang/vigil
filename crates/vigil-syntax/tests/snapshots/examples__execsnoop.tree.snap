@@ -1,0 +1,324 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..743
+  IMPORT@70..158
+    FROM_KW@70..74 "from"
+    PATH@75..82
+      NAME_REF@75..78
+        IDENT@75..78 "std"
+      DOT@78..79 "."
+      NAME_REF@79..82
+        IDENT@79..82 "bpf"
+    IMPORT_KW@83..89 "import"
+    IMPORT_NAME@90..107
+      NAME_REF@90..107
+        IDENT@90..107 "TracepointContext"
+    COMMA@107..108 ","
+    IMPORT_NAME@109..117
+      NAME_REF@109..117
+        IDENT@109..117 "pid_tgid"
+    COMMA@117..118 ","
+    IMPORT_NAME@119..126
+      NAME_REF@119..126
+        IDENT@119..126 "uid_gid"
+    COMMA@126..127 ","
+    IMPORT_NAME@128..136
+      NAME_REF@128..136
+        IDENT@128..136 "ktime_ns"
+    COMMA@136..137 ","
+    IMPORT_NAME@138..142
+      NAME_REF@138..142
+        IDENT@138..142 "comm"
+    COMMA@142..143 ","
+    IMPORT_NAME@144..157
+      NAME_REF@144..157
+        IDENT@144..157 "read_user_str"
+    NEWLINE@157..158 "\n"
+  IMPORT@158..203
+    FROM_KW@158..162 "from"
+    PATH@163..169
+      NAME_REF@163..169
+        IDENT@163..169 "kernel"
+    IMPORT_KW@170..176 "import"
+    IMPORT_NAME@177..202
+      NAME_REF@177..202
+        IDENT@177..202 "trace_event_raw_sys_enter"
+    NEWLINE@202..203 "\n"
+  STRUCT_DEF@204..313
+    STRUCT_KW@204..210 "struct"
+    NAME@211..220
+      IDENT@211..220 "ExecEvent"
+    COLON@220..221 ":"
+    MEMBER_LIST@221..313
+      NEWLINE@221..222 "\n"
+      INDENT@226..226 ""
+      FIELD@226..235
+        NAME@226..229
+          IDENT@226..229 "pid"
+        COLON@229..230 ":"
+        PATH_TYPE@231..234
+          PATH@231..234
+            NAME_REF@231..234
+              IDENT@231..234 "u32"
+        NEWLINE@234..235 "\n"
+      FIELD@239..248
+        NAME@239..242
+          IDENT@239..242 "uid"
+        COLON@242..243 ":"
+        PATH_TYPE@244..247
+          PATH@244..247
+            NAME_REF@244..247
+              IDENT@244..247 "u32"
+        NEWLINE@247..248 "\n"
+      FIELD@252..267
+        NAME@252..261
+          IDENT@252..261 "timestamp"
+        COLON@261..262 ":"
+        PATH_TYPE@263..266
+          PATH@263..266
+            NAME_REF@263..266
+              IDENT@263..266 "u64"
+        NEWLINE@266..267 "\n"
+      FIELD@271..287
+        NAME@271..275
+          IDENT@271..275 "comm"
+        COLON@275..276 ":"
+        PATH_TYPE@277..286
+          PATH@277..282
+            NAME_REF@277..282
+              IDENT@277..282 "bytes"
+          GENERIC_ARG_LIST@282..286
+            L_BRACK@282..283 "["
+            CONST_ARG@283..285
+              LITERAL@283..285
+                INT@283..285 "16"
+            R_BRACK@285..286 "]"
+        NEWLINE@286..287 "\n"
+      FIELD@291..312
+        NAME@291..299
+          IDENT@291..299 "filename"
+        COLON@299..300 ":"
+        PATH_TYPE@301..311
+          PATH@301..306
+            NAME_REF@301..306
+              IDENT@301..306 "bytes"
+          GENERIC_ARG_LIST@306..311
+            L_BRACK@306..307 "["
+            CONST_ARG@307..310
+              LITERAL@307..310
+                INT@307..310 "128"
+            R_BRACK@310..311 "]"
+        NEWLINE@311..312 "\n"
+      DEDENT@313..313 ""
+  EVENT_DECL@313..362
+    EVENT_KW@313..318 "event"
+    NAME@319..324
+      IDENT@319..324 "execs"
+    COLON@324..325 ":"
+    PATH_TYPE@326..344
+      PATH@326..333
+        NAME_REF@326..333
+          IDENT@326..333 "RingBuf"
+      GENERIC_ARG_LIST@333..344
+        L_BRACK@333..334 "["
+        TYPE_ARG@334..343
+          PATH_TYPE@334..343
+            PATH@334..343
+              NAME_REF@334..343
+                IDENT@334..343 "ExecEvent"
+        R_BRACK@343..344 "]"
+    ARG_LIST@344..361
+      L_PAREN@344..345 "("
+      ARG@345..360
+        NAME@345..349
+          IDENT@345..349 "size"
+        EQ@349..350 "="
+        BIN_EXPR@350..360
+          LITERAL@350..353
+            INT@350..353 "256"
+          STAR@354..355 "*"
+          LITERAL@356..360
+            INT@356..360 "1024"
+      R_PAREN@360..361 ")"
+    NEWLINE@361..362 "\n"
+  FN_DEF@363..743
+    DECORATOR@363..404
+      AT@363..364 "@"
+      PATH@364..374
+        NAME_REF@364..374
+          IDENT@364..374 "tracepoint"
+      ARG_LIST@374..403
+        L_PAREN@374..375 "("
+        ARG@375..402
+          LITERAL@375..402
+            STRING@375..402 "\"syscalls/sys_enter_execve\""
+        R_PAREN@402..403 ")"
+      NEWLINE@403..404 "\n"
+    DEF_KW@404..407 "def"
+    NAME@408..417
+      IDENT@408..417 "on_execve"
+    PARAM_LIST@417..468
+      L_PAREN@417..418 "("
+      PARAM@418..467
+        NAME@418..421
+          IDENT@418..421 "ctx"
+        COLON@421..422 ":"
+        PATH_TYPE@423..467
+          PATH@423..440
+            NAME_REF@423..440
+              IDENT@423..440 "TracepointContext"
+          GENERIC_ARG_LIST@440..467
+            L_BRACK@440..441 "["
+            TYPE_ARG@441..466
+              PATH_TYPE@441..466
+                PATH@441..466
+                  NAME_REF@441..466
+                    IDENT@441..466 "trace_event_raw_sys_enter"
+            R_BRACK@466..467 "]"
+      R_PAREN@467..468 ")"
+    RET_TYPE@469..475
+      ARROW@469..471 "->"
+      PATH_TYPE@472..475
+        PATH@472..475
+          NAME_REF@472..475
+            IDENT@472..475 "i32"
+    COLON@475..476 ":"
+    BLOCK@476..743
+      NEWLINE@476..477 "\n"
+      INDENT@481..481 ""
+      ASSIGN_STMT@481..708
+        NAME_EXPR@481..486
+          NAME_REF@481..486
+            IDENT@481..486 "event"
+        EQ@487..488 "="
+        CALL_EXPR@489..707
+          NAME_EXPR@489..498
+            NAME_REF@489..498
+              IDENT@489..498 "ExecEvent"
+          ARG_LIST@498..707
+            L_PAREN@498..499 "("
+            ARG@508..533
+              NAME@508..511
+                IDENT@508..511 "pid"
+              EQ@511..512 "="
+              CALL_EXPR@512..533
+                NAME_EXPR@512..515
+                  NAME_REF@512..515
+                    IDENT@512..515 "u32"
+                ARG_LIST@515..533
+                  L_PAREN@515..516 "("
+                  ARG@516..532
+                    BIN_EXPR@516..532
+                      CALL_EXPR@516..526
+                        NAME_EXPR@516..524
+                          NAME_REF@516..524
+                            IDENT@516..524 "pid_tgid"
+                        ARG_LIST@524..526
+                          L_PAREN@524..525 "("
+                          R_PAREN@525..526 ")"
+                      SHR@527..529 ">>"
+                      LITERAL@530..532
+                        INT@530..532 "32"
+                  R_PAREN@532..533 ")"
+            COMMA@533..534 ","
+            ARG@543..575
+              NAME@543..546
+                IDENT@543..546 "uid"
+              EQ@546..547 "="
+              CALL_EXPR@547..575
+                NAME_EXPR@547..550
+                  NAME_REF@547..550
+                    IDENT@547..550 "u32"
+                ARG_LIST@550..575
+                  L_PAREN@550..551 "("
+                  ARG@551..574
+                    BIN_EXPR@551..574
+                      CALL_EXPR@551..560
+                        NAME_EXPR@551..558
+                          NAME_REF@551..558
+                            IDENT@551..558 "uid_gid"
+                        ARG_LIST@558..560
+                          L_PAREN@558..559 "("
+                          R_PAREN@559..560 ")"
+                      AMP@561..562 "&"
+                      LITERAL@563..574
+                        INT@563..574 "0xFFFF_FFFF"
+                  R_PAREN@574..575 ")"
+            COMMA@575..576 ","
+            ARG@585..605
+              NAME@585..594
+                IDENT@585..594 "timestamp"
+              EQ@594..595 "="
+              CALL_EXPR@595..605
+                NAME_EXPR@595..603
+                  NAME_REF@595..603
+                    IDENT@595..603 "ktime_ns"
+                ARG_LIST@603..605
+                  L_PAREN@603..604 "("
+                  R_PAREN@604..605 ")"
+            COMMA@605..606 ","
+            ARG@615..626
+              NAME@615..619
+                IDENT@615..619 "comm"
+              EQ@619..620 "="
+              CALL_EXPR@620..626
+                NAME_EXPR@620..624
+                  NAME_REF@620..624
+                    IDENT@620..624 "comm"
+                ARG_LIST@624..626
+                  L_PAREN@624..625 "("
+                  R_PAREN@625..626 ")"
+            COMMA@626..627 ","
+            ARG@636..671
+              NAME@636..644
+                IDENT@636..644 "filename"
+              EQ@644..645 "="
+              CALL_EXPR@645..671
+                NAME_EXPR@645..658
+                  NAME_REF@645..658
+                    IDENT@645..658 "read_user_str"
+                ARG_LIST@658..671
+                  L_PAREN@658..659 "("
+                  ARG@659..670
+                    INDEX_EXPR@659..670
+                      FIELD_EXPR@659..667
+                        NAME_EXPR@659..662
+                          NAME_REF@659..662
+                            IDENT@659..662 "ctx"
+                        DOT@662..663 "."
+                        NAME_REF@663..667
+                          IDENT@663..667 "args"
+                      INDEX_LIST@667..670
+                        L_BRACK@667..668 "["
+                        LITERAL@668..669
+                          INT@668..669 "0"
+                        R_BRACK@669..670 "]"
+                  R_PAREN@670..671 ")"
+            COMMA@671..672 ","
+            R_PAREN@706..707 ")"
+        NEWLINE@707..708 "\n"
+      EXPR_STMT@712..730
+        CALL_EXPR@712..729
+          FIELD_EXPR@712..722
+            NAME_EXPR@712..717
+              NAME_REF@712..717
+                IDENT@712..717 "execs"
+            DOT@717..718 "."
+            NAME_REF@718..722
+              IDENT@718..722 "emit"
+          ARG_LIST@722..729
+            L_PAREN@722..723 "("
+            ARG@723..728
+              NAME_EXPR@723..728
+                NAME_REF@723..728
+                  IDENT@723..728 "event"
+            R_PAREN@728..729 ")"
+        NEWLINE@729..730 "\n"
+      RETURN_STMT@734..743
+        RETURN_KW@734..740 "return"
+        LITERAL@741..742
+          INT@741..742 "0"
+        NEWLINE@742..743 "\n"
+      DEDENT@743..743 ""

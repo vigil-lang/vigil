@@ -1,0 +1,36 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0402] Error: `ktime_ns` cannot be called at compile time
+   ╭─[ main.vg:5:12 ]
+   │
+ 5 │     return ktime_ns()
+   │            ────┬───  
+   │                ╰───── called in the comptime function `stamp`
+   │ 
+   │ Note: it is a kernel helper, which only exists in the running program
+───╯
+[E0402] Error: `ktime_ns` cannot be called at compile time
+    ╭─[ main.vg:10:13 ]
+    │
+ 10 │         t = ktime_ns()
+    │             ────┬───  
+    │                 ╰───── called in a comptime block of `p`
+    │ 
+    │ Note: it is a kernel helper, which only exists in the running program
+────╯
+[E0408] Error: `?` needs a function that can fail
+    ╭─[ main.vg:19:9 ]
+    │
+ 18 │ comptime def g() -> u32:
+    │                     ─┬─  
+    │                      ╰─── `g` returns `u32`, not an `Option`
+ 19 │     x = first([1, 2])?
+    │         ───────┬──────  
+    │                ╰──────── `None` would leave the function here
+    │ 
+    │ Help: handle the `None` case with `match`, or make the function return an `Option`
+    │ 
+    │ Note: in eBPF programs, `?` returns the default action of the program type
+────╯

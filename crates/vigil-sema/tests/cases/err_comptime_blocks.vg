@@ -1,0 +1,18 @@
+from std.bpf import KprobeContext, ktime_ns
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    now = ktime_ns()
+    comptime:
+        late = now + 1
+        now = 3
+        ratio = 0.5
+        table: u8[2] = [0] * 2
+        table[2] = 1
+    x = ratio
+    for i in range(3):
+        comptime:
+            break
+    comptime:
+        return 1
+    return 0

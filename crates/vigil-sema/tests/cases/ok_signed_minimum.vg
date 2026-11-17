@@ -1,0 +1,12 @@
+def minimum() -> i8:
+    return -128
+
+def hex_minimum() -> i16:
+    x: i16 = -0x8000
+    return x
+
+def compare(q: i8) -> bool:
+    return q == -128 or q == -(127)
+
+def wide() -> i64:
+    return -9223372036854775808

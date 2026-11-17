@@ -1,0 +1,121 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "errors(&[\"x = 3\\n\", \"fn f() -> u32:\\n    return 1\\n\",\n\"def f(a: bool, b: bool) -> bool:\\n    return a && b\\n\",\n\"def f(x: u32):\\n    x++\\n\", \"def f(x: bool) -> bool:\\n    return !x\\n\",\n\"def f(x: u32):\\n    let y = x\\n\",\n\"def f(x: u32):\\n    if x:\\n        pass\\n    else if x > 1:\\n        pass\\n\",\n\"def f(x: u32):\\n    elif x:\\n        pass\\n\",\n\"def f():\\n    for (i = 0; i < 3; i += 1):\\n        pass\\n\",\n\"def f():\\n    while True {\\n        pass\\n    }\\n\",])"
+---
+[E0200] Error: expected an item, found `x`
+   ╭─[ test.vg:1:1 ]
+   │
+ 1 │ x = 3
+   │ ┬  
+   │ ╰── expected an item
+   │ 
+   │ Help: statements go in the body of a function; for a constant, write `const x = ...`
+───╯
+[E0200] Error: expected an item, found `fn`
+   ╭─[ test.vg:1:1 ]
+   │
+ 1 │ fn f() -> u32:
+   │ ─┬  
+   │  ╰── expected an item
+   │ 
+   │ Help: functions are defined with `def`
+───╯
+[E0200] Error: expected an expression, found `&`
+   ╭─[ test.vg:2:15 ]
+   │
+ 2 │     return a && b
+   │               ┬  
+   │               ╰── expected an expression
+   │ 
+   │ Help: write `and` instead of `&&`
+───╯
+[E0200] Error: expected an expression, found `+`
+   ╭─[ test.vg:2:7 ]
+   │
+ 2 │     x++
+   │       ┬  
+   │       ╰── expected an expression
+   │ 
+   │ Help: Vigil has no `++`: write `+= 1`
+───╯
+[E0201] Error: unexpected character `!`
+   ╭─[ test.vg:2:12 ]
+   │
+ 2 │     return !x
+   │            ┬  
+   │            ╰── not part of any token
+   │ 
+   │ Help: write `not` for the logical negation
+───╯
+[E0200] Error: expected a line break, found `y`
+   ╭─[ test.vg:2:9 ]
+   │
+ 2 │     let y = x
+   │         ┬  
+   │         ╰── expected a line break
+   │ 
+   │ Help: a variable is declared by its first assignment: write `y = ...`
+───╯
+[E0200] Error: expected `:`, found `if`
+   ╭─[ test.vg:4:10 ]
+   │
+ 4 │     else if x > 1:
+   │          ─┬  
+   │           ╰── expected `:`
+   │ 
+   │ Help: write `elif` instead of `else if`
+───╯
+[E0200] Error: expected a statement, found `elif`
+   ╭─[ test.vg:2:5 ]
+   │
+ 2 │     elif x:
+   │     ──┬─  
+   │       ╰─── expected a statement
+   │ 
+   │ Help: `elif` continues an `if`, and goes at the same indentation as the `if`
+───╯
+[E0200] Error: expected a name, found `(`
+   ╭─[ test.vg:2:9 ]
+   │
+ 2 │     for (i = 0; i < 3; i += 1):
+   │         ┬  
+   │         ╰── expected a name
+   │ 
+   │ Help: a loop over a range is written `for i in range(n):`
+───╯
+[E0201] Error: unexpected character `;`
+   ╭─[ test.vg:2:15 ]
+   │
+ 2 │     for (i = 0; i < 3; i += 1):
+   │               ┬  
+   │               ╰── not part of any token
+   │ 
+   │ Help: remove the `;`: a statement ends at the end of its line
+───╯
+[E0201] Error: unexpected character `;`
+   ╭─[ test.vg:2:22 ]
+   │
+ 2 │     for (i = 0; i < 3; i += 1):
+   │                      ┬  
+   │                      ╰── not part of any token
+   │ 
+   │ Help: remove the `;`: a statement ends at the end of its line
+───╯
+[E0201] Error: unexpected character `{`
+   ╭─[ test.vg:2:16 ]
+   │
+ 2 │     while True {
+   │                ┬  
+   │                ╰── not part of any token
+   │ 
+   │ Help: a block is written with `:` and an indented body, without braces
+───╯
+[E0201] Error: unexpected character `}`
+   ╭─[ test.vg:4:5 ]
+   │
+ 4 │     }
+   │     ┬  
+   │     ╰── not part of any token
+   │ 
+   │ Help: a block is written with `:` and an indented body, without braces
+───╯

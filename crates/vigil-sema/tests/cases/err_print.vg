@@ -1,0 +1,9 @@
+struct P:
+    x: u32
+
+def f(a: u32, p: P):
+    print(f"{a} {a} {a} {a}")
+    print(f"{p}")
+    print(f"{a +}")
+    print(f"{a")
+    print(a)

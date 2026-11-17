@@ -1,0 +1,94 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..256
+  IMPORT@63..107
+    FROM_KW@63..67 "from"
+    PATH@68..75
+      NAME_REF@68..71
+        IDENT@68..71 "std"
+      DOT@71..72 "."
+      NAME_REF@72..75
+        IDENT@72..75 "bpf"
+    IMPORT_KW@76..82 "import"
+    IMPORT_NAME@83..96
+      NAME_REF@83..96
+        IDENT@83..96 "KprobeContext"
+    COMMA@96..97 ","
+    IMPORT_NAME@98..106
+      NAME_REF@98..106
+        IDENT@98..106 "pid_tgid"
+    NEWLINE@106..107 "\n"
+  FN_DEF@108..256
+    DECORATOR@108..134
+      AT@108..109 "@"
+      PATH@109..115
+        NAME_REF@109..115
+          IDENT@109..115 "kprobe"
+      ARG_LIST@115..133
+        L_PAREN@115..116 "("
+        ARG@116..132
+          LITERAL@116..132
+            STRING@116..132 "\"do_sys_openat2\""
+        R_PAREN@132..133 ")"
+      NEWLINE@133..134 "\n"
+    DEF_KW@134..137 "def"
+    NAME@138..145
+      IDENT@138..145 "on_open"
+    PARAM_LIST@145..165
+      L_PAREN@145..146 "("
+      PARAM@146..164
+        NAME@146..149
+          IDENT@146..149 "ctx"
+        COLON@149..150 ":"
+        PATH_TYPE@151..164
+          PATH@151..164
+            NAME_REF@151..164
+              IDENT@151..164 "KprobeContext"
+      R_PAREN@164..165 ")"
+    RET_TYPE@166..172
+      ARROW@166..168 "->"
+      PATH_TYPE@169..172
+        PATH@169..172
+          NAME_REF@169..172
+            IDENT@169..172 "i32"
+    COLON@172..173 ":"
+    BLOCK@173..256
+      NEWLINE@173..174 "\n"
+      INDENT@178..178 ""
+      ASSIGN_STMT@178..201
+        NAME_EXPR@178..181
+          NAME_REF@178..181
+            IDENT@178..181 "pid"
+        EQ@182..183 "="
+        BIN_EXPR@184..200
+          CALL_EXPR@184..194
+            NAME_EXPR@184..192
+              NAME_REF@184..192
+                IDENT@184..192 "pid_tgid"
+            ARG_LIST@192..194
+              L_PAREN@192..193 "("
+              R_PAREN@193..194 ")"
+          SHR@195..197 ">>"
+          LITERAL@198..200
+            INT@198..200 "32"
+        NEWLINE@200..201 "\n"
+      EXPR_STMT@205..243
+        CALL_EXPR@205..242
+          NAME_EXPR@205..210
+            NAME_REF@205..210
+              IDENT@205..210 "print"
+          ARG_LIST@210..242
+            L_PAREN@210..211 "("
+            ARG@211..241
+              LITERAL@211..241
+                FSTRING@211..241 "f\"openat2 called by pid {pid}\""
+            R_PAREN@241..242 ")"
+        NEWLINE@242..243 "\n"
+      RETURN_STMT@247..256
+        RETURN_KW@247..253 "return"
+        LITERAL@254..255
+          INT@254..255 "0"
+        NEWLINE@255..256 "\n"
+      DEDENT@256..256 ""

@@ -1,0 +1,20 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "errors(&[\"def f(x: u32) -> u32:\\n    while x < 3 do\\n        x += 1\\n    return x\\n\",\n\"def f(x: u32) -> u32:\\n    if x = 1:\\n        return 0\\n    return x\\n\",])"
+---
+[E0200] Error: expected `:`, found `do`
+   ╭─[ test.vg:2:17 ]
+   │
+ 2 │     while x < 3 do
+   │                 ─┬  
+   │                  ╰── expected `:`
+───╯
+[E0200] Error: expected `:`, found `=`
+   ╭─[ test.vg:2:10 ]
+   │
+ 2 │     if x = 1:
+   │          ┬  
+   │          ╰── expected `:`
+   │ 
+   │ Help: write `==` to compare
+───╯

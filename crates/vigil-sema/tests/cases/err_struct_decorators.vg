@@ -1,0 +1,7 @@
+@network_order(1)
+struct A:
+    x: u32
+
+@packed
+struct B:
+    x: u32

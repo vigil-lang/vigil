@@ -1,0 +1,7 @@
+# a failed constant evaluation has the same label in a `const` and in a body
+const A: u32 = 3 // 0
+
+def g(x: u32) -> u32:
+    a = [x] * (3 // 0)
+    b = [x] * (1 << 200)
+    return x

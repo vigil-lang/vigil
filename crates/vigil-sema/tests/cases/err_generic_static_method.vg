@@ -1,0 +1,17 @@
+struct Ring[T, N: usize]:
+    items: T[N]
+    head: usize
+
+    def empty(zero: T) -> Ring[T, N]:
+        return Ring[T, N]([zero] * N, 0)
+
+struct Plain:
+    x: u32
+
+    def make[U](u: U) -> Plain:
+        return Plain(1)
+
+def demo() -> u64:
+    r = Ring.empty(0)
+    p = Plain.make(1)
+    return 0

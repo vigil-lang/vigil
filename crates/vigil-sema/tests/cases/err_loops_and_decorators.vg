@@ -1,0 +1,27 @@
+@inline
+def helper(n: u32) -> u32:
+    while n > 0:
+        n -= 1
+    @bounded(4)
+    for i in range(3):
+        pass
+    @bounded(0)
+    while n < 10:
+        n += 1
+    for x in n:
+        pass
+    r = range(3)
+    arr = [1, 2]
+    return arr[2]
+
+@xdp
+@tc
+def two_programs() -> i32:
+    return 0
+
+struct S:
+    a: u32
+
+    @xdp
+    def method(self) -> i32:
+        return 0

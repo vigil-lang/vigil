@@ -1,0 +1,83 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0412] Error: unknown decorator `@inline`
+   ╭─[ main.vg:1:1 ]
+   │
+ 1 │ @inline
+   │ ────┬───  
+   │     ╰───── not a Vigil decorator
+   │ 
+   │ Note: programs: @kprobe, @kretprobe, @tracepoint, @uprobe, @uretprobe, @lsm, @xdp, @tc, @tail; tests: @test; contracts: @requires, @ensures; methods: @mut; loops: @unroll, @no_unroll, @bounded, @invariant; structs: @network_order
+───╯
+[E0412] Error: `while` loops need a bound
+   ╭─[ main.vg:3:11 ]
+   │
+ 3 │     while n > 0:
+   │           ──┬──  
+   │             ╰──── the verifier rejects loops it cannot bound
+   │ 
+   │ Help: add `@bounded(N)` before the loop, with `N` the maximum number of iterations
+───╯
+[E0412] Error: `@bounded` applies to `while` loops
+   ╭─[ main.vg:5:5 ]
+   │
+ 5 │     @bounded(4)
+   │     ──────┬─────  
+   │           ╰─────── `for` loops are bounded by their iterable
+───╯
+[E0412] Error: `@bounded` takes the maximum number of iterations
+   ╭─[ main.vg:8:5 ]
+   │
+ 8 │     @bounded(0)
+   │     ──────┬─────  
+   │           ╰─────── expected `@bounded(N)` with a positive constant `N`
+───╯
+[E0400] Error: cannot iterate over `u32`
+    ╭─[ main.vg:11:14 ]
+    │
+ 11 │     for x in n:
+    │              ┬  
+    │              ╰── expected `range(...)` or an array
+────╯
+[E0402] Error: `range` can only be iterated by a `for` loop
+    ╭─[ main.vg:13:9 ]
+    │
+ 13 │     r = range(3)
+    │         ────┬───  
+    │             ╰───── not a value
+────╯
+[E0414] Error: index 2 is out of bounds
+    ╭─[ main.vg:15:16 ]
+    │
+ 15 │     return arr[2]
+    │                ┬  
+    │                ╰── the array has 2 elements
+────╯
+[E0412] Error: a function can be only one program, test, property or helper
+    ╭─[ main.vg:18:1 ]
+    │
+ 17 │ @xdp
+    │ ──┬──  
+    │   ╰──── first one here
+ 18 │ @tc
+    │ ──┬─  
+    │   ╰─── second decorator
+────╯
+[E0412] Error: an XDP program takes one parameter of type `XdpContext`
+    ╭─[ main.vg:19:5 ]
+    │
+ 19 │ def two_programs() -> i32:
+    │     ──────────┬──────────  
+    │               ╰──────────── no parameter
+    │ 
+    │ Help: write `def two_programs(ctx: XdpContext)`, with `from std.net import XdpContext`
+────╯
+[E0412] Error: methods cannot be eBPF programs
+    ╭─[ main.vg:25:5 ]
+    │
+ 25 │     @xdp
+    │     ──┬──  
+    │       ╰──── move the program to a top-level function
+────╯

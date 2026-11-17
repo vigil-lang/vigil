@@ -1,0 +1,8 @@
+const LIMIT: u32 = 10
+
+def kind(x: u32) -> u32:
+    match x:
+        case LIMIT:
+            return 1
+        case _:
+            return 0

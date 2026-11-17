@@ -1,0 +1,22 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0405] Error: cannot infer `T` of `make`
+    ╭─[ main.vg:11:9 ]
+    │
+ 11 │     x = make()
+    │         ──┬─  
+    │           ╰─── the arguments of this call do not tell `T`
+    │ 
+    │ Help: give its generic arguments, as in `make[...](...)`
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:12:21 ]
+    │
+ 12 │     y = same(u8(1), u16(2))
+    │                     ───┬──  
+    │                        ╰──── expected `u8`, found `u16`
+    │ 
+    │ Help: convert the value with `u8(...)`
+────╯

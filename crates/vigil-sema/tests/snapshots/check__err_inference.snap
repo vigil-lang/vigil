@@ -1,0 +1,39 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0405] Error: cannot infer the type of `x`
+   ╭─[ main.vg:2:5 ]
+   │
+ 2 │     x = None
+   │     ┬  
+   │     ╰── nothing here tells its type
+   │ 
+   │ Help: give it a type, as in `x: T = ...`
+───╯
+[E0405] Error: cannot infer the type of an empty array
+   ╭─[ main.vg:3:9 ]
+   │
+ 3 │     y = []
+   │         ─┬  
+   │          ╰── arrays have at least one element
+   │ 
+   │ Help: to fill an array, repeat a value, as in `[0] * 8`
+───╯
+[E0406] Error: `300` does not fit in `u8`
+   ╭─[ main.vg:4:9 ]
+   │
+ 4 │     z = 300
+   │         ─┬─  
+   │          ╰─── `u8` goes from 0 to 255
+───╯
+[E0400] Error: mismatched types
+   ╭─[ main.vg:7:9 ]
+   │
+ 6 │     v = 5
+   │     ┬  
+   │     ╰── `v` is declared here
+ 7 │     v = True
+   │         ──┬─  
+   │           ╰─── expected `{integer}`, found `bool`
+───╯

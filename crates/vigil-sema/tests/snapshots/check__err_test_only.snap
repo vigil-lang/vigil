@@ -1,0 +1,108 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0417] Error: `run` is for tests
+    ╭─[ main.vg:21:12 ]
+    │
+ 21 │     return run(inner, p)
+    │            ──────┬──────  
+    │                  ╰──────── reached from the program `uses_tests`
+    │ 
+    │ Note: `run`, `set_time`, and `count` and `last` of events drive the simulator of `vigil test`: `@test` and `@property` functions, and the functions they call, use them
+────╯
+[E0417] Error: `set_time` is for tests
+    ╭─[ main.vg:25:5 ]
+    │
+ 25 │     set_time(5)
+    │     ─────┬─────  
+    │          ╰─────── in the program `uses_tests`
+    │ 
+    │ Note: `run`, `set_time`, and `count` and `last` of events drive the simulator of `vigil test`: `@test` and `@property` functions, and the functions they call, use them
+────╯
+[E0417] Error: `count` is for tests
+    ╭─[ main.vg:32:8 ]
+    │
+ 32 │     if seen.count() > 0:
+    │        ──────┬─────  
+    │              ╰─────── in the program `reads_events`
+    │ 
+    │ Note: `run`, `set_time`, and `count` and `last` of events drive the simulator of `vigil test`: `@test` and `@property` functions, and the functions they call, use them
+────╯
+[E0417] Error: `last` is for tests
+    ╭─[ main.vg:34:11 ]
+    │
+ 34 │     match seen.last():
+    │           ─────┬─────  
+    │                ╰─────── in the program `reads_events`
+    │ 
+    │ Note: `run`, `set_time`, and `count` and `last` of events drive the simulator of `vigil test`: `@test` and `@property` functions, and the functions they call, use them
+────╯
+[E0401] Error: `Array` maps have no method `count`
+    ╭─[ main.vg:41:18 ]
+    │
+ 41 │     return stats.count()
+    │                  ──┬──  
+    │                    ╰──── not a method of `stats`
+    │ 
+    │ Note: the methods are `get`, `insert`, `contains`
+────╯
+[E0402] Error: `run` runs an XDP or TC program of the project
+    ╭─[ main.vg:53:9 ]
+    │
+ 53 │     run(probe, p)
+    │         ──┬──  
+    │           ╰──── not a packet program
+    │ 
+    │ Help: name the program, as in `run(firewall, pkt)`
+────╯
+[E0402] Error: `run` runs an XDP or TC program of the project
+    ╭─[ main.vg:54:9 ]
+    │
+ 54 │     run(not_a_program, p)
+    │         ──────┬──────  
+    │               ╰──────── not a packet program
+    │ 
+    │ Help: name the program, as in `run(firewall, pkt)`
+────╯
+[E0402] Error: `run` runs an XDP or TC program of the project
+    ╭─[ main.vg:55:9 ]
+    │
+ 55 │     run(nothing, p)
+    │         ───┬───  
+    │            ╰───── not a packet program
+    │ 
+    │ Help: name the program, as in `run(firewall, pkt)`
+────╯
+[E0400] Error: `run` takes a packet of `std.testing`, not `{integer}`
+    ╭─[ main.vg:60:16 ]
+    │
+ 60 │     run(inner, 3)
+    │                ┬  
+    │                ╰── expected `Packet` or `Damaged`
+────╯
+[E0403] Error: wrong arguments for `run`
+    ╭─[ main.vg:61:5 ]
+    │
+ 61 │     run(inner)
+    │     ─────┬────  
+    │          ╰────── expected a program and a packet, as in `run(firewall, pkt)`
+────╯
+[E0402] Error: expected a value, found a function
+    ╭─[ main.vg:61:9 ]
+    │
+ 61 │     run(inner)
+    │         ──┬──  
+    │           ╰──── not a value
+    │ 
+    │ Help: call it
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:62:14 ]
+    │
+ 62 │     set_time(True)
+    │              ──┬─  
+    │                ╰─── expected `u64`, found `bool`
+    │ 
+    │ Help: convert the value with `u64(...)`
+────╯

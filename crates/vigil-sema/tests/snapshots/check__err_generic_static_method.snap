@@ -1,0 +1,18 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: `Ring` is generic
+    ╭─[ main.vg:15:9 ]
+    │
+ 15 │     r = Ring.empty(0)
+    │         ─────┬────  
+    │              ╰────── give its generic arguments, as in `Ring[T, N].empty(...)`
+────╯
+[E0403] Error: `make` is generic
+    ╭─[ main.vg:16:9 ]
+    │
+ 16 │     p = Plain.make(1)
+    │         ─────┬────  
+    │              ╰────── give its generic arguments, as in `Plain.make[U](...)`
+────╯

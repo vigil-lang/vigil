@@ -1,0 +1,102 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0400] Error: mismatched types
+   ╭─[ main.vg:6:11 ]
+   │
+ 6 │ @requires(n)
+   │           ┬  
+   │           ╰── expected `bool`, found `u32`
+───╯
+[E0300] Error: cannot find `result` in this scope
+    ╭─[ main.vg:10:10 ]
+    │
+ 10 │ @ensures(result)
+    │          ───┬──  
+    │             ╰──── not found
+────╯
+[E0600] Error: `@requires` takes one condition
+    ╭─[ main.vg:14:1 ]
+    │
+ 14 │ @requires(n > 1, n < 4)
+    │ ────────────┬───────────  
+    │             ╰───────────── expected `@requires(condition)`
+────╯
+[E0600] Error: a parameter named `result` hides the result in `@ensures`
+    ╭─[ main.vg:19:18 ]
+    │
+ 19 │ def hides_result(result: u32) -> u32:
+    │                  ───┬──  
+    │                     ╰──── rename this parameter
+────╯
+[E0601] Error: a contract must be pure
+    ╭─[ main.vg:22:11 ]
+    │
+ 22 │ @requires(counts.contains(n))
+    │           ───────┬───────  
+    │                  ╰───────── uses a map
+    │ 
+    │ Note: contracts and invariants state facts: they cannot read maps, the packet or the kernel, call helpers, print, or leave with `?`
+────╯
+[E0601] Error: a contract must be pure
+    ╭─[ main.vg:29:20 ]
+    │
+ 27 │     return pid_tgid()
+    │            ────┬───  
+    │                ╰───── the helper `pid_tgid` here
+    │ 
+ 29 │ @ensures(result <= helper_user())
+    │                    ─────┬─────  
+    │                         ╰─────── calls `helper_user`, which is not pure
+    │ 
+    │ Note: contracts and invariants state facts: they cannot read maps, the packet or the kernel, call helpers, print, or leave with `?`
+────╯
+[E0600] Error: programs have no `@requires`
+    ╭─[ main.vg:33:1 ]
+    │
+ 33 │ @requires(True)
+    │ ────────┬───────  
+    │         ╰───────── the kernel calls programs
+    │ 
+    │ Help: state what a program guarantees with `@ensures`
+────╯
+[E0600] Error: `comptime` functions have no contracts
+    ╭─[ main.vg:38:1 ]
+    │
+ 38 │ @requires(True)
+    │ ────────┬───────  
+    │         ╰───────── remove this contract
+────╯
+[E0412] Error: `@invariant` applies to loops
+    ╭─[ main.vg:42:1 ]
+    │
+ 42 │ @invariant(True)
+    │ ────────┬────────  
+    │         ╰────────── not allowed on a function
+    │ 
+    │ Help: write `@invariant` on the line before a `for` or `while` loop
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:48:16 ]
+    │
+ 48 │     @invariant(t)
+    │                ┬  
+    │                ╰── expected `bool`, found `u32`
+────╯
+[E0600] Error: `is_some` is only allowed in contracts
+    ╭─[ main.vg:55:8 ]
+    │
+ 55 │     if is_some(o):
+    │        ─────┬────  
+    │             ╰────── not in a contract
+    │ 
+    │ Help: in code, use `match` or `?`
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:59:16 ]
+    │
+ 59 │ @ensures(value(n) > 0)
+    │                ┬  
+    │                ╰── expected an `Option`, found `u32`
+────╯

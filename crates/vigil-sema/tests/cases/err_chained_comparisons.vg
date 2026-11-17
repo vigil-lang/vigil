@@ -1,0 +1,16 @@
+# Comparisons do not chain: one error each, with a help.
+const LOW: u32 = 1
+const IN_ORDER: bool = LOW < 2 < 3
+
+def between(a: u32, b: u32, c: u32) -> bool:
+    return a < b < c
+
+def all_equal(a: u32, b: u32, c: u32) -> bool:
+    return a == b == c
+
+def longer(a: u32, b: u32, c: u32, d: u32) -> bool:
+    return a <= b < c <= d
+
+# With parentheses it is a comparison of two `bool`, which is fine.
+def same_order(a: u32, b: u32, flag: bool) -> bool:
+    return (a < b) == flag

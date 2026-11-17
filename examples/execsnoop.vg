@@ -1,0 +1,24 @@
+# Reports every process execution to userspace through a ring buffer.
+from std.bpf import TracepointContext, pid_tgid, uid_gid, ktime_ns, comm, read_user_str
+from kernel import trace_event_raw_sys_enter
+
+struct ExecEvent:
+    pid: u32
+    uid: u32
+    timestamp: u64
+    comm: bytes[16]
+    filename: bytes[128]
+
+event execs: RingBuf[ExecEvent](size=256 * 1024)
+
+@tracepoint("syscalls/sys_enter_execve")
+def on_execve(ctx: TracepointContext[trace_event_raw_sys_enter]) -> i32:
+    event = ExecEvent(
+        pid=u32(pid_tgid() >> 32),
+        uid=u32(uid_gid() & 0xFFFF_FFFF),
+        timestamp=ktime_ns(),
+        comm=comm(),
+        filename=read_user_str(ctx.args[0]),    # the path being executed
+    )
+    execs.emit(event)
+    return 0

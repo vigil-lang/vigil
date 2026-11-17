@@ -1,0 +1,11 @@
+# `map[i] = v` is one error, without a second one on the value
+from std.bpf import KprobeContext
+
+map blobs: Array[u8[2000], 4]
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    b: u8[2000] = [0] * 2000
+    blobs[0] = b
+    blobs[1] += 1
+    return 0

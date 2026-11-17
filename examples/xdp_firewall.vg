@@ -1,0 +1,57 @@
+# Drops traffic from blocked IPv4 sources and counts the drops per source.
+from std.net import XdpContext, XdpAction, EthHdr, Ipv4Hdr, ETH_HLEN, ETH_P_IP
+
+map blocked: Hash[u32, bool](max_entries=1024)
+map drops: PerCpuHash[u32, u64](max_entries=1024)
+
+@xdp(iface="eth0")
+def firewall(ctx: XdpContext) -> XdpAction:
+    eth = ctx.parse[EthHdr](0)?     # too short: XDP_PASS
+    if eth.proto != ETH_P_IP:
+        return XdpAction.PASS
+    ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+    if blocked.contains(ip.saddr):
+        count = drops.get_or_insert(ip.saddr, 0)
+        count += 1
+        return XdpAction.DROP
+    return XdpAction.PASS
+
+# Properties, which `vigil test examples/xdp_firewall.vg` runs on generated
+# packets in the simulator (`run` is for tests only: the program above is
+# what gets loaded).
+from std.testing import Packet, Trace
+
+# A blocked source is dropped, every time, and each drop is counted.
+@property
+def blocked_sources_are_dropped_and_counted(pkt: Packet) -> bool:
+    match pkt.ipv4_src():
+        case Some(src):
+            blocked.insert(src, True)
+            dropped = run(firewall, pkt) == XdpAction.DROP and run(firewall, pkt) == XdpAction.DROP
+            match drops.get(src):
+                case Some(n):
+                    return dropped and n == 2
+                case None:
+                    return False
+        case None:
+            return run(firewall, pkt) == XdpAction.PASS
+
+# Blocking one source changes nothing for the others, whatever comes in
+# between.
+@property
+def other_sources_pass(blocked_source: u32, trace: Trace[Packet, 8]) -> bool:
+    blocked.insert(blocked_source, True)
+    for i in range(8):
+        match trace.get(u32(i)):
+            case Some(pkt):
+                verdict = run(firewall, pkt)
+                match pkt.ipv4_src():
+                    case Some(src):
+                        if (verdict == XdpAction.DROP) != (src == blocked_source):
+                            return False
+                    case None:
+                        if verdict != XdpAction.PASS:
+                            return False
+            case None:
+                return True
+    return True

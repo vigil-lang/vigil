@@ -1,0 +1,29 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0400] Error: mismatched types
+   ╭─[ main.vg:5:10 ]
+   │
+ 5 │     a += b
+   │          ┬  
+   │          ╰── expected `u32`, found `u64`
+   │ 
+   │ Help: convert the value with `u32(...)`
+───╯
+[E0400] Error: mismatched types
+   ╭─[ main.vg:6:10 ]
+   │
+ 6 │     a -= True
+   │          ──┬─  
+   │            ╰─── expected `u32`, found `bool`
+   │ 
+   │ Help: convert the value with `u32(...)`
+───╯
+[E0404] Error: `<<` cannot be applied to `bool`
+   ╭─[ main.vg:7:11 ]
+   │
+ 7 │     a <<= flag
+   │           ──┬─  
+   │             ╰─── `<<` applies to integers
+───╯

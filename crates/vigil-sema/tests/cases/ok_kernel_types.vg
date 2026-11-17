@@ -1,0 +1,31 @@
+from std.bpf import KprobeContext, TracepointContext, current_task, read_user_str
+from kernel import task_struct, trace_event_raw_sys_enter
+import kernel
+
+struct Info:
+    pid: i32
+    parent: kptr[task_struct]
+    comm: u8[16]
+
+event infos: RingBuf[Info](size=4096)
+
+def parent_of(task: kptr[kernel.task_struct]) -> kptr[task_struct]:
+    return task.real_parent
+
+@kprobe("do_sys_openat2")
+def who(ctx: KprobeContext) -> i32:
+    task = kptr[task_struct](current_task())
+    if task.is_null():
+        return 0
+    parent = parent_of(task)
+    uid = task.cred.uid.val
+    infos.emit(Info(task.tgid, parent, task.comm))
+    print(f"{parent.tgid} {uid} {u64(parent) != 0}")
+    filename = read_user_str(ctx.arg(1))
+    return 0
+
+@tracepoint("syscalls/sys_enter_execve")
+def execve(ctx: TracepointContext[trace_event_raw_sys_enter]) -> i32:
+    filename = read_user_str(ctx.args[0])
+    id = ctx.id
+    return 0

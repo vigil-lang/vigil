@@ -1,0 +1,58 @@
+from std.net import XdpContext, XdpAction
+from std.bpf import KprobeContext, pid_tgid
+
+struct Stats:
+    calls: u64
+    last: u64
+
+struct Event:
+    pid: u32
+    calls: u64
+
+const SLOTS: u32 = 4
+
+map counts: Hash[u32, u64](max_entries=1024)
+map stats: LruHash[u32, Stats](max_entries=SLOTS * 256)
+map per_cpu: PerCpuArray[u64, SLOTS]
+map table: Array[u32[4], 2]
+event events: RingBuf[Event](size=64 * 4096)
+
+def bump(pid: u32) -> u64:
+    count = counts.get_or_insert(pid, 0)
+    count += 1
+    return count
+
+@kprobe("do_sys_openat2")
+def on_open(ctx: KprobeContext) -> i32:
+    pid = u32(pid_tgid() >> 32)
+    calls = bump(pid)
+    st = stats.get_or_insert(pid, Stats(0, 0))
+    st.calls += 1
+    st.last = calls
+    slot = per_cpu[pid % SLOTS]?
+    slot += 1
+    row = table[0]?
+    row[1] = pid
+    if counts.contains(pid) and not counts.remove(pid + 1):
+        counts.insert(pid, calls * 2)
+    match stats.get(pid):
+        case Some(s):
+            events.emit(Event(pid, s.calls))
+        case None:
+            pass
+    total = st.calls + calls
+    print(f"{pid} {total}")
+    return 0
+
+# Tail calls between packet programs.
+map stages: ProgArray(max_entries=4)
+
+@xdp
+def dispatch(ctx: XdpContext) -> XdpAction:
+    stages.tail_call(ctx, 1)
+    return XdpAction.PASS
+
+@xdp
+@tail(stages, 1)
+def stage(ctx: XdpContext) -> XdpAction:
+    return XdpAction.DROP

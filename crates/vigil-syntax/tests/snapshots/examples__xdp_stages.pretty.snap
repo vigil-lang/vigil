@@ -1,0 +1,24 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: printed
+---
+from std.net import XdpContext, XdpAction, EthHdr, Ipv4Hdr, ETH_HLEN, ETH_P_IP, IPPROTO_UDP
+
+@xdp(iface="eth0")
+def guard(ctx: XdpContext) -> XdpAction:
+    eth = ctx.parse[EthHdr](0)?
+    if eth.proto != ETH_P_IP:
+        return XdpAction.PASS
+    ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+    ttl = ip.ttl
+    protocol = ip.protocol
+    stage()
+    score: u32 = 0
+    if ttl < 32:
+        score += 2
+    if protocol == IPPROTO_UDP:
+        score += 1
+    stage()
+    if score >= 3:
+        return XdpAction.DROP
+    return XdpAction.PASS

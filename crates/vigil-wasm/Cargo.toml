@@ -1,0 +1,13 @@
+[package]
+name = "vigil-wasm"
+version.workspace = true
+edition.workspace = true
+description = "The Vigil compiler for the browser (WebAssembly), for the playground"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+vigil-driver.workspace = true
+serde_json.workspace = true
+wasm-bindgen.workspace = true

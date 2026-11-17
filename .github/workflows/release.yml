@@ -1,0 +1,88 @@
+# The binaries of a release: pushing a tag `v*` builds `vigil` for Linux
+# (static, with musl) and macOS, on x86_64 and aarch64, and publishes them in
+# the GitHub release of the tag, as the archives that the install script of
+# the website downloads: `vigil-<target>.tar.gz`, each with a `.sha256`
+# beside it.
+#
+# The standard library built in is the one of `std.ref`: for a release, a
+# tag of `vigil-lang/std` rather than `main`, so that the release can be built
+# again.  Once published, the website is rebuilt with the new compiler if
+# the secret `PAGES_TOKEN` (a token that may run the workflows of the
+# repository of the website) is set.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+env:
+  CARGO_TERM_COLOR: always
+  STD_REPO: https://github.com/vigil-lang/std
+  PAGES_REPO: vigil-lang/vigil-lang.github.io
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - { target: x86_64-unknown-linux-musl, os: ubuntu-24.04 }
+          - { target: aarch64-unknown-linux-musl, os: ubuntu-24.04-arm }
+          - { target: x86_64-apple-darwin, os: macos-13 }
+          - { target: aarch64-apple-darwin, os: macos-14 }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: compiler
+      - name: Check out the standard library
+        run: git clone --depth 1 --branch "$(cat compiler/std.ref)" "$STD_REPO" std
+      - name: Install musl
+        if: contains(matrix.target, 'musl')
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: compiler
+          key: ${{ matrix.target }}
+      - working-directory: compiler
+        run: cargo build --release --locked -p vigil-cli --target ${{ matrix.target }}
+      - name: Package
+        working-directory: compiler
+        run: |
+          archive=vigil-${{ matrix.target }}.tar.gz
+          tar -czf "$archive" -C target/${{ matrix.target }}/release vigil
+          if command -v sha256sum >/dev/null; then
+            sha256sum "$archive" > "$archive.sha256"
+          else
+            shasum -a 256 "$archive" > "$archive.sha256"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vigil-${{ matrix.target }}
+          path: compiler/vigil-${{ matrix.target }}.tar.gz*
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    # Secrets cannot appear in `if:`; through the environment of the job,
+    # they can.
+    env:
+      PAGES_TOKEN: ${{ secrets.PAGES_TOKEN }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --generate-notes
+      - name: Rebuild the website
+        if: env.PAGES_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ env.PAGES_TOKEN }}
+        run: gh workflow run pages.yml --repo "$PAGES_REPO"

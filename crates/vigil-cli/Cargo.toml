@@ -1,0 +1,23 @@
+[package]
+name = "vigil-cli"
+version.workspace = true
+edition.workspace = true
+description = "The `vigil` command: check, build, core, fmt and parse"
+
+[[bin]]
+name = "vigil"
+path = "src/main.rs"
+
+[dependencies]
+vigil-btf.workspace = true
+vigil-codegen-llvm.workspace = true
+vigil-diagnostics.workspace = true
+vigil-driver.workspace = true
+vigil-sema.workspace = true
+vigil-syntax.workspace = true
+vigil-target.workspace = true
+vigil-core.workspace = true
+clap.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+toml.workspace = true

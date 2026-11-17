@@ -1,0 +1,16 @@
+struct Point:
+    x: i32
+    y: i32
+
+def f(a: u32, b: u64) -> u32:
+    small: u8 = 300
+    flag: u32 = True
+    mixed = a + b
+    half = a / 2
+    neg = -a
+    p = Point(1)
+    q = Point(1, 2, 3)
+    r = Point(x=1, z=2, y=3)
+    p.z = 1
+    unknown_var + 1
+    return b

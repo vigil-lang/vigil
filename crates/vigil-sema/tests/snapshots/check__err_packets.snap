@@ -1,0 +1,62 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0412] Error: an XDP program returns `XdpAction` or an integer
+   ╭─[ main.vg:5:38 ]
+   │
+ 5 │ def wrong_action(ctx: XdpContext) -> TcAction:
+   │                                      ────┬───  
+   │                                          ╰───── found `TcAction`
+   │ 
+   │ Help: declare the return type, as in `-> XdpAction`
+───╯
+[E0412] Error: invalid arguments for `@tc`
+   ╭─[ main.vg:8:1 ]
+   │
+ 8 │ @tc(direction="sideways")
+   │ ─────────────┬────────────  
+   │              ╰────────────── expected `@tc(direction="ingress", iface="eth0")`
+───╯
+[E0412] Error: invalid arguments for `@xdp`
+    ╭─[ main.vg:12:1 ]
+    │
+ 12 │ @xdp(interface="eth0")
+    │ ───────────┬───────────  
+    │            ╰───────────── expected `@xdp` or `@xdp(iface="eth0")`
+────╯
+[E0403] Error: `parse` takes the type of a header
+    ╭─[ main.vg:18:9 ]
+    │
+ 18 │     a = ctx.parse[u32](0)?
+    │         ────────┬────────  
+    │                 ╰────────── write `ctx.parse[Header](offset)`
+────╯
+[E0403] Error: missing argument `offset`
+    ╭─[ main.vg:19:9 ]
+    │
+ 19 │     b = ctx.parse[EthHdr]()?
+    │         ─────────┬─────────  
+    │                  ╰─────────── add `offset=...`
+────╯
+[E0403] Error: `len` takes no arguments
+    ╭─[ main.vg:20:9 ]
+    │
+ 20 │     c = ctx.len(1)
+    │         ─────┬────  
+    │              ╰────── write `ctx.len()`
+────╯
+[E0402] Error: only packet programs can parse packets
+    ╭─[ main.vg:25:15 ]
+    │
+ 25 │     eth = ctx.parse[EthHdr](0)?
+    │               ──┬──  
+    │                 ╰──── `parse` is a method of `XdpContext` and `TcContext`
+────╯
+[E0412] Error: `@network_order` takes no arguments
+    ╭─[ main.vg:28:1 ]
+    │
+ 28 │ @network_order(1)
+    │ ─────────┬────────  
+    │          ╰────────── write `@network_order`
+────╯

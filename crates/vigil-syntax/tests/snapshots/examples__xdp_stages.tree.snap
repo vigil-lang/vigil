@@ -1,0 +1,307 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..990
+  IMPORT@392..484
+    FROM_KW@392..396 "from"
+    PATH@397..404
+      NAME_REF@397..400
+        IDENT@397..400 "std"
+      DOT@400..401 "."
+      NAME_REF@401..404
+        IDENT@401..404 "net"
+    IMPORT_KW@405..411 "import"
+    IMPORT_NAME@412..422
+      NAME_REF@412..422
+        IDENT@412..422 "XdpContext"
+    COMMA@422..423 ","
+    IMPORT_NAME@424..433
+      NAME_REF@424..433
+        IDENT@424..433 "XdpAction"
+    COMMA@433..434 ","
+    IMPORT_NAME@435..441
+      NAME_REF@435..441
+        IDENT@435..441 "EthHdr"
+    COMMA@441..442 ","
+    IMPORT_NAME@443..450
+      NAME_REF@443..450
+        IDENT@443..450 "Ipv4Hdr"
+    COMMA@450..451 ","
+    IMPORT_NAME@452..460
+      NAME_REF@452..460
+        IDENT@452..460 "ETH_HLEN"
+    COMMA@460..461 ","
+    IMPORT_NAME@462..470
+      NAME_REF@462..470
+        IDENT@462..470 "ETH_P_IP"
+    COMMA@470..471 ","
+    IMPORT_NAME@472..483
+      NAME_REF@472..483
+        IDENT@472..483 "IPPROTO_UDP"
+    NEWLINE@483..484 "\n"
+  FN_DEF@485..990
+    DECORATOR@485..504
+      AT@485..486 "@"
+      PATH@486..489
+        NAME_REF@486..489
+          IDENT@486..489 "xdp"
+      ARG_LIST@489..503
+        L_PAREN@489..490 "("
+        ARG@490..502
+          NAME@490..495
+            IDENT@490..495 "iface"
+          EQ@495..496 "="
+          LITERAL@496..502
+            STRING@496..502 "\"eth0\""
+        R_PAREN@502..503 ")"
+      NEWLINE@503..504 "\n"
+    DEF_KW@504..507 "def"
+    NAME@508..513
+      IDENT@508..513 "guard"
+    PARAM_LIST@513..530
+      L_PAREN@513..514 "("
+      PARAM@514..529
+        NAME@514..517
+          IDENT@514..517 "ctx"
+        COLON@517..518 ":"
+        PATH_TYPE@519..529
+          PATH@519..529
+            NAME_REF@519..529
+              IDENT@519..529 "XdpContext"
+      R_PAREN@529..530 ")"
+    RET_TYPE@531..543
+      ARROW@531..533 "->"
+      PATH_TYPE@534..543
+        PATH@534..543
+          NAME_REF@534..543
+            IDENT@534..543 "XdpAction"
+    COLON@543..544 ":"
+    BLOCK@544..990
+      NEWLINE@544..545 "\n"
+      INDENT@549..549 ""
+      ASSIGN_STMT@549..577
+        NAME_EXPR@549..552
+          NAME_REF@549..552
+            IDENT@549..552 "eth"
+        EQ@553..554 "="
+        TRY_EXPR@555..576
+          CALL_EXPR@555..575
+            INDEX_EXPR@555..572
+              FIELD_EXPR@555..564
+                NAME_EXPR@555..558
+                  NAME_REF@555..558
+                    IDENT@555..558 "ctx"
+                DOT@558..559 "."
+                NAME_REF@559..564
+                  IDENT@559..564 "parse"
+              INDEX_LIST@564..572
+                L_BRACK@564..565 "["
+                NAME_EXPR@565..571
+                  NAME_REF@565..571
+                    IDENT@565..571 "EthHdr"
+                R_BRACK@571..572 "]"
+            ARG_LIST@572..575
+              L_PAREN@572..573 "("
+              ARG@573..574
+                LITERAL@573..574
+                  INT@573..574 "0"
+              R_PAREN@574..575 ")"
+          QUESTION@575..576 "?"
+        NEWLINE@576..577 "\n"
+      IF_STMT@581..641
+        IF_KW@581..583 "if"
+        BIN_EXPR@584..605
+          FIELD_EXPR@584..593
+            NAME_EXPR@584..587
+              NAME_REF@584..587
+                IDENT@584..587 "eth"
+            DOT@587..588 "."
+            NAME_REF@588..593
+              IDENT@588..593 "proto"
+          NEQ@594..596 "!="
+          NAME_EXPR@597..605
+            NAME_REF@597..605
+              IDENT@597..605 "ETH_P_IP"
+        COLON@605..606 ":"
+        BLOCK@606..641
+          NEWLINE@606..607 "\n"
+          INDENT@615..615 ""
+          RETURN_STMT@615..637
+            RETURN_KW@615..621 "return"
+            FIELD_EXPR@622..636
+              NAME_EXPR@622..631
+                NAME_REF@622..631
+                  IDENT@622..631 "XdpAction"
+              DOT@631..632 "."
+              NAME_REF@632..636
+                IDENT@632..636 "PASS"
+            NEWLINE@636..637 "\n"
+          DEDENT@641..641 ""
+      ASSIGN_STMT@641..676
+        NAME_EXPR@641..643
+          NAME_REF@641..643
+            IDENT@641..643 "ip"
+        EQ@644..645 "="
+        TRY_EXPR@646..675
+          CALL_EXPR@646..674
+            INDEX_EXPR@646..664
+              FIELD_EXPR@646..655
+                NAME_EXPR@646..649
+                  NAME_REF@646..649
+                    IDENT@646..649 "ctx"
+                DOT@649..650 "."
+                NAME_REF@650..655
+                  IDENT@650..655 "parse"
+              INDEX_LIST@655..664
+                L_BRACK@655..656 "["
+                NAME_EXPR@656..663
+                  NAME_REF@656..663
+                    IDENT@656..663 "Ipv4Hdr"
+                R_BRACK@663..664 "]"
+            ARG_LIST@664..674
+              L_PAREN@664..665 "("
+              ARG@665..673
+                NAME_EXPR@665..673
+                  NAME_REF@665..673
+                    IDENT@665..673 "ETH_HLEN"
+              R_PAREN@673..674 ")"
+          QUESTION@674..675 "?"
+        NEWLINE@675..676 "\n"
+      ASSIGN_STMT@680..693
+        NAME_EXPR@680..683
+          NAME_REF@680..683
+            IDENT@680..683 "ttl"
+        EQ@684..685 "="
+        FIELD_EXPR@686..692
+          NAME_EXPR@686..688
+            NAME_REF@686..688
+              IDENT@686..688 "ip"
+          DOT@688..689 "."
+          NAME_REF@689..692
+            IDENT@689..692 "ttl"
+        NEWLINE@692..693 "\n"
+      ASSIGN_STMT@697..720
+        NAME_EXPR@697..705
+          NAME_REF@697..705
+            IDENT@697..705 "protocol"
+        EQ@706..707 "="
+        FIELD_EXPR@708..719
+          NAME_EXPR@708..710
+            NAME_REF@708..710
+              IDENT@708..710 "ip"
+          DOT@710..711 "."
+          NAME_REF@711..719
+            IDENT@711..719 "protocol"
+        NEWLINE@719..720 "\n"
+      EXPR_STMT@724..732
+        CALL_EXPR@724..731
+          NAME_EXPR@724..729
+            NAME_REF@724..729
+              IDENT@724..729 "stage"
+          ARG_LIST@729..731
+            L_PAREN@729..730 "("
+            R_PAREN@730..731 ")"
+        NEWLINE@731..732 "\n"
+      ASSIGN_STMT@781..796
+        NAME_EXPR@781..786
+          NAME_REF@781..786
+            IDENT@781..786 "score"
+        COLON@786..787 ":"
+        PATH_TYPE@788..791
+          PATH@788..791
+            NAME_REF@788..791
+              IDENT@788..791 "u32"
+        EQ@792..793 "="
+        LITERAL@794..795
+          INT@794..795 "0"
+        NEWLINE@795..796 "\n"
+      IF_STMT@800..836
+        IF_KW@800..802 "if"
+        BIN_EXPR@803..811
+          NAME_EXPR@803..806
+            NAME_REF@803..806
+              IDENT@803..806 "ttl"
+          LT@807..808 "<"
+          LITERAL@809..811
+            INT@809..811 "32"
+        COLON@811..812 ":"
+        BLOCK@812..836
+          NEWLINE@812..813 "\n"
+          INDENT@821..821 ""
+          AUG_ASSIGN_STMT@821..832
+            NAME_EXPR@821..826
+              NAME_REF@821..826
+                IDENT@821..826 "score"
+            PLUS_EQ@827..829 "+="
+            LITERAL@830..831
+              INT@830..831 "2"
+            NEWLINE@831..832 "\n"
+          DEDENT@836..836 ""
+      IF_STMT@836..887
+        IF_KW@836..838 "if"
+        BIN_EXPR@839..862
+          NAME_EXPR@839..847
+            NAME_REF@839..847
+              IDENT@839..847 "protocol"
+          EQ2@848..850 "=="
+          NAME_EXPR@851..862
+            NAME_REF@851..862
+              IDENT@851..862 "IPPROTO_UDP"
+        COLON@862..863 ":"
+        BLOCK@863..887
+          NEWLINE@863..864 "\n"
+          INDENT@872..872 ""
+          AUG_ASSIGN_STMT@872..883
+            NAME_EXPR@872..877
+              NAME_REF@872..877
+                IDENT@872..877 "score"
+            PLUS_EQ@878..880 "+="
+            LITERAL@881..882
+              INT@881..882 "1"
+            NEWLINE@882..883 "\n"
+          DEDENT@887..887 ""
+      EXPR_STMT@887..895
+        CALL_EXPR@887..894
+          NAME_EXPR@887..892
+            NAME_REF@887..892
+              IDENT@887..892 "stage"
+          ARG_LIST@892..894
+            L_PAREN@892..893 "("
+            R_PAREN@893..894 ")"
+        NEWLINE@894..895 "\n"
+      IF_STMT@919..968
+        IF_KW@919..921 "if"
+        BIN_EXPR@922..932
+          NAME_EXPR@922..927
+            NAME_REF@922..927
+              IDENT@922..927 "score"
+          GTEQ@928..930 ">="
+          LITERAL@931..932
+            INT@931..932 "3"
+        COLON@932..933 ":"
+        BLOCK@933..968
+          NEWLINE@933..934 "\n"
+          INDENT@942..942 ""
+          RETURN_STMT@942..964
+            RETURN_KW@942..948 "return"
+            FIELD_EXPR@949..963
+              NAME_EXPR@949..958
+                NAME_REF@949..958
+                  IDENT@949..958 "XdpAction"
+              DOT@958..959 "."
+              NAME_REF@959..963
+                IDENT@959..963 "DROP"
+            NEWLINE@963..964 "\n"
+          DEDENT@968..968 ""
+      RETURN_STMT@968..990
+        RETURN_KW@968..974 "return"
+        FIELD_EXPR@975..989
+          NAME_EXPR@975..984
+            NAME_REF@975..984
+              IDENT@975..984 "XdpAction"
+          DOT@984..985 "."
+          NAME_REF@985..989
+            IDENT@985..989 "PASS"
+        NEWLINE@989..990 "\n"
+      DEDENT@990..990 ""

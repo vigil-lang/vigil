@@ -1,0 +1,15 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0401] Error: `RingBuf` maps have no method `get`
+    ╭─[ main.vg:11:10 ]
+    │
+ 11 │     seen.get(1)
+    │          ─┬─  
+    │           ╰─── not a method of `seen`
+    │ 
+    │ Note 1: the methods are `emit`
+    │ 
+    │ Note 2: tests may also call `count`, `last`
+────╯

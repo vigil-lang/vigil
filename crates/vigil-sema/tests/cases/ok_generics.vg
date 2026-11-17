@@ -1,0 +1,51 @@
+from std.bpf import KprobeContext
+
+protocol Shape:
+    def area(self) -> u64: ...
+
+struct Square(Shape):
+    side: u32
+
+    def area(self) -> u64:
+        return u64(self.side) * u64(self.side)
+
+struct Vec[T, N: usize]:
+    items: T[N]
+
+    def get(self, i: usize) -> T:
+        return self.items[i]
+
+    def sum(self) -> T:
+        total = self.items[0]
+        for i in range(1, N):
+            total = total + self.items[i]
+        return total
+
+    def len(self) -> usize:
+        return N
+
+struct Pair[A, B]:
+    first: A
+    second: B
+
+def total_area[S: Shape, N: usize](shapes: S[N]) -> u64:
+    total: u64 = 0
+    for s in shapes:
+        total += s.area()
+    return total
+
+def first[T, N: usize](v: Vec[T, N]) -> T:
+    return v.get(0)
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    v = Vec[u32, 4]([1, 2, 3, 4])
+    w: Vec[u8, 2] = Vec[u8, 2]([7, 8])
+    nested = Vec[Vec[u8, 2], 2]([w, w])
+    pair = Pair[u32, bool](5, True)
+    squares = [Square(2), Square(3)]
+    area = total_area[Square, 2](squares)
+    print(f"{v.sum()} {w.sum()} {v.len()}")
+    print(f"{first[u32, 4](v)} {nested.get(1).get(0)} {pair.second}")
+    print(f"{area}")
+    return 0

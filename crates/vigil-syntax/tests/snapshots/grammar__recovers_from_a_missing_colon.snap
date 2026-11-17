@@ -1,0 +1,47 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "check(\"def f()\\n    return 1\\n\\ndef g():\\n    return 2\\n\")"
+---
+SOURCE_FILE@0..44
+  FN_DEF@0..22
+    DEF_KW@0..3 "def"
+    NAME@4..5
+      IDENT@4..5 "f"
+    PARAM_LIST@5..7
+      L_PAREN@5..6 "("
+      R_PAREN@6..7 ")"
+    BLOCK@7..22
+      NEWLINE@7..8 "\n"
+      INDENT@12..12 ""
+      RETURN_STMT@12..21
+        RETURN_KW@12..18 "return"
+        LITERAL@19..20
+          INT@19..20 "1"
+        NEWLINE@20..21 "\n"
+      DEDENT@22..22 ""
+  FN_DEF@22..44
+    DEF_KW@22..25 "def"
+    NAME@26..27
+      IDENT@26..27 "g"
+    PARAM_LIST@27..29
+      L_PAREN@27..28 "("
+      R_PAREN@28..29 ")"
+    COLON@29..30 ":"
+    BLOCK@30..44
+      NEWLINE@30..31 "\n"
+      INDENT@35..35 ""
+      RETURN_STMT@35..44
+        RETURN_KW@35..41 "return"
+        LITERAL@42..43
+          INT@42..43 "2"
+        NEWLINE@43..44 "\n"
+      DEDENT@44..44 ""
+
+--- errors ---
+[E0200] Error: expected `:`, found a line break
+   ╭─[ test.vg:1:8 ]
+   │
+ 1 │ def f()
+   │        ┬  
+   │        ╰── expected `:`
+───╯

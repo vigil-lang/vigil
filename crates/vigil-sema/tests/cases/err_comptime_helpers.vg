@@ -1,0 +1,22 @@
+from std.bpf import KprobeContext, ktime_ns
+
+# A kernel helper has no body the compiler could run.
+comptime def stamp() -> u64:
+    return ktime_ns()
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    comptime:
+        t = ktime_ns()
+    return 0
+
+# After a type error the comptime functions do not run, so `G` gets no
+# second error.
+comptime def first(xs: u32[2]) -> u32?:
+    return Some(xs[0])
+
+comptime def g() -> u32:
+    x = first([1, 2])?
+    return x
+
+const G: u32 = g()

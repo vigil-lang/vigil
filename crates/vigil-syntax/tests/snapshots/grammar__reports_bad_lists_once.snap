@@ -1,0 +1,69 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "errors(&[\"def f(x u32, y: u32) -> u32:\\n    return x\\n\",\n\"def f(x: u32, y: u32 -> u32:\\n    return x\\n\",\n\"def f(x: u32) -> u32:\\n    return g(x y, 1)\\n\",\n\"def f(x: u32) -> u32:\\n    y = [1, 2\\n    return y\\n\",\n\"def f(x: u32) -> u32:\\n    y = (x + 1\\n    return y\\n\",\n\"struct P:\\n    x u32\\n    y: u32\\n\",\n\"@xdp(\\ndef f(x: u32) -> u32:\\n    return x\\n\",\n\"def f(x: u32) -> u32:\\n    return x)\\n\",])"
+---
+[E0200] Error: expected `:`, found `u32`
+   ╭─[ test.vg:1:9 ]
+   │
+ 1 │ def f(x u32, y: u32) -> u32:
+   │         ─┬─  
+   │          ╰─── expected `:` between the parameter and its type
+───╯
+[E0200] Error: expected `,` or `)`, found `->`
+   ╭─[ test.vg:1:22 ]
+   │
+ 1 │ def f(x: u32, y: u32 -> u32:
+   │                      ─┬  
+   │                       ╰── expected `,` or `)`
+───╯
+[E0200] Error: expected `,` or `)`, found `y`
+   ╭─[ test.vg:2:16 ]
+   │
+ 2 │     return g(x y, 1)
+   │                ┬  
+   │                ╰── expected `,` or `)`
+───╯
+[E0200] Error: expected `,` or `]`, found `return`
+   ╭─[ test.vg:3:5 ]
+   │
+ 2 │     y = [1, 2
+   │         ┬  
+   │         ╰── this `[` is not closed
+ 3 │     return y
+   │     ───┬──  
+   │        ╰──── expected `,` or `]`
+───╯
+[E0200] Error: expected `)`, found `return`
+   ╭─[ test.vg:3:5 ]
+   │
+ 2 │     y = (x + 1
+   │         ┬  
+   │         ╰── this `(` is not closed
+ 3 │     return y
+   │     ───┬──  
+   │        ╰──── expected `)`
+───╯
+[E0200] Error: expected `:`, found `u32`
+   ╭─[ test.vg:2:7 ]
+   │
+ 2 │     x u32
+   │       ─┬─  
+   │        ╰─── expected `:` between the field name and its type
+───╯
+[E0200] Error: expected an expression, found `def`
+   ╭─[ test.vg:2:1 ]
+   │
+ 1 │ @xdp(
+   │     ┬  
+   │     ╰── this `(` is not closed
+ 2 │ def f(x: u32) -> u32:
+   │ ─┬─  
+   │  ╰─── expected an expression
+───╯
+[E0200] Error: unmatched `)`
+   ╭─[ test.vg:2:13 ]
+   │
+ 2 │     return x)
+   │             ┬  
+   │             ╰── no opening bracket before it
+───╯

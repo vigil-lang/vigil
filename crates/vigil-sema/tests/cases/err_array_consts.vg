@@ -1,0 +1,6 @@
+const SHORT: u8[3] = [1, 2]
+const WIDE: u8[2] = [1, 300]
+const UNTYPED = [1, 2]
+const NOT_ARRAY: u32 = [1]
+const MIXED: bool[2] = [True, 1]
+const SUM: u32 = [1, 2] + 3

@@ -1,0 +1,73 @@
+# `run` and `set_time` drive the simulator of `vigil test`: tests use them,
+# programs do not. `run` runs an XDP or TC program on a packet of
+# `std.testing`.
+from std.net import XdpContext, XdpAction
+from std.bpf import KprobeContext
+from std.testing import Packet
+
+map packets: Array[Packet, 1]
+
+struct Seen:
+    n: u32
+
+event seen: RingBuf[Seen](size=4096)
+map stats: Array[u32, 1]
+
+@xdp(iface="eth0")
+def inner(ctx: XdpContext) -> XdpAction:
+    return XdpAction.PASS
+
+def forward(p: Packet) -> XdpAction:
+    return run(inner, p)
+
+@xdp(iface="eth0")
+def uses_tests(ctx: XdpContext) -> XdpAction:
+    set_time(5)
+    p = packets[0]?
+    return forward(p)
+
+# The events emitted, in the simulator: tests only.
+@xdp(iface="eth0")
+def reads_events(ctx: XdpContext) -> XdpAction:
+    if seen.count() > 0:
+        return XdpAction.DROP
+    match seen.last():
+        case Some(s):
+            return XdpAction.DROP
+        case None:
+            return XdpAction.PASS
+
+def not_events() -> u64:
+    return stats.count()
+
+@kprobe("f")
+def probe(ctx: KprobeContext) -> i32:
+    return 0
+
+def not_a_program() -> u32:
+    return 0
+
+@test
+def runs_a_probe() -> bool:
+    p = packets[0]?
+    run(probe, p)
+    run(not_a_program, p)
+    run(nothing, p)
+    return True
+
+@test
+def runs_a_number() -> bool:
+    run(inner, 3)
+    run(inner)
+    set_time(True)
+    return True
+
+# Allowed: in tests, and in what they call.
+def through(p: Packet) -> bool:
+    set_time(1_000)
+    return run(inner, p) == XdpAction.PASS
+
+@test
+def runs_inner() -> bool:
+    p = packets[0]?
+    return through(p) and run(inner, p) == XdpAction.PASS and seen.count() == 0

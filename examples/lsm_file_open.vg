@@ -1,0 +1,13 @@
+# Counts the files opened by each process, from the `file_open` LSM hook,
+# and allows every open (an LSM program returns 0 to allow, a negative
+# errno to deny).
+from std.bpf import LsmContext, pid_tgid
+
+map opens: Hash[u32, u64](max_entries=1024)
+
+@lsm("file_open")
+def count_opens(ctx: LsmContext) -> i32:
+    pid = u32(pid_tgid() >> 32)
+    count = opens.get_or_insert(pid, 0)
+    count += 1
+    return 0

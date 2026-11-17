@@ -1,0 +1,56 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "check(\"def f():\\n    if x:\\n        y\\n      z\\n\\tw\\n\")"
+---
+SOURCE_FILE@0..40
+  FN_DEF@0..38
+    DEF_KW@0..3 "def"
+    NAME@4..5
+      IDENT@4..5 "f"
+    PARAM_LIST@5..7
+      L_PAREN@5..6 "("
+      R_PAREN@6..7 ")"
+    COLON@7..8 ":"
+    BLOCK@8..38
+      NEWLINE@8..9 "\n"
+      INDENT@13..13 ""
+      IF_STMT@13..35
+        IF_KW@13..15 "if"
+        NAME_EXPR@16..17
+          NAME_REF@16..17
+            IDENT@16..17 "x"
+        COLON@17..18 ":"
+        BLOCK@18..35
+          NEWLINE@18..19 "\n"
+          INDENT@27..27 ""
+          EXPR_STMT@27..29
+            NAME_EXPR@27..28
+              NAME_REF@27..28
+                IDENT@27..28 "y"
+            NEWLINE@28..29 "\n"
+          DEDENT@35..35 ""
+      EXPR_STMT@35..37
+        NAME_EXPR@35..36
+          NAME_REF@35..36
+            IDENT@35..36 "z"
+        NEWLINE@36..37 "\n"
+      DEDENT@38..38 ""
+  ERROR@38..40
+    IDENT@38..39 "w"
+    NEWLINE@39..40 "\n"
+
+--- errors ---
+[E0203] Error: unindent does not match any outer indentation level
+   ╭─[ test.vg:4:1 ]
+   │
+ 4 │       z
+   │ ───┬──  
+   │    ╰──── expected 0, 4 or 8 spaces, found 6
+───╯
+[E0202] Error: tabs are not allowed in indentation
+   ╭─[ test.vg:5:1 ]
+   │
+ 5 │     w
+   │ ┬───  
+   │ ╰───── indent with spaces
+───╯

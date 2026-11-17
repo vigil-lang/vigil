@@ -1,0 +1,15 @@
+# module: main
+# A module of the user named `std` is an error, and has no privilege of the
+# standard library.
+from std.mine import f
+
+# module: std.mine
+@helper(14)
+def f() -> u64: ...
+
+@context("xdp")
+struct Ctx:
+    pass
+
+# module: std
+const X: u32 = 1

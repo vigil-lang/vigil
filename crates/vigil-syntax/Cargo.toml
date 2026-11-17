@@ -1,0 +1,12 @@
+[package]
+name = "vigil-syntax"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+vigil-diagnostics.workspace = true
+logos.workspace = true
+rowan.workspace = true
+
+[dev-dependencies]
+insta.workspace = true

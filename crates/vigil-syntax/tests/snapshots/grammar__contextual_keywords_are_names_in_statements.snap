@@ -1,0 +1,34 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "check(\"def f():\\n    map = 1\\n    type = map\\n\")"
+---
+SOURCE_FILE@0..36
+  FN_DEF@0..36
+    DEF_KW@0..3 "def"
+    NAME@4..5
+      IDENT@4..5 "f"
+    PARAM_LIST@5..7
+      L_PAREN@5..6 "("
+      R_PAREN@6..7 ")"
+    COLON@7..8 ":"
+    BLOCK@8..36
+      NEWLINE@8..9 "\n"
+      INDENT@13..13 ""
+      ASSIGN_STMT@13..21
+        NAME_EXPR@13..16
+          NAME_REF@13..16
+            IDENT@13..16 "map"
+        EQ@17..18 "="
+        LITERAL@19..20
+          INT@19..20 "1"
+        NEWLINE@20..21 "\n"
+      ASSIGN_STMT@25..36
+        NAME_EXPR@25..29
+          NAME_REF@25..29
+            IDENT@25..29 "type"
+        EQ@30..31 "="
+        NAME_EXPR@32..35
+          NAME_REF@32..35
+            IDENT@32..35 "map"
+        NEWLINE@35..36 "\n"
+      DEDENT@36..36 ""

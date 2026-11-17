@@ -1,0 +1,25 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0414] Error: division by zero
+   ╭─[ main.vg:2:16 ]
+   │
+ 2 │ const A: u32 = 3 // 0
+   │                ───┬──  
+   │                   ╰──── the divisor is 0
+───╯
+[E0414] Error: division by zero
+   ╭─[ main.vg:5:16 ]
+   │
+ 5 │     a = [x] * (3 // 0)
+   │                ───┬──  
+   │                   ╰──── the divisor is 0
+───╯
+[E0414] Error: shift amount out of range
+   ╭─[ main.vg:6:16 ]
+   │
+ 6 │     b = [x] * (1 << 200)
+   │                ────┬───  
+   │                    ╰───── shifts by 200, the amount goes from 0 to 127
+───╯

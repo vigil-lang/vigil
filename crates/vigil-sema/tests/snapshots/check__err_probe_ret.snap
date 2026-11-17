@@ -1,0 +1,13 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: `ret` is not available in a kprobe program
+   ╭─[ main.vg:5:8 ]
+   │
+ 5 │     if ctx.ret() == 0:
+   │        ────┬────  
+   │            ╰────── the probed function has not returned yet
+   │ 
+   │ Help: read the value returned in a `@kretprobe` or `@uretprobe`
+───╯

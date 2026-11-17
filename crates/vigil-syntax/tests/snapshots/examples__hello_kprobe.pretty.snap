@@ -1,0 +1,11 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: printed
+---
+from std.bpf import KprobeContext, pid_tgid
+
+@kprobe("do_sys_openat2")
+def on_open(ctx: KprobeContext) -> i32:
+    pid = pid_tgid() >> 32
+    print(f"openat2 called by pid {pid}")
+    return 0

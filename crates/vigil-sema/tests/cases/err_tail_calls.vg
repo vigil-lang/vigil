@@ -1,0 +1,25 @@
+from std.net import XdpContext, XdpAction
+
+map stages: ProgArray(max_entries=2)
+map counts: Hash[u32, u64](max_entries=8)
+map typed: ProgArray[u32](max_entries=2)
+
+@xdp
+@tail(stages, 2)
+def out_of_range(ctx: XdpContext) -> XdpAction:
+    return XdpAction.PASS
+
+@xdp
+@tail(counts, 0)
+def not_a_program_array(ctx: XdpContext) -> XdpAction:
+    return XdpAction.PASS
+
+@tail(stages, 0)
+def not_a_program(x: u32) -> u32:
+    return x
+
+@xdp
+def entry(ctx: XdpContext) -> XdpAction:
+    stages.tail_call(7, 0)
+    stages.get(0)
+    return XdpAction.PASS

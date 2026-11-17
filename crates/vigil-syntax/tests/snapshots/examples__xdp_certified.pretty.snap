@@ -1,0 +1,16 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: printed
+---
+from std.net import XdpContext, XdpAction, Byte
+
+@xdp
+def dns_drop(ctx: XdpContext) -> XdpAction:
+    if ctx.parse[Byte](12)?.value != 8 or ctx.parse[Byte](13)?.value != 0:
+        return XdpAction.PASS
+    if ctx.parse[Byte](14)?.value != 0x45 or ctx.parse[Byte](23)?.value != 17:
+        return XdpAction.PASS
+    port = u16(ctx.parse[Byte](36)?.value) << 8 | u16(ctx.parse[Byte](37)?.value)
+    if port == 53:
+        return XdpAction.DROP
+    return XdpAction.PASS

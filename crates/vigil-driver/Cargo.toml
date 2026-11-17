@@ -1,0 +1,16 @@
+[package]
+name = "vigil-driver"
+version.workspace = true
+edition.workspace = true
+description = "The Vigil pipeline without a file system: analysis, LLVM IR, Vigil Core and the certified eBPF backend, shared by the CLI and the WASM build"
+
+[dependencies]
+vigil-btf.workspace = true
+vigil-core.workspace = true
+vigil-codegen-llvm.workspace = true
+vigil-codegen-bpf.workspace = true
+vigil-diagnostics.workspace = true
+vigil-sema.workspace = true
+vigil-syntax.workspace = true
+vigil-target.workspace = true
+serde_json.workspace = true

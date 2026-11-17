@@ -1,0 +1,22 @@
+# module: net.ports
+def _is_ntp(port: u16) -> bool:
+    return port == 123
+
+def is_watched(port: u16) -> bool:
+    return port == 53 or _is_ntp(port)
+
+struct _Hidden:
+    x: u32
+
+# module: main
+import net.ports
+import net
+from net import ports as p
+
+def check(port: u16) -> bool:
+    if p.is_watched(port):
+        return True
+    return net.ports._is_ntp(port) or p._is_ntp(port) or ports._is_ntp(port)
+
+def hidden(h: p._Hidden) -> u32:
+    return 0

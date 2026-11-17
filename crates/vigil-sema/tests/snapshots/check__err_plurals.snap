@@ -1,0 +1,39 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0400] Error: expected 1 element, found 2
+   ╭─[ main.vg:6:19 ]
+   │
+ 6 │ const C: u32[1] = [1, 2]
+   │                   ───┬──  
+   │                      ╰──── wrong length
+───╯
+[E0407] Error: 2 targets for 1 value
+   ╭─[ main.vg:9:5 ]
+   │
+ 9 │     a, b = 1
+   │     ────┬────  
+   │         ╰────── each target takes one value, as in `a, b = b, a`
+───╯
+[E0407] Error: 2 targets for 3 values
+    ╭─[ main.vg:10:5 ]
+    │
+ 10 │     a, b = x, x, x
+    │     ───────┬───────  
+    │            ╰───────── each target takes one value, as in `a, b = b, a`
+────╯
+[E0402] Error: variant `One` has fields
+    ╭─[ main.vg:11:9 ]
+    │
+ 11 │     e = E.One
+    │         ──┬──  
+    │           ╰──── construct it with 1 value in parentheses
+────╯
+[E0414] Error: index 1 is out of bounds
+    ╭─[ main.vg:13:15 ]
+    │
+ 13 │     return xs[1]
+    │               ┬  
+    │               ╰── the array has 1 element
+────╯

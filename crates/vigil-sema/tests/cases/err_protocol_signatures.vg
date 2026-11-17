@@ -1,0 +1,36 @@
+protocol Scorer:
+    def score(self, x: u32) -> i64: ...
+    def name(self, key) -> u8: ...
+
+# Wrong type of parameter.
+struct A(Scorer):
+    w: u32
+
+    def score(self, x: u16) -> i64:
+        return 0
+
+    def name(self, key: u64) -> u8:
+        return 1
+
+# Wrong return type; `key` may be of any type.
+struct B(Scorer):
+    w: u32
+
+    def score(self, x: u32) -> i32:
+        return 0
+
+    def name(self, key: bool) -> u8:
+        return 1
+
+# Right.
+struct C(Scorer):
+    w: u32
+
+    def score(self, x: u32) -> i64:
+        return 0
+
+    def name(self, key: u16) -> u8:
+        return 2
+
+protocol Broken:
+    def f(self, x: Unknown) -> u8: ...

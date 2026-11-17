@@ -1,0 +1,38 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0402] Error: `stage()` is only allowed in a program
+   ╭─[ main.vg:4:5 ]
+   │
+ 3 │ def helper() -> u32:
+   │     ───┬──  
+   │        ╰──── declared here, without a program decorator
+ 4 │     stage()
+   │     ───┬───  
+   │        ╰───── `helper` is not a program
+   │ 
+   │ Note: `stage()` splits a program in two, joined by a tail call
+───╯
+[E0402] Error: `stage()` is a statement of the body of a program
+    ╭─[ main.vg:12:9 ]
+    │
+ 12 │         stage()
+    │         ───┬───  
+    │            ╰───── not at the top of the program
+    │ 
+    │ Note: the program is split there: no loop or branch may contain it
+────╯
+[E0402] Error: `ip` cannot go to the next stage
+    ╭─[ main.vg:13:5 ]
+    │
+ 10 │     ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+    │     ─┬  
+    │      ╰── a pointer, defined here
+    │ 
+ 13 │     stage()
+    │     ────┬───  
+    │         ╰───── the program is split here
+    │ 
+    │ Help: parse the packet or look up the map again after `stage()`
+────╯

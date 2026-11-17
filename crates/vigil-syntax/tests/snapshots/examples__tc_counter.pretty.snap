@@ -1,0 +1,49 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: printed
+---
+from std.net import TcContext, TcAction, EthHdr, Ipv4Hdr, ETH_HLEN, ETH_P_IP
+
+enum Proto:
+    Tcp
+    Udp
+    Icmp
+    Other(u8)
+
+    def of(n: u8) -> Proto:
+        match n:
+            case 6:
+                return Proto.Tcp
+            case 17:
+                return Proto.Udp
+            case 1:
+                return Proto.Icmp
+            case _:
+                return Proto.Other(n)
+
+    def slot(self) -> u32:
+        match self:
+            case Proto.Tcp:
+                return 0
+            case Proto.Udp:
+                return 1
+            case Proto.Icmp:
+                return 2
+            case Proto.Other(_):
+                return 3
+
+struct Counters:
+    packets: u64
+    bytes: u64
+
+map counters: PerCpuArray[Counters, 4]
+
+@tc(direction="egress", iface="eth0")
+def count(ctx: TcContext) -> TcAction:
+    eth = ctx.parse[EthHdr](0)?
+    if eth.proto == ETH_P_IP:
+        ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+        c = counters[Proto.of(ip.protocol).slot()]?
+        c.packets += 1
+        c.bytes += u64(ctx.len())
+    return TcAction.OK

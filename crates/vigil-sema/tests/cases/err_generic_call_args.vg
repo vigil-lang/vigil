@@ -1,0 +1,16 @@
+# the arguments of an inferred generic call are checked as in other calls:
+# an argument given twice, a positional one after a keyword one
+def gen[T](x: T, y: T) -> T:
+    return x
+
+def a() -> u32:
+    return gen(u32(1), x=u32(2))
+
+def b() -> u32:
+    return gen(x=u32(1), u32(2))
+
+def c() -> u32:
+    return gen(u32(1), u32(2)) + gen(y=u32(1), x=u32(2))
+
+def d() -> u32:
+    return gen(u32(1))

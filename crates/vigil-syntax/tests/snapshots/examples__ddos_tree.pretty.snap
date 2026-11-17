@@ -1,0 +1,42 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+assertion_line: 41
+expression: printed
+---
+from std.net import XdpContext, XdpAction, EthHdr, Ipv4Hdr, TcpHdr, ETH_HLEN, ETH_P_IP, IPPROTO_TCP
+from std.ml import DecisionTree
+from std.ml.tensor import Vector
+from std.sketch import CountMin
+
+const MAX_NODES: usize = 64
+const DEPTH: usize = 8
+
+comptime def prefix_mask(bits: u32) -> u32:
+    return u32(((1 << u64(bits)) - 1) << u64(32 - bits))
+
+const SLASH_24: u32 = prefix_mask(24)
+map tree: Array[DecisionTree[u32, 4, MAX_NODES, DEPTH], 1]
+map syns: PerCpuArray[CountMin[4, 1024], 1]
+
+@xdp(iface="eth0")
+def syn_guard(ctx: XdpContext) -> XdpAction:
+    eth = ctx.parse[EthHdr](0)?
+    if eth.proto != ETH_P_IP:
+        return XdpAction.PASS
+    ip = ctx.parse[Ipv4Hdr](ETH_HLEN)?
+    if ip.protocol != IPPROTO_TCP:
+        return XdpAction.PASS
+    tcp = ctx.parse[TcpHdr](ETH_HLEN + ip.header_len())?
+    if not tcp.syn() or tcp.ack():
+        return XdpAction.PASS
+    sketch = syns[0]?
+    sketch.add(ip.saddr)
+    x = Vector[u32, 4]([sketch.estimate(ip.saddr), ip.saddr & SLASH_24, u32(tcp.window), u32(ip.ttl)])
+    model = tree[0]?
+    match model.classify(x):
+        case 0:
+            return XdpAction.PASS
+        case 1 | 2:
+            return XdpAction.DROP
+        case _:
+            return XdpAction.ABORTED

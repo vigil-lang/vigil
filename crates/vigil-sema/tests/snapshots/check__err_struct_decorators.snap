@@ -1,0 +1,20 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0412] Error: `@network_order` takes no arguments
+   ╭─[ main.vg:1:1 ]
+   │
+ 1 │ @network_order(1)
+   │ ─────────┬────────  
+   │          ╰────────── write `@network_order`
+───╯
+[E0412] Error: `@packed` is not a decorator of structs
+   ╭─[ main.vg:5:1 ]
+   │
+ 5 │ @packed
+   │ ────┬───  
+   │     ╰───── not allowed on a struct
+   │ 
+   │ Help: structs take `@network_order`
+───╯

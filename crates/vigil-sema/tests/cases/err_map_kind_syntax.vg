@@ -1,0 +1,6 @@
+# the expected declaration is the one of the kind written
+map s: ProgArray[u32](max_entries=4)
+map e: RingBuf[u32](size=4096)
+map l: LruHash[u32](max_entries=4)
+map a: PerCpuArray[u32]
+event h: Hash[u32, u32](max_entries=4)

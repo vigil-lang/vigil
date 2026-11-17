@@ -1,0 +1,80 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0412] Error: `nothing` is not a function
+    ╭─[ main.vg:27:13 ]
+    │
+ 27 │ @property(x=nothing)
+    │             ───┬───  
+    │                ╰───── not a generator
+    │ 
+    │ Help: a generator is a function whose parameters are drawn, and which returns the value of the parameter
+────╯
+[E0412] Error: `counts` is not a function
+    ╭─[ main.vg:31:13 ]
+    │
+ 31 │ @property(x=counts)
+    │             ───┬──  
+    │                ╰──── not a generator
+    │ 
+    │ Help: a generator is a function whose parameters are drawn, and which returns the value of the parameter
+────╯
+[E0412] Error: `wrong_type` does not make values of the parameter
+    ╭─[ main.vg:35:13 ]
+    │
+ 35 │ @property(x=wrong_type)
+    │             ─────┬────  
+    │                  ╰────── returns `u64`, the parameter is `u32`
+    │ 
+    │ Help: a generator returns the type of the parameter, or an option of it (`None` discards the case)
+────╯
+[E0412] Error: the parameters of `takes_a_context` cannot be generated
+    ╭─[ main.vg:39:13 ]
+    │
+ 11 │ def takes_a_context(ctx: XdpContext) -> u32:
+    │                     ─┬─  
+    │                      ╰─── this parameter
+    │ 
+ 39 │ @property(x=takes_a_context)
+    │             ───────┬───────  
+    │                    ╰───────── its parameter `ctx` is not data
+    │ 
+    │ Note: generated values are integers, booleans, arrays, structs, enums and options of those
+────╯
+[E0412] Error: `pair` cannot be a generator
+    ╭─[ main.vg:43:13 ]
+    │
+ 43 │ @property(x=pair)
+    │             ──┬─  
+    │               ╰─── a program, test, property, helper, comptime or generic function
+────╯
+[E0412] Error: `program` cannot be a generator
+    ╭─[ main.vg:47:13 ]
+    │
+ 47 │ @property(x=program)
+    │             ───┬───  
+    │                ╰───── a program, test, property, helper, comptime or generic function
+────╯
+[E0412] Error: `Point.norm` cannot be a generator
+    ╭─[ main.vg:51:13 ]
+    │
+ 24 │     def norm(self) -> u32:
+    │              ──┬─  
+    │                ╰─── `self` here
+    │ 
+ 51 │ @property(x=Point.norm)
+    │             ─────┬────  
+    │                  ╰────── it takes `self`
+    │ 
+    │ Help: a generator is a function, or a method without `self`
+────╯
+[E0412] Error: invalid argument for `@property`
+    ╭─[ main.vg:55:1 ]
+    │
+ 55 │ @property(y=wrong_type)
+    │ ────────────┬───────────  
+    │             ╰───────────── expected `@property`, `@property(cases=N)` or `@property(x=generator)`
+    │ 
+    │ Help: `cases` is the number of values tried, from 1 to 1000000; `x=g` makes the values of the parameter `x` with the function `g`
+────╯

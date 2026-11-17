@@ -1,0 +1,13 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0390] Error: floating-point numbers are only allowed in comptime code
+    ╭─[ main.vg:14:9 ]
+    │
+ 14 │     x = 1.5
+    │         ─┬─  
+    │          ╰─── the verifier rejects floating point
+    │ 
+    │ Help: compute the value in a `comptime def`, or use `fixed[I, F]` from `std.fixed`
+────╯

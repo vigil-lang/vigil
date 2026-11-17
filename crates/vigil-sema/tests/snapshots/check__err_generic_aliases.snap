@@ -1,0 +1,51 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0304] Error: type alias `Loop` refers to itself
+   ╭─[ main.vg:3:6 ]
+   │
+ 3 │ type Loop[T] = Loop[T]
+   │      ──┬─  
+   │        ╰─── cycle through this alias
+───╯
+[E0403] Error: `Pair` takes generic arguments
+   ╭─[ main.vg:5:10 ]
+   │
+ 5 │ def a(x: Pair) -> u8:
+   │          ──┬─  
+   │            ╰─── write `Pair[...]`
+───╯
+[E0403] Error: `Pair` takes 1 generic argument, found 2
+   ╭─[ main.vg:8:10 ]
+   │
+ 1 │ type Pair[T] = T[2]
+   │      ──┬─  
+   │        ╰─── `Pair` declared here
+   │ 
+ 8 │ def b(x: Pair[u8, u16]) -> u8:
+   │          ──────┬──────  
+   │                ╰──────── expected 1
+───╯
+[E0402] Error: `N` is a constant parameter
+    ╭─[ main.vg:11:16 ]
+    │
+  2 │ type Sized[N: usize] = u8[N]
+    │            ┬  
+    │            ╰── declared here
+    │ 
+ 11 │ def c(x: Sized[u8]) -> u8:
+    │                ─┬  
+    │                 ╰── expected a constant, found a type
+────╯
+[E0402] Error: `T` is a type parameter
+    ╭─[ main.vg:14:15 ]
+    │
+  1 │ type Pair[T] = T[2]
+    │           ┬  
+    │           ╰── declared here
+    │ 
+ 14 │ def d(x: Pair[4]) -> u8:
+    │               ┬  
+    │               ╰── expected a type, found a constant
+────╯

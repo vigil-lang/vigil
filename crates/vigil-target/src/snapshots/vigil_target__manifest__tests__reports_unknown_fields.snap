@@ -1,0 +1,11 @@
+---
+source: crates/vigil-target/src/manifest.rs
+expression: out
+---
+[E0001] Error: invalid `vigil.toml`
+   ╭─[ vigil.toml:3:1 ]
+   │
+ 3 │ author = "me"
+   │ ───┬──  
+   │    ╰──── unknown key `author`, expected `name` or `version`
+───╯

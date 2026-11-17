@@ -1,0 +1,19 @@
+from std.bpf import KprobeContext
+
+def total[N: usize](xs: u32[N]) -> u32:
+    t: u32 = 0
+    for x in xs:
+        t += x
+    return t
+
+def same[T](x: T) -> T:
+    return x
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    # The literals take the element type of the parameter: `u32`.
+    a: u32 = total([1, 2, 3])
+    # A type parameter bound by a literal alone is `i64`.
+    b: i64 = same(5)
+    print(f"{a} {b}")
+    return 0

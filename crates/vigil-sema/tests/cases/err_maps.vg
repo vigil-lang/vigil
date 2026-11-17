@@ -1,0 +1,20 @@
+from std.bpf import KprobeContext
+
+map bad_kind: Tree[u32, u64](max_entries=4)
+map no_size: Hash[u32, u64]
+map bad_param: Hash[u32, u64](entries=4)
+map bad_value: Hash[u32, Option[KprobeContext]](max_entries=4)
+map ring_as_map: RingBuf[u32](size=4096)
+event odd_ring: RingBuf[u32](size=5000)
+map arr: Array[u64, 8]
+map h: Hash[u32, u64](max_entries=8)
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    x = h
+    h.emit(1)
+    arr.remove(1)
+    y = h[1]
+    z = arr.get(True)
+    h.insert("k", 1)
+    return 0

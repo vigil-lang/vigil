@@ -1,0 +1,40 @@
+---
+source: crates/vigil-syntax/tests/grammar.rs
+expression: "check(\"import std.ml as ml\\nfrom std.net import (\\n    EthHdr,\\n    Ipv4Hdr as Ip,\\n)\\n\")"
+---
+SOURCE_FILE@0..75
+  IMPORT@0..20
+    IMPORT_KW@0..6 "import"
+    PATH@7..13
+      NAME_REF@7..10
+        IDENT@7..10 "std"
+      DOT@10..11 "."
+      NAME_REF@11..13
+        IDENT@11..13 "ml"
+    AS_KW@14..16 "as"
+    NAME@17..19
+      IDENT@17..19 "ml"
+    NEWLINE@19..20 "\n"
+  IMPORT@20..75
+    FROM_KW@20..24 "from"
+    PATH@25..32
+      NAME_REF@25..28
+        IDENT@25..28 "std"
+      DOT@28..29 "."
+      NAME_REF@29..32
+        IDENT@29..32 "net"
+    IMPORT_KW@33..39 "import"
+    L_PAREN@40..41 "("
+    IMPORT_NAME@46..52
+      NAME_REF@46..52
+        IDENT@46..52 "EthHdr"
+    COMMA@52..53 ","
+    IMPORT_NAME@58..71
+      NAME_REF@58..65
+        IDENT@58..65 "Ipv4Hdr"
+      AS_KW@66..68 "as"
+      NAME@69..71
+        IDENT@69..71 "Ip"
+    COMMA@71..72 ","
+    R_PAREN@73..74 ")"
+    NEWLINE@74..75 "\n"

@@ -1,0 +1,64 @@
+# Contracts: `@requires` over the parameters, `@ensures` over them and
+# `result`, `@invariant` on loops; contracts may call pure functions.
+from std.bpf import KprobeContext, pid_tgid
+
+map counts: Hash[u32, u64](max_entries=16)
+
+def square(x: u32) -> u64:
+    return u64(x) * u64(x)
+
+@requires(n <= 1000)
+@ensures(result >= u64(n))
+@ensures(result <= square(n) + u64(n))
+def bump(n: u32) -> u64:
+    if n < 10:
+        return u64(n) * 2
+    return u64(n) + 1
+
+@requires(lo <= hi)
+@ensures(lo <= result and result <= hi)
+def clamp_to(x: i32, lo: i32, hi: i32) -> i32:
+    return min(max(x, lo), hi)
+
+@ensures(result == (xs[0] > 0))
+def first_positive(xs: i32[4]) -> bool:
+    return xs[0] > 0
+
+@requires(n > 0)
+def total(n: u32) -> u64:
+    t: u64 = 0
+    @invariant(t <= u64(i) * 100)
+    for i in range(n):
+        t += 100
+    w: u32 = 0
+    @bounded(8)
+    @invariant(w <= 8)
+    while w < n:
+        w += 1
+    return t
+
+struct Point:
+    x: u32
+    y: u32
+
+    @ensures(result >= u64(self.x))
+    def sum(self) -> u64:
+        return u64(self.x) + u64(self.y)
+
+@ensures(result >= xs[0])
+def largest[N: usize](xs: u32[N]) -> u32:
+    best: u32 = 0
+    for x in xs:
+        best = max(best, x)
+    return best
+
+def demo() -> u64:
+    return bump(3) + u64(clamp_to(5, 0, 3)) + u64(largest([1, 2]))
+
+# Bodies may use maps and helpers; the contracts may not.
+@ensures(result >= 0)
+@kprobe("do_sys_openat2")
+def probe(ctx: KprobeContext) -> i32:
+    n = counts.get_or_insert(u32(pid_tgid() >> 32), 0)
+    n += bump(1)
+    return 0

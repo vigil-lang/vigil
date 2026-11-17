@@ -1,0 +1,103 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0406] Error: `300` does not fit in `u8`
+   ╭─[ main.vg:6:17 ]
+   │
+ 6 │     small: u8 = 300
+   │                 ─┬─  
+   │                  ╰─── `u8` goes from 0 to 255
+───╯
+[E0400] Error: mismatched types
+   ╭─[ main.vg:7:17 ]
+   │
+ 7 │     flag: u32 = True
+   │                 ──┬─  
+   │                   ╰─── expected `u32`, found `bool`
+   │ 
+   │ Help: convert the value with `u32(...)`
+───╯
+[E0400] Error: mismatched types
+   ╭─[ main.vg:8:17 ]
+   │
+ 8 │     mixed = a + b
+   │                 ┬  
+   │                 ╰── expected `u32`, found `u64`
+   │ 
+   │ Help: convert the value with `u32(...)`
+───╯
+[E0404] Error: `/` is not defined on integers
+   ╭─[ main.vg:9:12 ]
+   │
+ 9 │     half = a / 2
+   │            ──┬──  
+   │              ╰──── the operands are `u32`
+   │ 
+   │ Help: use `//` for integer division
+───╯
+[E0404] Error: cannot negate a value of type `u32`
+    ╭─[ main.vg:10:11 ]
+    │
+ 10 │     neg = -a
+    │           ─┬  
+    │            ╰── unsigned integers have no negative values
+────╯
+[E0403] Error: missing argument `y`
+    ╭─[ main.vg:11:9 ]
+    │
+  1 │ struct Point:
+    │        ──┬──  
+    │          ╰──── `Point` declared here
+    │ 
+ 11 │     p = Point(1)
+    │         ────┬───  
+    │             ╰───── add `y=...`
+────╯
+[E0403] Error: too many arguments: this struct takes 2
+    ╭─[ main.vg:12:21 ]
+    │
+  1 │ struct Point:
+    │        ──┬──  
+    │          ╰──── `Point` declared here
+    │ 
+ 12 │     q = Point(1, 2, 3)
+    │                     ┬  
+    │                     ╰── unexpected argument
+────╯
+[E0403] Error: unknown argument `z`
+    ╭─[ main.vg:13:20 ]
+    │
+ 13 │     r = Point(x=1, z=2, y=3)
+    │                    ┬  
+    │                    ╰── no parameter with this name
+────╯
+[E0401] Error: `Point` has no field `z`
+    ╭─[ main.vg:14:7 ]
+    │
+ 14 │     p.z = 1
+    │       ┬  
+    │       ╰── unknown field
+    │ 
+    │ Note: its fields are `x`, `y`
+────╯
+[E0300] Error: cannot find `unknown_var` in this scope
+    ╭─[ main.vg:15:5 ]
+    │
+ 15 │     unknown_var + 1
+    │     ─────┬─────  
+    │          ╰─────── not found
+────╯
+[E0400] Error: mismatched types
+    ╭─[ main.vg:16:12 ]
+    │
+  5 │ def f(a: u32, b: u64) -> u32:
+    │                          ─┬─  
+    │                           ╰─── the return type of `f`
+    │ 
+ 16 │     return b
+    │            ┬  
+    │            ╰── expected `u32`, found `u64`
+    │ 
+    │ Help: convert the value with `u32(...)`
+────╯

@@ -1,0 +1,156 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..409
+  IMPORT@163..204
+    FROM_KW@163..167 "from"
+    PATH@168..175
+      NAME_REF@168..171
+        IDENT@168..171 "std"
+      DOT@171..172 "."
+      NAME_REF@172..175
+        IDENT@172..175 "bpf"
+    IMPORT_KW@176..182 "import"
+    IMPORT_NAME@183..193
+      NAME_REF@183..193
+        IDENT@183..193 "LsmContext"
+    COMMA@193..194 ","
+    IMPORT_NAME@195..203
+      NAME_REF@195..203
+        IDENT@195..203 "pid_tgid"
+    NEWLINE@203..204 "\n"
+  MAP_DECL@205..249
+    MAP_KW@205..208 "map"
+    NAME@209..214
+      IDENT@209..214 "opens"
+    COLON@214..215 ":"
+    PATH_TYPE@216..230
+      PATH@216..220
+        NAME_REF@216..220
+          IDENT@216..220 "Hash"
+      GENERIC_ARG_LIST@220..230
+        L_BRACK@220..221 "["
+        TYPE_ARG@221..224
+          PATH_TYPE@221..224
+            PATH@221..224
+              NAME_REF@221..224
+                IDENT@221..224 "u32"
+        COMMA@224..225 ","
+        TYPE_ARG@226..229
+          PATH_TYPE@226..229
+            PATH@226..229
+              NAME_REF@226..229
+                IDENT@226..229 "u64"
+        R_BRACK@229..230 "]"
+    ARG_LIST@230..248
+      L_PAREN@230..231 "("
+      ARG@231..247
+        NAME@231..242
+          IDENT@231..242 "max_entries"
+        EQ@242..243 "="
+        LITERAL@243..247
+          INT@243..247 "1024"
+      R_PAREN@247..248 ")"
+    NEWLINE@248..249 "\n"
+  FN_DEF@250..409
+    DECORATOR@250..268
+      AT@250..251 "@"
+      PATH@251..254
+        NAME_REF@251..254
+          IDENT@251..254 "lsm"
+      ARG_LIST@254..267
+        L_PAREN@254..255 "("
+        ARG@255..266
+          LITERAL@255..266
+            STRING@255..266 "\"file_open\""
+        R_PAREN@266..267 ")"
+      NEWLINE@267..268 "\n"
+    DEF_KW@268..271 "def"
+    NAME@272..283
+      IDENT@272..283 "count_opens"
+    PARAM_LIST@283..300
+      L_PAREN@283..284 "("
+      PARAM@284..299
+        NAME@284..287
+          IDENT@284..287 "ctx"
+        COLON@287..288 ":"
+        PATH_TYPE@289..299
+          PATH@289..299
+            NAME_REF@289..299
+              IDENT@289..299 "LsmContext"
+      R_PAREN@299..300 ")"
+    RET_TYPE@301..307
+      ARROW@301..303 "->"
+      PATH_TYPE@304..307
+        PATH@304..307
+          NAME_REF@304..307
+            IDENT@304..307 "i32"
+    COLON@307..308 ":"
+    BLOCK@308..409
+      NEWLINE@308..309 "\n"
+      INDENT@313..313 ""
+      ASSIGN_STMT@313..341
+        NAME_EXPR@313..316
+          NAME_REF@313..316
+            IDENT@313..316 "pid"
+        EQ@317..318 "="
+        CALL_EXPR@319..340
+          NAME_EXPR@319..322
+            NAME_REF@319..322
+              IDENT@319..322 "u32"
+          ARG_LIST@322..340
+            L_PAREN@322..323 "("
+            ARG@323..339
+              BIN_EXPR@323..339
+                CALL_EXPR@323..333
+                  NAME_EXPR@323..331
+                    NAME_REF@323..331
+                      IDENT@323..331 "pid_tgid"
+                  ARG_LIST@331..333
+                    L_PAREN@331..332 "("
+                    R_PAREN@332..333 ")"
+                SHR@334..336 ">>"
+                LITERAL@337..339
+                  INT@337..339 "32"
+            R_PAREN@339..340 ")"
+        NEWLINE@340..341 "\n"
+      ASSIGN_STMT@345..381
+        NAME_EXPR@345..350
+          NAME_REF@345..350
+            IDENT@345..350 "count"
+        EQ@351..352 "="
+        CALL_EXPR@353..380
+          FIELD_EXPR@353..372
+            NAME_EXPR@353..358
+              NAME_REF@353..358
+                IDENT@353..358 "opens"
+            DOT@358..359 "."
+            NAME_REF@359..372
+              IDENT@359..372 "get_or_insert"
+          ARG_LIST@372..380
+            L_PAREN@372..373 "("
+            ARG@373..376
+              NAME_EXPR@373..376
+                NAME_REF@373..376
+                  IDENT@373..376 "pid"
+            COMMA@376..377 ","
+            ARG@378..379
+              LITERAL@378..379
+                INT@378..379 "0"
+            R_PAREN@379..380 ")"
+        NEWLINE@380..381 "\n"
+      AUG_ASSIGN_STMT@385..396
+        NAME_EXPR@385..390
+          NAME_REF@385..390
+            IDENT@385..390 "count"
+        PLUS_EQ@391..393 "+="
+        LITERAL@394..395
+          INT@394..395 "1"
+        NEWLINE@395..396 "\n"
+      RETURN_STMT@400..409
+        RETURN_KW@400..406 "return"
+        LITERAL@407..408
+          INT@407..408 "0"
+        NEWLINE@408..409 "\n"
+      DEDENT@409..409 ""

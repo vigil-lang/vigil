@@ -1,0 +1,51 @@
+from std.ml.tensor import Vector, Matrix
+
+comptime def table() -> u32[4]:
+    t = [0] * 4
+    for i in range(5):
+        t[i] = 1
+    return t
+
+comptime def half() -> f64:
+    return 0.5
+
+def not_comptime() -> u32:
+    return 1
+
+def uses_float(x: f64) -> u32:
+    return 0
+
+const T: u32[4] = table()
+const H: u32 = half()
+const N = not_comptime()
+const UNTYPED = table()
+const LEN: u32 = 4
+const BAD: u32[LEN] = table()
+
+struct S:
+    v: u32[T[0]]
+    n: u32
+
+    def set(self, n: u32):
+        self.n = n
+
+    @mut
+    def reset(self):
+        self.n = 0
+
+    def calls_mut(self):
+        self.reset()
+
+@mut
+def free():
+    pass
+
+def runtime() -> u32:
+    x = half()
+    y = 2.5
+    m = Matrix[u32, 2, 3]([[1, 2, 3], [4, 5, 6]])
+    v = m.matvec(Vector[u32, 2]([1, 2]))
+    S(T, 1).reset()
+    z = [1] * LEN + 1
+    w = [0] * x
+    return 0

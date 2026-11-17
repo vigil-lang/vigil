@@ -1,0 +1,567 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..1116
+  IMPORT@51..128
+    FROM_KW@51..55 "from"
+    PATH@56..63
+      NAME_REF@56..59
+        IDENT@56..59 "std"
+      DOT@59..60 "."
+      NAME_REF@60..63
+        IDENT@60..63 "net"
+    IMPORT_KW@64..70 "import"
+    IMPORT_NAME@71..80
+      NAME_REF@71..80
+        IDENT@71..80 "TcContext"
+    COMMA@80..81 ","
+    IMPORT_NAME@82..90
+      NAME_REF@82..90
+        IDENT@82..90 "TcAction"
+    COMMA@90..91 ","
+    IMPORT_NAME@92..98
+      NAME_REF@92..98
+        IDENT@92..98 "EthHdr"
+    COMMA@98..99 ","
+    IMPORT_NAME@100..107
+      NAME_REF@100..107
+        IDENT@100..107 "Ipv4Hdr"
+    COMMA@107..108 ","
+    IMPORT_NAME@109..117
+      NAME_REF@109..117
+        IDENT@109..117 "ETH_HLEN"
+    COMMA@117..118 ","
+    IMPORT_NAME@119..127
+      NAME_REF@119..127
+        IDENT@119..127 "ETH_P_IP"
+    NEWLINE@127..128 "\n"
+  ENUM_DEF@129..712
+    ENUM_KW@129..133 "enum"
+    NAME@134..139
+      IDENT@134..139 "Proto"
+    COLON@139..140 ":"
+    MEMBER_LIST@140..712
+      NEWLINE@140..141 "\n"
+      INDENT@145..145 ""
+      VARIANT@145..149
+        NAME@145..148
+          IDENT@145..148 "Tcp"
+        NEWLINE@148..149 "\n"
+      VARIANT@153..157
+        NAME@153..156
+          IDENT@153..156 "Udp"
+        NEWLINE@156..157 "\n"
+      VARIANT@161..166
+        NAME@161..165
+          IDENT@161..165 "Icmp"
+        NEWLINE@165..166 "\n"
+      VARIANT@170..180
+        NAME@170..175
+          IDENT@170..175 "Other"
+        VARIANT_FIELDS@175..179
+          L_PAREN@175..176 "("
+          PATH_TYPE@176..178
+            PATH@176..178
+              NAME_REF@176..178
+                IDENT@176..178 "u8"
+          R_PAREN@178..179 ")"
+        NEWLINE@179..180 "\n"
+      FN_DEF@185..450
+        DEF_KW@185..188 "def"
+        NAME@189..191
+          IDENT@189..191 "of"
+        PARAM_LIST@191..198
+          L_PAREN@191..192 "("
+          PARAM@192..197
+            NAME@192..193
+              IDENT@192..193 "n"
+            COLON@193..194 ":"
+            PATH_TYPE@195..197
+              PATH@195..197
+                NAME_REF@195..197
+                  IDENT@195..197 "u8"
+          R_PAREN@197..198 ")"
+        RET_TYPE@199..207
+          ARROW@199..201 "->"
+          PATH_TYPE@202..207
+            PATH@202..207
+              NAME_REF@202..207
+                IDENT@202..207 "Proto"
+        COLON@207..208 ":"
+        BLOCK@208..450
+          NEWLINE@208..209 "\n"
+          INDENT@217..217 ""
+          MATCH_STMT@217..450
+            MATCH_KW@217..222 "match"
+            NAME_EXPR@223..224
+              NAME_REF@223..224
+                IDENT@223..224 "n"
+            COLON@224..225 ":"
+            NEWLINE@225..226 "\n"
+            INDENT@238..238 ""
+            MATCH_ARM@238..291
+              CASE_KW@238..242 "case"
+              LITERAL_PAT@243..244
+                INT@243..244 "6"
+              COLON@244..245 ":"
+              BLOCK@245..291
+                NEWLINE@245..246 "\n"
+                INDENT@262..262 ""
+                RETURN_STMT@262..279
+                  RETURN_KW@262..268 "return"
+                  FIELD_EXPR@269..278
+                    NAME_EXPR@269..274
+                      NAME_REF@269..274
+                        IDENT@269..274 "Proto"
+                    DOT@274..275 "."
+                    NAME_REF@275..278
+                      IDENT@275..278 "Tcp"
+                  NEWLINE@278..279 "\n"
+                DEDENT@291..291 ""
+            MATCH_ARM@291..345
+              CASE_KW@291..295 "case"
+              LITERAL_PAT@296..298
+                INT@296..298 "17"
+              COLON@298..299 ":"
+              BLOCK@299..345
+                NEWLINE@299..300 "\n"
+                INDENT@316..316 ""
+                RETURN_STMT@316..333
+                  RETURN_KW@316..322 "return"
+                  FIELD_EXPR@323..332
+                    NAME_EXPR@323..328
+                      NAME_REF@323..328
+                        IDENT@323..328 "Proto"
+                    DOT@328..329 "."
+                    NAME_REF@329..332
+                      IDENT@329..332 "Udp"
+                  NEWLINE@332..333 "\n"
+                DEDENT@345..345 ""
+            MATCH_ARM@345..399
+              CASE_KW@345..349 "case"
+              LITERAL_PAT@350..351
+                INT@350..351 "1"
+              COLON@351..352 ":"
+              BLOCK@352..399
+                NEWLINE@352..353 "\n"
+                INDENT@369..369 ""
+                RETURN_STMT@369..387
+                  RETURN_KW@369..375 "return"
+                  FIELD_EXPR@376..386
+                    NAME_EXPR@376..381
+                      NAME_REF@376..381
+                        IDENT@376..381 "Proto"
+                    DOT@381..382 "."
+                    NAME_REF@382..386
+                      IDENT@382..386 "Icmp"
+                  NEWLINE@386..387 "\n"
+                DEDENT@399..399 ""
+            MATCH_ARM@399..450
+              CASE_KW@399..403 "case"
+              WILDCARD_PAT@404..405
+                IDENT@404..405 "_"
+              COLON@405..406 ":"
+              BLOCK@406..450
+                NEWLINE@406..407 "\n"
+                INDENT@423..423 ""
+                RETURN_STMT@423..445
+                  RETURN_KW@423..429 "return"
+                  CALL_EXPR@430..444
+                    FIELD_EXPR@430..441
+                      NAME_EXPR@430..435
+                        NAME_REF@430..435
+                          IDENT@430..435 "Proto"
+                      DOT@435..436 "."
+                      NAME_REF@436..441
+                        IDENT@436..441 "Other"
+                    ARG_LIST@441..444
+                      L_PAREN@441..442 "("
+                      ARG@442..443
+                        NAME_EXPR@442..443
+                          NAME_REF@442..443
+                            IDENT@442..443 "n"
+                      R_PAREN@443..444 ")"
+                  NEWLINE@444..445 "\n"
+                DEDENT@450..450 ""
+            DEDENT@450..450 ""
+          DEDENT@450..450 ""
+      FN_DEF@450..712
+        DEF_KW@450..453 "def"
+        NAME@454..458
+          IDENT@454..458 "slot"
+        PARAM_LIST@458..464
+          L_PAREN@458..459 "("
+          PARAM@459..463
+            NAME@459..463
+              IDENT@459..463 "self"
+          R_PAREN@463..464 ")"
+        RET_TYPE@465..471
+          ARROW@465..467 "->"
+          PATH_TYPE@468..471
+            PATH@468..471
+              NAME_REF@468..471
+                IDENT@468..471 "u32"
+        COLON@471..472 ":"
+        BLOCK@472..712
+          NEWLINE@472..473 "\n"
+          INDENT@481..481 ""
+          MATCH_STMT@481..712
+            MATCH_KW@481..486 "match"
+            NAME_EXPR@487..491
+              NAME_REF@487..491
+                IDENT@487..491 "self"
+            COLON@491..492 ":"
+            NEWLINE@492..493 "\n"
+            INDENT@505..505 ""
+            MATCH_ARM@505..558
+              CASE_KW@505..509 "case"
+              PATH_PAT@510..519
+                PATH@510..519
+                  NAME_REF@510..515
+                    IDENT@510..515 "Proto"
+                  DOT@515..516 "."
+                  NAME_REF@516..519
+                    IDENT@516..519 "Tcp"
+              COLON@519..520 ":"
+              BLOCK@520..558
+                NEWLINE@520..521 "\n"
+                INDENT@537..537 ""
+                RETURN_STMT@537..546
+                  RETURN_KW@537..543 "return"
+                  LITERAL@544..545
+                    INT@544..545 "0"
+                  NEWLINE@545..546 "\n"
+                DEDENT@558..558 ""
+            MATCH_ARM@558..611
+              CASE_KW@558..562 "case"
+              PATH_PAT@563..572
+                PATH@563..572
+                  NAME_REF@563..568
+                    IDENT@563..568 "Proto"
+                  DOT@568..569 "."
+                  NAME_REF@569..572
+                    IDENT@569..572 "Udp"
+              COLON@572..573 ":"
+              BLOCK@573..611
+                NEWLINE@573..574 "\n"
+                INDENT@590..590 ""
+                RETURN_STMT@590..599
+                  RETURN_KW@590..596 "return"
+                  LITERAL@597..598
+                    INT@597..598 "1"
+                  NEWLINE@598..599 "\n"
+                DEDENT@611..611 ""
+            MATCH_ARM@611..665
+              CASE_KW@611..615 "case"
+              PATH_PAT@616..626
+                PATH@616..626
+                  NAME_REF@616..621
+                    IDENT@616..621 "Proto"
+                  DOT@621..622 "."
+                  NAME_REF@622..626
+                    IDENT@622..626 "Icmp"
+              COLON@626..627 ":"
+              BLOCK@627..665
+                NEWLINE@627..628 "\n"
+                INDENT@644..644 ""
+                RETURN_STMT@644..653
+                  RETURN_KW@644..650 "return"
+                  LITERAL@651..652
+                    INT@651..652 "2"
+                  NEWLINE@652..653 "\n"
+                DEDENT@665..665 ""
+            MATCH_ARM@665..712
+              CASE_KW@665..669 "case"
+              TUPLE_STRUCT_PAT@670..684
+                PATH@670..681
+                  NAME_REF@670..675
+                    IDENT@670..675 "Proto"
+                  DOT@675..676 "."
+                  NAME_REF@676..681
+                    IDENT@676..681 "Other"
+                L_PAREN@681..682 "("
+                WILDCARD_PAT@682..683
+                  IDENT@682..683 "_"
+                R_PAREN@683..684 ")"
+              COLON@684..685 ":"
+              BLOCK@685..712
+                NEWLINE@685..686 "\n"
+                INDENT@702..702 ""
+                RETURN_STMT@702..711
+                  RETURN_KW@702..708 "return"
+                  LITERAL@709..710
+                    INT@709..710 "3"
+                  NEWLINE@710..711 "\n"
+                DEDENT@712..712 ""
+            DEDENT@712..712 ""
+          DEDENT@712..712 ""
+      DEDENT@712..712 ""
+  STRUCT_DEF@712..762
+    STRUCT_KW@712..718 "struct"
+    NAME@719..727
+      IDENT@719..727 "Counters"
+    COLON@727..728 ":"
+    MEMBER_LIST@728..762
+      NEWLINE@728..729 "\n"
+      INDENT@733..733 ""
+      FIELD@733..746
+        NAME@733..740
+          IDENT@733..740 "packets"
+        COLON@740..741 ":"
+        PATH_TYPE@742..745
+          PATH@742..745
+            NAME_REF@742..745
+              IDENT@742..745 "u64"
+        NEWLINE@745..746 "\n"
+      FIELD@750..761
+        NAME@750..755
+          IDENT@750..755 "bytes"
+        COLON@755..756 ":"
+        PATH_TYPE@757..760
+          PATH@757..760
+            NAME_REF@757..760
+              IDENT@757..760 "u64"
+        NEWLINE@760..761 "\n"
+      DEDENT@762..762 ""
+  MAP_DECL@762..801
+    MAP_KW@762..765 "map"
+    NAME@766..774
+      IDENT@766..774 "counters"
+    COLON@774..775 ":"
+    PATH_TYPE@776..800
+      PATH@776..787
+        NAME_REF@776..787
+          IDENT@776..787 "PerCpuArray"
+      GENERIC_ARG_LIST@787..800
+        L_BRACK@787..788 "["
+        TYPE_ARG@788..796
+          PATH_TYPE@788..796
+            PATH@788..796
+              NAME_REF@788..796
+                IDENT@788..796 "Counters"
+        COMMA@796..797 ","
+        CONST_ARG@798..799
+          LITERAL@798..799
+            INT@798..799 "4"
+        R_BRACK@799..800 "]"
+    NEWLINE@800..801 "\n"
+  FN_DEF@802..1116
+    DECORATOR@802..840
+      AT@802..803 "@"
+      PATH@803..805
+        NAME_REF@803..805
+          IDENT@803..805 "tc"
+      ARG_LIST@805..839
+        L_PAREN@805..806 "("
+        ARG@806..824
+          NAME@806..815
+            IDENT@806..815 "direction"
+          EQ@815..816 "="
+          LITERAL@816..824
+            STRING@816..824 "\"egress\""
+        COMMA@824..825 ","
+        ARG@826..838
+          NAME@826..831
+            IDENT@826..831 "iface"
+          EQ@831..832 "="
+          LITERAL@832..838
+            STRING@832..838 "\"eth0\""
+        R_PAREN@838..839 ")"
+      NEWLINE@839..840 "\n"
+    DEF_KW@840..843 "def"
+    NAME@844..849
+      IDENT@844..849 "count"
+    PARAM_LIST@849..865
+      L_PAREN@849..850 "("
+      PARAM@850..864
+        NAME@850..853
+          IDENT@850..853 "ctx"
+        COLON@853..854 ":"
+        PATH_TYPE@855..864
+          PATH@855..864
+            NAME_REF@855..864
+              IDENT@855..864 "TcContext"
+      R_PAREN@864..865 ")"
+    RET_TYPE@866..877
+      ARROW@866..868 "->"
+      PATH_TYPE@869..877
+        PATH@869..877
+          NAME_REF@869..877
+            IDENT@869..877 "TcAction"
+    COLON@877..878 ":"
+    BLOCK@878..1116
+      NEWLINE@878..879 "\n"
+      INDENT@883..883 ""
+      ASSIGN_STMT@883..911
+        NAME_EXPR@883..886
+          NAME_REF@883..886
+            IDENT@883..886 "eth"
+        EQ@887..888 "="
+        TRY_EXPR@889..910
+          CALL_EXPR@889..909
+            INDEX_EXPR@889..906
+              FIELD_EXPR@889..898
+                NAME_EXPR@889..892
+                  NAME_REF@889..892
+                    IDENT@889..892 "ctx"
+                DOT@892..893 "."
+                NAME_REF@893..898
+                  IDENT@893..898 "parse"
+              INDEX_LIST@898..906
+                L_BRACK@898..899 "["
+                NAME_EXPR@899..905
+                  NAME_REF@899..905
+                    IDENT@899..905 "EthHdr"
+                R_BRACK@905..906 "]"
+            ARG_LIST@906..909
+              L_PAREN@906..907 "("
+              ARG@907..908
+                LITERAL@907..908
+                  INT@907..908 "0"
+              R_PAREN@908..909 ")"
+          QUESTION@909..910 "?"
+        NEWLINE@910..911 "\n"
+      IF_STMT@915..1097
+        IF_KW@915..917 "if"
+        BIN_EXPR@918..939
+          FIELD_EXPR@918..927
+            NAME_EXPR@918..921
+              NAME_REF@918..921
+                IDENT@918..921 "eth"
+            DOT@921..922 "."
+            NAME_REF@922..927
+              IDENT@922..927 "proto"
+          EQ2@928..930 "=="
+          NAME_EXPR@931..939
+            NAME_REF@931..939
+              IDENT@931..939 "ETH_P_IP"
+        COLON@939..940 ":"
+        BLOCK@940..1097
+          NEWLINE@940..941 "\n"
+          INDENT@949..949 ""
+          ASSIGN_STMT@949..984
+            NAME_EXPR@949..951
+              NAME_REF@949..951
+                IDENT@949..951 "ip"
+            EQ@952..953 "="
+            TRY_EXPR@954..983
+              CALL_EXPR@954..982
+                INDEX_EXPR@954..972
+                  FIELD_EXPR@954..963
+                    NAME_EXPR@954..957
+                      NAME_REF@954..957
+                        IDENT@954..957 "ctx"
+                    DOT@957..958 "."
+                    NAME_REF@958..963
+                      IDENT@958..963 "parse"
+                  INDEX_LIST@963..972
+                    L_BRACK@963..964 "["
+                    NAME_EXPR@964..971
+                      NAME_REF@964..971
+                        IDENT@964..971 "Ipv4Hdr"
+                    R_BRACK@971..972 "]"
+                ARG_LIST@972..982
+                  L_PAREN@972..973 "("
+                  ARG@973..981
+                    NAME_EXPR@973..981
+                      NAME_REF@973..981
+                        IDENT@973..981 "ETH_HLEN"
+                  R_PAREN@981..982 ")"
+              QUESTION@982..983 "?"
+            NEWLINE@983..984 "\n"
+          ASSIGN_STMT@992..1036
+            NAME_EXPR@992..993
+              NAME_REF@992..993
+                IDENT@992..993 "c"
+            EQ@994..995 "="
+            TRY_EXPR@996..1035
+              INDEX_EXPR@996..1034
+                NAME_EXPR@996..1004
+                  NAME_REF@996..1004
+                    IDENT@996..1004 "counters"
+                INDEX_LIST@1004..1034
+                  L_BRACK@1004..1005 "["
+                  CALL_EXPR@1005..1033
+                    FIELD_EXPR@1005..1031
+                      CALL_EXPR@1005..1026
+                        FIELD_EXPR@1005..1013
+                          NAME_EXPR@1005..1010
+                            NAME_REF@1005..1010
+                              IDENT@1005..1010 "Proto"
+                          DOT@1010..1011 "."
+                          NAME_REF@1011..1013
+                            IDENT@1011..1013 "of"
+                        ARG_LIST@1013..1026
+                          L_PAREN@1013..1014 "("
+                          ARG@1014..1025
+                            FIELD_EXPR@1014..1025
+                              NAME_EXPR@1014..1016
+                                NAME_REF@1014..1016
+                                  IDENT@1014..1016 "ip"
+                              DOT@1016..1017 "."
+                              NAME_REF@1017..1025
+                                IDENT@1017..1025 "protocol"
+                          R_PAREN@1025..1026 ")"
+                      DOT@1026..1027 "."
+                      NAME_REF@1027..1031
+                        IDENT@1027..1031 "slot"
+                    ARG_LIST@1031..1033
+                      L_PAREN@1031..1032 "("
+                      R_PAREN@1032..1033 ")"
+                  R_BRACK@1033..1034 "]"
+              QUESTION@1034..1035 "?"
+            NEWLINE@1035..1036 "\n"
+          AUG_ASSIGN_STMT@1044..1059
+            FIELD_EXPR@1044..1053
+              NAME_EXPR@1044..1045
+                NAME_REF@1044..1045
+                  IDENT@1044..1045 "c"
+              DOT@1045..1046 "."
+              NAME_REF@1046..1053
+                IDENT@1046..1053 "packets"
+            PLUS_EQ@1054..1056 "+="
+            LITERAL@1057..1058
+              INT@1057..1058 "1"
+            NEWLINE@1058..1059 "\n"
+          AUG_ASSIGN_STMT@1067..1093
+            FIELD_EXPR@1067..1074
+              NAME_EXPR@1067..1068
+                NAME_REF@1067..1068
+                  IDENT@1067..1068 "c"
+              DOT@1068..1069 "."
+              NAME_REF@1069..1074
+                IDENT@1069..1074 "bytes"
+            PLUS_EQ@1075..1077 "+="
+            CALL_EXPR@1078..1092
+              NAME_EXPR@1078..1081
+                NAME_REF@1078..1081
+                  IDENT@1078..1081 "u64"
+              ARG_LIST@1081..1092
+                L_PAREN@1081..1082 "("
+                ARG@1082..1091
+                  CALL_EXPR@1082..1091
+                    FIELD_EXPR@1082..1089
+                      NAME_EXPR@1082..1085
+                        NAME_REF@1082..1085
+                          IDENT@1082..1085 "ctx"
+                      DOT@1085..1086 "."
+                      NAME_REF@1086..1089
+                        IDENT@1086..1089 "len"
+                    ARG_LIST@1089..1091
+                      L_PAREN@1089..1090 "("
+                      R_PAREN@1090..1091 ")"
+                R_PAREN@1091..1092 ")"
+            NEWLINE@1092..1093 "\n"
+          DEDENT@1097..1097 ""
+      RETURN_STMT@1097..1116
+        RETURN_KW@1097..1103 "return"
+        FIELD_EXPR@1104..1115
+          NAME_EXPR@1104..1112
+            NAME_REF@1104..1112
+              IDENT@1104..1112 "TcAction"
+          DOT@1112..1113 "."
+          NAME_REF@1113..1115
+            IDENT@1113..1115 "OK"
+        NEWLINE@1115..1116 "\n"
+      DEDENT@1116..1116 ""

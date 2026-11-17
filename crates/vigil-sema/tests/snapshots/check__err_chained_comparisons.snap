@@ -1,0 +1,40 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0404] Error: comparisons do not chain in Vigil
+   ╭─[ main.vg:3:24 ]
+   │
+ 3 │ const IN_ORDER: bool = LOW < 2 < 3
+   │                        ─────┬─────  
+   │                             ╰─────── two comparisons in a row
+   │ 
+   │ Help: compare twice: `LOW < 2 and 2 < 3`
+───╯
+[E0404] Error: comparisons do not chain in Vigil
+   ╭─[ main.vg:6:12 ]
+   │
+ 6 │     return a < b < c
+   │            ────┬────  
+   │                ╰────── two comparisons in a row
+   │ 
+   │ Help: compare twice: `a < b and b < c`
+───╯
+[E0404] Error: comparisons do not chain in Vigil
+   ╭─[ main.vg:9:12 ]
+   │
+ 9 │     return a == b == c
+   │            ─────┬─────  
+   │                 ╰─────── two comparisons in a row
+   │ 
+   │ Help: compare twice: `a == b and b == c`
+───╯
+[E0404] Error: comparisons do not chain in Vigil
+    ╭─[ main.vg:12:12 ]
+    │
+ 12 │     return a <= b < c <= d
+    │            ───────┬───────  
+    │                   ╰───────── two comparisons in a row
+    │ 
+    │ Help: compare twice, joined by `and`: `a < b and b < c`
+────╯

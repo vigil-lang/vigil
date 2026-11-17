@@ -1,0 +1,336 @@
+---
+source: crates/vigil-syntax/tests/examples.rs
+expression: parse.debug_tree(false)
+---
+SOURCE_FILE@0..680
+  IMPORT@150..198
+    FROM_KW@150..154 "from"
+    PATH@155..162
+      NAME_REF@155..158
+        IDENT@155..158 "std"
+      DOT@158..159 "."
+      NAME_REF@159..162
+        IDENT@159..162 "net"
+    IMPORT_KW@163..169 "import"
+    IMPORT_NAME@170..180
+      NAME_REF@170..180
+        IDENT@170..180 "XdpContext"
+    COMMA@180..181 ","
+    IMPORT_NAME@182..191
+      NAME_REF@182..191
+        IDENT@182..191 "XdpAction"
+    COMMA@191..192 ","
+    IMPORT_NAME@193..197
+      NAME_REF@193..197
+        IDENT@193..197 "Byte"
+    NEWLINE@197..198 "\n"
+  FN_DEF@199..680
+    DECORATOR@199..204
+      AT@199..200 "@"
+      PATH@200..203
+        NAME_REF@200..203
+          IDENT@200..203 "xdp"
+      NEWLINE@203..204 "\n"
+    DEF_KW@204..207 "def"
+    NAME@208..216
+      IDENT@208..216 "dns_drop"
+    PARAM_LIST@216..233
+      L_PAREN@216..217 "("
+      PARAM@217..232
+        NAME@217..220
+          IDENT@217..220 "ctx"
+        COLON@220..221 ":"
+        PATH_TYPE@222..232
+          PATH@222..232
+            NAME_REF@222..232
+              IDENT@222..232 "XdpContext"
+      R_PAREN@232..233 ")"
+    RET_TYPE@234..246
+      ARROW@234..236 "->"
+      PATH_TYPE@237..246
+        PATH@237..246
+          NAME_REF@237..246
+            IDENT@237..246 "XdpAction"
+    COLON@246..247 ":"
+    BLOCK@247..680
+      NEWLINE@247..248 "\n"
+      INDENT@283..283 ""
+      IF_STMT@283..418
+        IF_KW@283..285 "if"
+        BIN_EXPR@286..352
+          BIN_EXPR@286..317
+            FIELD_EXPR@286..312
+              TRY_EXPR@286..306
+                CALL_EXPR@286..305
+                  INDEX_EXPR@286..301
+                    FIELD_EXPR@286..295
+                      NAME_EXPR@286..289
+                        NAME_REF@286..289
+                          IDENT@286..289 "ctx"
+                      DOT@289..290 "."
+                      NAME_REF@290..295
+                        IDENT@290..295 "parse"
+                    INDEX_LIST@295..301
+                      L_BRACK@295..296 "["
+                      NAME_EXPR@296..300
+                        NAME_REF@296..300
+                          IDENT@296..300 "Byte"
+                      R_BRACK@300..301 "]"
+                  ARG_LIST@301..305
+                    L_PAREN@301..302 "("
+                    ARG@302..304
+                      LITERAL@302..304
+                        INT@302..304 "12"
+                    R_PAREN@304..305 ")"
+                QUESTION@305..306 "?"
+              DOT@306..307 "."
+              NAME_REF@307..312
+                IDENT@307..312 "value"
+            NEQ@313..315 "!="
+            LITERAL@316..317
+              INT@316..317 "8"
+          OR_KW@318..320 "or"
+          BIN_EXPR@321..352
+            FIELD_EXPR@321..347
+              TRY_EXPR@321..341
+                CALL_EXPR@321..340
+                  INDEX_EXPR@321..336
+                    FIELD_EXPR@321..330
+                      NAME_EXPR@321..324
+                        NAME_REF@321..324
+                          IDENT@321..324 "ctx"
+                      DOT@324..325 "."
+                      NAME_REF@325..330
+                        IDENT@325..330 "parse"
+                    INDEX_LIST@330..336
+                      L_BRACK@330..331 "["
+                      NAME_EXPR@331..335
+                        NAME_REF@331..335
+                          IDENT@331..335 "Byte"
+                      R_BRACK@335..336 "]"
+                  ARG_LIST@336..340
+                    L_PAREN@336..337 "("
+                    ARG@337..339
+                      LITERAL@337..339
+                        INT@337..339 "13"
+                    R_PAREN@339..340 ")"
+                QUESTION@340..341 "?"
+              DOT@341..342 "."
+              NAME_REF@342..347
+                IDENT@342..347 "value"
+            NEQ@348..350 "!="
+            LITERAL@351..352
+              INT@351..352 "0"
+        COLON@352..353 ":"
+        BLOCK@353..418
+          NEWLINE@353..354 "\n"
+          INDENT@362..362 ""
+          RETURN_STMT@362..384
+            RETURN_KW@362..368 "return"
+            FIELD_EXPR@369..383
+              NAME_EXPR@369..378
+                NAME_REF@369..378
+                  IDENT@369..378 "XdpAction"
+              DOT@378..379 "."
+              NAME_REF@379..383
+                IDENT@379..383 "PASS"
+            NEWLINE@383..384 "\n"
+          DEDENT@418..418 ""
+      IF_STMT@418..527
+        IF_KW@418..420 "if"
+        BIN_EXPR@421..491
+          BIN_EXPR@421..455
+            FIELD_EXPR@421..447
+              TRY_EXPR@421..441
+                CALL_EXPR@421..440
+                  INDEX_EXPR@421..436
+                    FIELD_EXPR@421..430
+                      NAME_EXPR@421..424
+                        NAME_REF@421..424
+                          IDENT@421..424 "ctx"
+                      DOT@424..425 "."
+                      NAME_REF@425..430
+                        IDENT@425..430 "parse"
+                    INDEX_LIST@430..436
+                      L_BRACK@430..431 "["
+                      NAME_EXPR@431..435
+                        NAME_REF@431..435
+                          IDENT@431..435 "Byte"
+                      R_BRACK@435..436 "]"
+                  ARG_LIST@436..440
+                    L_PAREN@436..437 "("
+                    ARG@437..439
+                      LITERAL@437..439
+                        INT@437..439 "14"
+                    R_PAREN@439..440 ")"
+                QUESTION@440..441 "?"
+              DOT@441..442 "."
+              NAME_REF@442..447
+                IDENT@442..447 "value"
+            NEQ@448..450 "!="
+            LITERAL@451..455
+              INT@451..455 "0x45"
+          OR_KW@456..458 "or"
+          BIN_EXPR@459..491
+            FIELD_EXPR@459..485
+              TRY_EXPR@459..479
+                CALL_EXPR@459..478
+                  INDEX_EXPR@459..474
+                    FIELD_EXPR@459..468
+                      NAME_EXPR@459..462
+                        NAME_REF@459..462
+                          IDENT@459..462 "ctx"
+                      DOT@462..463 "."
+                      NAME_REF@463..468
+                        IDENT@463..468 "parse"
+                    INDEX_LIST@468..474
+                      L_BRACK@468..469 "["
+                      NAME_EXPR@469..473
+                        NAME_REF@469..473
+                          IDENT@469..473 "Byte"
+                      R_BRACK@473..474 "]"
+                  ARG_LIST@474..478
+                    L_PAREN@474..475 "("
+                    ARG@475..477
+                      LITERAL@475..477
+                        INT@475..477 "23"
+                    R_PAREN@477..478 ")"
+                QUESTION@478..479 "?"
+              DOT@479..480 "."
+              NAME_REF@480..485
+                IDENT@480..485 "value"
+            NEQ@486..488 "!="
+            LITERAL@489..491
+              INT@489..491 "17"
+        COLON@491..492 ":"
+        BLOCK@492..527
+          NEWLINE@492..493 "\n"
+          INDENT@501..501 ""
+          RETURN_STMT@501..523
+            RETURN_KW@501..507 "return"
+            FIELD_EXPR@508..522
+              NAME_EXPR@508..517
+                NAME_REF@508..517
+                  IDENT@508..517 "XdpAction"
+              DOT@517..518 "."
+              NAME_REF@518..522
+                IDENT@518..522 "PASS"
+            NEWLINE@522..523 "\n"
+          DEDENT@527..527 ""
+      ASSIGN_STMT@527..605
+        NAME_EXPR@527..531
+          NAME_REF@527..531
+            IDENT@527..531 "port"
+        EQ@532..533 "="
+        BIN_EXPR@534..604
+          BIN_EXPR@534..570
+            CALL_EXPR@534..565
+              NAME_EXPR@534..537
+                NAME_REF@534..537
+                  IDENT@534..537 "u16"
+              ARG_LIST@537..565
+                L_PAREN@537..538 "("
+                ARG@538..564
+                  FIELD_EXPR@538..564
+                    TRY_EXPR@538..558
+                      CALL_EXPR@538..557
+                        INDEX_EXPR@538..553
+                          FIELD_EXPR@538..547
+                            NAME_EXPR@538..541
+                              NAME_REF@538..541
+                                IDENT@538..541 "ctx"
+                            DOT@541..542 "."
+                            NAME_REF@542..547
+                              IDENT@542..547 "parse"
+                          INDEX_LIST@547..553
+                            L_BRACK@547..548 "["
+                            NAME_EXPR@548..552
+                              NAME_REF@548..552
+                                IDENT@548..552 "Byte"
+                            R_BRACK@552..553 "]"
+                        ARG_LIST@553..557
+                          L_PAREN@553..554 "("
+                          ARG@554..556
+                            LITERAL@554..556
+                              INT@554..556 "36"
+                          R_PAREN@556..557 ")"
+                      QUESTION@557..558 "?"
+                    DOT@558..559 "."
+                    NAME_REF@559..564
+                      IDENT@559..564 "value"
+                R_PAREN@564..565 ")"
+            SHL@566..568 "<<"
+            LITERAL@569..570
+              INT@569..570 "8"
+          PIPE@571..572 "|"
+          CALL_EXPR@573..604
+            NAME_EXPR@573..576
+              NAME_REF@573..576
+                IDENT@573..576 "u16"
+            ARG_LIST@576..604
+              L_PAREN@576..577 "("
+              ARG@577..603
+                FIELD_EXPR@577..603
+                  TRY_EXPR@577..597
+                    CALL_EXPR@577..596
+                      INDEX_EXPR@577..592
+                        FIELD_EXPR@577..586
+                          NAME_EXPR@577..580
+                            NAME_REF@577..580
+                              IDENT@577..580 "ctx"
+                          DOT@580..581 "."
+                          NAME_REF@581..586
+                            IDENT@581..586 "parse"
+                        INDEX_LIST@586..592
+                          L_BRACK@586..587 "["
+                          NAME_EXPR@587..591
+                            NAME_REF@587..591
+                              IDENT@587..591 "Byte"
+                          R_BRACK@591..592 "]"
+                      ARG_LIST@592..596
+                        L_PAREN@592..593 "("
+                        ARG@593..595
+                          LITERAL@593..595
+                            INT@593..595 "37"
+                        R_PAREN@595..596 ")"
+                    QUESTION@596..597 "?"
+                  DOT@597..598 "."
+                  NAME_REF@598..603
+                    IDENT@598..603 "value"
+              R_PAREN@603..604 ")"
+        NEWLINE@604..605 "\n"
+      IF_STMT@609..658
+        IF_KW@609..611 "if"
+        BIN_EXPR@612..622
+          NAME_EXPR@612..616
+            NAME_REF@612..616
+              IDENT@612..616 "port"
+          EQ2@617..619 "=="
+          LITERAL@620..622
+            INT@620..622 "53"
+        COLON@622..623 ":"
+        BLOCK@623..658
+          NEWLINE@623..624 "\n"
+          INDENT@632..632 ""
+          RETURN_STMT@632..654
+            RETURN_KW@632..638 "return"
+            FIELD_EXPR@639..653
+              NAME_EXPR@639..648
+                NAME_REF@639..648
+                  IDENT@639..648 "XdpAction"
+              DOT@648..649 "."
+              NAME_REF@649..653
+                IDENT@649..653 "DROP"
+            NEWLINE@653..654 "\n"
+          DEDENT@658..658 ""
+      RETURN_STMT@658..680
+        RETURN_KW@658..664 "return"
+        FIELD_EXPR@665..679
+          NAME_EXPR@665..674
+            NAME_REF@665..674
+              IDENT@665..674 "XdpAction"
+          DOT@674..675 "."
+          NAME_REF@675..679
+            IDENT@675..679 "PASS"
+        NEWLINE@679..680 "\n"
+      DEDENT@680..680 ""

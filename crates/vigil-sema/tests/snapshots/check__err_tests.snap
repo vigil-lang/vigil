@@ -1,0 +1,59 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0412] Error: a test is a function without parameters that returns `bool`
+   ╭─[ main.vg:5:5 ]
+   │
+ 5 │ def takes_an_argument(x: u32) -> bool:
+   │     ────────┬────────  
+   │             ╰────────── not a test
+   │ 
+   │ Help: write `@test` before `def name() -> bool:`
+───╯
+[E0412] Error: a test is a function without parameters that returns `bool`
+   ╭─[ main.vg:9:5 ]
+   │
+ 9 │ def returns_an_integer() -> u32:
+   │     ─────────┬────────  
+   │              ╰────────── not a test
+   │ 
+   │ Help: write `@test` before `def name() -> bool:`
+───╯
+[E0412] Error: a test is a function without parameters that returns `bool`
+    ╭─[ main.vg:13:5 ]
+    │
+ 13 │ def has_arguments() -> bool:
+    │     ──────┬──────  
+    │           ╰──────── not a test
+    │ 
+    │ Help: write `@test` before `def name() -> bool:`
+────╯
+[E0412] Error: a function can be only one program, test, property or helper
+    ╭─[ main.vg:17:1 ]
+    │
+ 16 │ @test
+    │ ───┬──  
+    │    ╰──── first one here
+ 17 │ @xdp
+    │ ──┬──  
+    │   ╰──── second decorator
+────╯
+[E0412] Error: a test is a function without parameters that returns `bool`
+    ╭─[ main.vg:18:5 ]
+    │
+ 18 │ def also_a_program(ctx: XdpContext) -> XdpAction:
+    │     ───────┬──────  
+    │            ╰──────── not a test
+    │ 
+    │ Help: write `@test` before `def name() -> bool:`
+────╯
+[E0412] Error: a test is a function without parameters that returns `bool`
+    ╭─[ main.vg:25:9 ]
+    │
+ 25 │     def method(self) -> bool:
+    │         ───┬──  
+    │            ╰──── not a test
+    │ 
+    │ Help: write `@test` before `def name() -> bool:`
+────╯

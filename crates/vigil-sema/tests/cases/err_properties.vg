@@ -1,0 +1,37 @@
+# Properties return `bool`, are top-level, not generic, and take data.
+from std.net import XdpContext, XdpAction
+
+map counts: Hash[u32, u64](max_entries=4)
+
+@property
+def returns_an_integer(x: u32) -> u32:
+    return x
+
+@property(cases=0)
+def no_cases(x: u32) -> bool:
+    return True
+
+@property(runs=10)
+def unknown_argument(x: u32) -> bool:
+    return True
+
+@property
+def takes_a_context(ctx: XdpContext) -> bool:
+    return True
+
+@ensures(result)
+@property
+def with_ensures(x: u32) -> bool:
+    return True
+
+@property
+@test
+def also_a_test() -> bool:
+    return True
+
+struct S:
+    x: u32
+
+    @property
+    def method(self) -> bool:
+        return True

@@ -1,0 +1,43 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0403] Error: `print` takes at most 3 values
+   ╭─[ main.vg:5:11 ]
+   │
+ 5 │     print(f"{a} {a} {a} {a}")
+   │           ─────────┬────────  
+   │                    ╰────────── 4 values
+   │ 
+   │ Note: `print` uses `bpf_printk`, which formats at most three values; send an event for more
+───╯
+[E0400] Error: cannot format a value of type `P`
+   ╭─[ main.vg:6:14 ]
+   │
+ 6 │     print(f"{p}")
+   │              ┬  
+   │              ╰── expected an integer, `bool` or `bytes[N]`
+───╯
+[E0200] Error: expected an expression, found the end of the interpolation
+   ╭─[ main.vg:7:17 ]
+   │
+ 7 │     print(f"{a +}")
+   │                 │ 
+   │                 ╰─ expected an expression
+───╯
+[E0200] Error: unclosed `{` in format string
+   ╭─[ main.vg:8:13 ]
+   │
+ 8 │     print(f"{a")
+   │             ┬  
+   │             ╰── this `{` is never closed
+   │ 
+   │ Help: write `{{` for a literal brace
+───╯
+[E0400] Error: mismatched types
+   ╭─[ main.vg:9:11 ]
+   │
+ 9 │     print(a)
+   │           ┬  
+   │           ╰── expected `str`, found `u32`
+───╯

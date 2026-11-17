@@ -1,0 +1,13 @@
+---
+source: crates/vigil-sema/tests/check.rs
+expression: output
+---
+[E0501] Error: the value type is too large (257 bytes)
+   ╭─[ main.vg:9:23 ]
+   │
+ 9 │ map values: Hash[u32, Packed](max_entries=8)
+   │                       ───┬──  
+   │                          ╰──── at most 256 bytes
+   │ 
+   │ Note: keys and values are built on the 512-byte stack; store large values in an `Array` or `PerCpuArray`
+───╯

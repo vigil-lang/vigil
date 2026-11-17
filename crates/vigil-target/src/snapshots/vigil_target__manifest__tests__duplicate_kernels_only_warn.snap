@@ -1,0 +1,13 @@
+---
+source: crates/vigil-target/src/manifest.rs
+expression: out
+---
+[W0002] Warning: kernel linux-6.1 is listed twice
+   ╭─[ vigil.toml:5:25 ]
+   │
+ 5 │ kernels = ["linux-6.1", "6.1"]
+   │            ─────┬─────  ──┬──  
+   │                 ╰────────────── first listed here
+   │                           │    
+   │                           ╰──── duplicate entry
+───╯

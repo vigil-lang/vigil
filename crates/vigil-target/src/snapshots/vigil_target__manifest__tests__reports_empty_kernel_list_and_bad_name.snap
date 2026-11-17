@@ -1,0 +1,22 @@
+---
+source: crates/vigil-target/src/manifest.rs
+expression: out
+---
+[E0005] Error: invalid package name `Flow Mon`
+   ╭─[ vigil.toml:2:8 ]
+   │
+ 2 │ name = "Flow Mon"
+   │        ─────┬────  
+   │             ╰────── not a valid package name
+   │ 
+   │ Help: package names start with a lowercase letter and contain only lowercase letters, digits, `_` and `-`
+───╯
+[E0004] Error: no target kernel
+   ╭─[ vigil.toml:5:11 ]
+   │
+ 5 │ kernels = []
+   │           ─┬  
+   │            ╰── this list is empty
+   │ 
+   │ Help: list at least one kernel, for example `kernels = ["linux-6.1"]`
+───╯

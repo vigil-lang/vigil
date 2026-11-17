@@ -1,0 +1,26 @@
+from std.bpf import KprobeContext
+
+const SCALE: u32 = 10
+
+def scaled(x: u32, k: u32 = SCALE, round: bool = False) -> u32:
+    if round:
+        return (x * k + 5) // 10 * 10
+    return x * k
+
+struct Counter:
+    n: u64
+
+    def step(self, by: u64 = 1) -> u64:
+        return self.n + by
+
+comptime def table_size(bits: u32 = 4) -> u32:
+    return 1 << bits
+
+const SIZE: u32 = table_size()
+
+@kprobe("f")
+def p(ctx: KprobeContext) -> i32:
+    c = Counter(5)
+    print(f"{scaled(3)} {scaled(3, 2)} {scaled(3, round=True)}")
+    print(f"{c.step()} {c.step(by=4)} {SIZE}")
+    return 0
