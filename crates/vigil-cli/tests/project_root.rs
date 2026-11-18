@@ -4,6 +4,8 @@
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
+use vigil_codegen_llvm::clang::Clang;
+
 /// a fresh project whose `main` imports `util`, so a check of `main.vg`
 /// alone (as a lone file) fails
 fn project(name: &str) -> PathBuf {
@@ -96,6 +98,10 @@ fn a_missing_btf_is_named_once() {
 /// `build` names a project as `check` does, and a lone file by its path
 #[test]
 fn build_names_the_project() {
+    if Clang::discover().is_err() {
+        println!("skipping: no clang");
+        return;
+    }
     let dir = project("build");
     std::fs::write(
         dir.join("src/main.vg"),

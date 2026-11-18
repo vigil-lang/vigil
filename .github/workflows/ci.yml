@@ -31,7 +31,7 @@ jobs:
         with:
           workspaces: compiler
       - working-directory: compiler
-        run: cargo test --workspace --locked
+        run: cargo test --workspace --locked --no-fail-fast
 
   # the same tests on Windows. The image has LLVM, so the tests that build
   # objects run there too; the few that fake a clang with a shell script are
@@ -56,4 +56,4 @@ jobs:
         with:
           workspaces: compiler
       - working-directory: compiler
-        run: cargo test --workspace --locked
+        run: cargo test --workspace --locked --no-fail-fast

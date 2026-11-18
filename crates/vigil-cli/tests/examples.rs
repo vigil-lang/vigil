@@ -1,5 +1,7 @@
 //! every example of `compiler/examples` checks, and builds to an object
-//! when there is a clang that can (`VIGIL_CLANG` or `clang`, 15 or newer)
+//! when there is a clang that can (`VIGIL_CLANG` or `clang`, 15 or newer).
+//! The examples that import kernel types need the kernel's BTF, so they are
+//! skipped on a machine without it (macOS, Windows, some containers)
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -15,7 +17,28 @@ fn examples() -> Vec<PathBuf> {
         .collect();
     paths.sort();
     assert!(!paths.is_empty(), "no examples in {}", dir.display());
+    if !Path::new(vigil_btf::VMLINUX).exists() {
+        paths.retain(|p| {
+            let kernel = imports_kernel(p);
+            if kernel {
+                println!(
+                    "skipping {}: it imports kernel types and there is no {}",
+                    p.display(),
+                    vigil_btf::VMLINUX
+                );
+            }
+            !kernel
+        });
+    }
     paths
+}
+
+/// does the example import from `kernel`?
+fn imports_kernel(path: &Path) -> bool {
+    std::fs::read_to_string(path)
+        .unwrap()
+        .lines()
+        .any(|line| line.trim_start().starts_with("from kernel import"))
 }
 
 /// running `vigil args`, giving the failure as text

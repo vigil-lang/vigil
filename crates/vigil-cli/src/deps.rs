@@ -739,6 +739,10 @@ mod tests {
     /// until an update
     #[test]
     fn locks_git_dependencies() {
+        if Command::new("git").arg("--version").output().is_err() {
+            println!("skipping: no git");
+            return;
+        }
         let dir = scratch("git");
         // the only test that reads `VIGIL_HOME`, so no other thread races it
         unsafe { std::env::set_var("VIGIL_HOME", dir.join("cache")) };

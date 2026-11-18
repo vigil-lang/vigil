@@ -59,6 +59,11 @@ fn build(code: &str, extra: &[&str]) -> (bool, String, String) {
 
 #[test]
 fn a_repeat_is_counted_once() {
+    // the scratch is measured when the object is built, after clang is found
+    if Clang::discover().is_err() {
+        println!("skipping: no clang");
+        return;
+    }
     let (ok, _, stderr) = build(&program("u8(0)", 40000), &[]);
     assert!(!ok);
     assert!(
