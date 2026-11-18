@@ -375,8 +375,9 @@ impl Scopes {
                         vigil_btf::VMLINUX
                     ))
                     .with_help(
-                        "kernels built with CONFIG_DEBUG_INFO_BTF have it; for others, extract it from \
-                         their debug info (`pahole -J`) or take it from BTFHub, and name the file with `btf`",
+                        "Linux kernels built with CONFIG_DEBUG_INFO_BTF have it; on macOS or Windows, or \
+                         for another kernel, copy it from the target machine, extract it from the kernel's \
+                         debug info (`pahole -J`) or take it from BTFHub, and name the file with `btf`",
                     ),
             );
             return Def::Error;

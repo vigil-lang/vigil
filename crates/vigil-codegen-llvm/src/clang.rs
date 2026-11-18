@@ -153,11 +153,11 @@ pub fn timeout() -> Option<Duration> {
     (seconds > 0).then(|| Duration::from_secs(seconds))
 }
 
-#[cfg(test)]
+// the fake clang is a shell script, so these tests are Unix only
+#[cfg(all(test, unix))]
 mod tests {
     use super::*;
 
-    #[cfg(unix)]
     #[test]
     fn kills_a_clang_that_hangs() {
         use std::os::unix::fs::PermissionsExt;

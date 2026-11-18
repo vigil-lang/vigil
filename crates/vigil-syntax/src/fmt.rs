@@ -7,6 +7,10 @@
 //! Working on tokens could change the meaning of a program, so we check the
 //! result: it must parse, print the same as the source and keep every
 //! comment. If it fails, we try again without breaking lines.
+//!
+//! The result keeps the line endings of the source: a file whose first line
+//! ends in `\r\n` (as on Windows) is written with `\r\n` throughout, any
+//! other with `\n`.
 
 use crate::lexer::{Token, tokenize};
 use crate::syntax_kind::SyntaxKind::{self, *};
@@ -27,6 +31,24 @@ pub const WIDTH: usize = 100;
 /// formatting `text`. A source with syntax errors is not formatted, because
 /// we couldn't check the result without a tree
 pub fn format(text: &str) -> Result<String, Error> {
+    let crlf = text
+        .find('\n')
+        .is_some_and(|end| text[..end].ends_with('\r'));
+    if !text.contains('\r') {
+        return format_lf(text);
+    }
+    // here we format with `\n` and put the line endings back, because the
+    // formatter and its checks work on lines ending in `\n`
+    let formatted = format_lf(&text.replace("\r\n", "\n"))?;
+    Ok(if crlf {
+        formatted.replace('\n', "\r\n")
+    } else {
+        formatted
+    })
+}
+
+/// formatting a text whose lines end in `\n`
+fn format_lf(text: &str) -> Result<String, Error> {
     let parse = crate::parse(text);
     if !parse.errors().is_empty() {
         return Err(Error::Syntax);
@@ -671,6 +693,24 @@ def main(ctx: XdpContext) -> XdpAction:
             "not formatted (run `vigil fmt`):\n{}",
             unformatted.join("\n")
         );
+    }
+
+    #[test]
+    fn keeps_the_line_endings_of_the_source() {
+        let lf = "def f() -> u32:\n    # one\n    return 1 + 2\n";
+        let crlf = lf.replace('\n', "\r\n");
+        assert_eq!(
+            format("def f( ) -> u32:\n    # one\n    return 1+2\n").as_deref(),
+            Ok(lf)
+        );
+        let messy = "def f( ) -> u32:\r\n    # one\r\n    return 1+2\r\n";
+        assert_eq!(format(messy).as_deref(), Ok(crlf.as_str()));
+        assert_eq!(format(&crlf).as_deref(), Ok(crlf.as_str()));
+        // mixed endings follow the first line
+        let mixed = "def f() -> u32:\r\n    # one\n    return 1 + 2\r\n";
+        assert_eq!(format(mixed).as_deref(), Ok(crlf.as_str()));
+        let mixed = "def f() -> u32:\n    # one\r\n    return 1 + 2\n";
+        assert_eq!(format(mixed).as_deref(), Ok(lf));
     }
 
     #[test]

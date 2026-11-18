@@ -27,13 +27,22 @@ def dns_drop(ctx: XdpContext) -> XdpAction:
 
 ## Installing
 
+On Linux and macOS:
+
 ```sh
 curl -fsSL https://vigil-lang.github.io/install.sh | sh
 ```
 
-The script downloads the binary of the latest release for the machine: Linux or
-macOS, on x86_64 or aarch64. It checks the binary's SHA-256 and puts it in
-`~/.local/bin`.
+On Windows, in PowerShell:
+
+```powershell
+irm https://vigil-lang.github.io/install.ps1 | iex
+```
+
+The scripts download the binary of the latest release for the machine:
+Linux, macOS or Windows, on x86_64 or aarch64. They check its SHA-256 and
+put it in `~/.local/bin`, or on Windows in
+`%LOCALAPPDATA%\Programs\vigil`, which is added to the user's `PATH`.
 
 ### From source
 
@@ -128,7 +137,8 @@ pinned = { github = "acme/pinned", rev = "<40-digit commit hash>" }
   committed. Later builds use those commits without contacting the remote, and
   `vigil update` resolves them again.
 - **Cache.** Checkouts are cached in `$VIGIL_HOME`, else
-  `$XDG_CACHE_HOME/vigil`, else `~/.cache/vigil`. Fetching needs `git`.
+  `$XDG_CACHE_HOME/vigil`, else on Windows `%LOCALAPPDATA%\vigil`, else
+  `~/.cache/vigil`. Fetching needs `git`.
 
 ## The certified backend
 
@@ -202,12 +212,16 @@ It reports `from kernel import ...` as an error.
 
 ## Releases
 
-`.github/workflows/ci.yml` runs the tests on every push and pull request, with
-`vigil-lang/std` checked out in `../std` at the ref named in `std.ref`.
+`.github/workflows/ci.yml` runs the tests on Linux and Windows on every push
+and pull request, with `vigil-lang/std` checked out in `../std` at the ref
+named in `std.ref`.
 
-On a tag `v*`, `release.yml` builds `vigil` for Linux (musl) and macOS, on
-x86_64 and aarch64. It publishes each build as `vigil-<target>.tar.gz` with its
-`.sha256`, which the install script downloads.
+On a tag `v*`, `release.yml` builds `vigil` for Linux (musl), macOS and
+Windows, on x86_64 and aarch64. It publishes each build with its `.sha256`:
+`vigil-<target>.tar.gz`, or `vigil-<target>.zip` with `vigil.exe` for
+Windows, which the install scripts download. A target that fails does not
+hold back the others: the release is published without it, and running the
+failed jobs again adds it.
 
 For a release:
 

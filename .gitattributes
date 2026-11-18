@@ -1,0 +1,3 @@
+# LF in every checkout, Windows included: the compiler embeds the sources of
+# the standard library and the tests compare texts and snapshots byte for byte
+* text=auto eol=lf

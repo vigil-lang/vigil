@@ -368,14 +368,28 @@ fn write_lock(path: &Path, old: &[LockEntry], mut new: Vec<LockEntry>, diags: &m
 // -------------------------
 
 /// the cache of git checkouts: `$VIGIL_HOME`, or `vigil` in
-/// `$XDG_CACHE_HOME`, or `~/.cache/vigil`
+/// `$XDG_CACHE_HOME`, or on Windows `vigil` in `%LOCALAPPDATA%`, or
+/// `~/.cache/vigil`
 pub fn cache_root() -> Result<PathBuf, String> {
-    let var = |name| std::env::var_os(name).filter(|v| !v.is_empty());
+    cache_root_in(|name| std::env::var_os(name), cfg!(windows))
+}
+
+/// [`cache_root`] for the environment `var` (empty values count as unset)
+fn cache_root_in(
+    var: impl Fn(&str) -> Option<std::ffi::OsString>,
+    windows: bool,
+) -> Result<PathBuf, String> {
+    let var = |name| var(name).filter(|v| !v.is_empty());
     if let Some(home) = var("VIGIL_HOME") {
         return Ok(PathBuf::from(home));
     }
     if let Some(cache) = var("XDG_CACHE_HOME") {
         return Ok(PathBuf::from(cache).join("vigil"));
+    }
+    // Windows has no `HOME` by default, and `%LOCALAPPDATA%` is where its
+    // programs keep caches
+    if windows && let Some(local) = var("LOCALAPPDATA") {
+        return Ok(PathBuf::from(local).join("vigil"));
     }
     var("HOME")
         .map(|home| PathBuf::from(home).join(".cache").join("vigil"))
@@ -691,6 +705,36 @@ mod tests {
         String::from_utf8(out.stdout).unwrap().trim().to_string()
     }
 
+    #[test]
+    fn finds_the_cache_directory() {
+        let root = |vars: &[(&str, &str)], windows| {
+            let vars: Vec<(String, String)> = vars
+                .iter()
+                .map(|(k, v)| (k.to_string(), v.to_string()))
+                .collect();
+            cache_root_in(
+                |name| vars.iter().find(|(k, _)| k == name).map(|(_, v)| v.into()),
+                windows,
+            )
+        };
+        let path = |p: &str| Ok(PathBuf::from(p));
+        let all = [
+            ("VIGIL_HOME", "/v"),
+            ("XDG_CACHE_HOME", "/x"),
+            ("LOCALAPPDATA", "/l"),
+            ("HOME", "/h"),
+        ];
+        assert_eq!(root(&all, false), path("/v"));
+        assert_eq!(root(&all[1..], false), path("/x/vigil"));
+        assert_eq!(root(&all[2..], false), path("/h/.cache/vigil"));
+        assert_eq!(root(&all[2..], true), path("/l/vigil"));
+        assert_eq!(
+            root(&[("VIGIL_HOME", ""), ("HOME", "/h")], true),
+            path("/h/.cache/vigil")
+        );
+        assert!(root(&[], true).is_err());
+    }
+
     /// the commit of a tag is locked, so moving the tag changes nothing
     /// until an update
     #[test]
@@ -706,7 +750,14 @@ mod tests {
         git(&repo, &["commit", "-qm", "one"]);
         git(&repo, &["tag", "v1"]);
         let first = git(&repo, &["rev-parse", "HEAD"]);
-        let url = format!("file://{}", repo.display());
+        // `file:///C:/...` on Windows, `file:///tmp/...` elsewhere
+        let url = format!(
+            "file:///{}",
+            repo.display()
+                .to_string()
+                .replace('\\', "/")
+                .trim_start_matches('/')
+        );
         write(
             &dir.join("app/vigil.toml"),
             &format!(

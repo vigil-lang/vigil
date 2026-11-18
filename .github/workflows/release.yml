@@ -1,8 +1,9 @@
 # The binaries of a release: pushing a tag `v*` builds `vigil` for Linux
-# (static, with musl) and macOS, on x86_64 and aarch64, and publishes them in
-# the GitHub release of the tag, as the archives that the install script of
-# the website downloads: `vigil-<target>.tar.gz`, each with a `.sha256`
-# beside it.
+# (static, with musl), macOS and Windows, on x86_64 and aarch64, and
+# publishes them in the GitHub release of the tag, as the archives that the
+# install scripts of the website download: `vigil-<target>.tar.gz` (with
+# `vigil`) or, for Windows, `vigil-<target>.zip` (with `vigil.exe`), each
+# with a `.sha256` beside it.
 #
 # The standard library built in is the one of `std.ref`: for a release, a
 # tag of `vigil-lang/std` rather than `main`, so that the release can be built
@@ -36,8 +37,16 @@ jobs:
           # silicon, whose toolchain targets both
           - { target: x86_64-apple-darwin, os: macos-latest }
           - { target: aarch64-apple-darwin, os: macos-latest }
+          - { target: x86_64-pc-windows-msvc, os: windows-latest }
+          - { target: aarch64-pc-windows-msvc, os: windows-11-arm }
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     steps:
+      # LF checkouts on Windows too, so the standard library built in is the
+      # same bytes on every target
+      - run: git config --global core.autocrlf false
       - uses: actions/checkout@v5
         with:
           path: compiler
@@ -56,6 +65,7 @@ jobs:
       - working-directory: compiler
         run: cargo build --release --locked -p vigil-cli --target ${{ matrix.target }}
       - name: Package
+        if: ${{ !contains(matrix.target, 'windows') }}
         working-directory: compiler
         run: |
           archive=vigil-${{ matrix.target }}.tar.gz
@@ -65,13 +75,32 @@ jobs:
           else
             shasum -a 256 "$archive" > "$archive.sha256"
           fi
+      # Windows has no `tar.gz` habit: a zip, made and hashed by PowerShell,
+      # which every Windows image has. The `.sha256` has the same form as
+      # the others, `<hash>  <file>`
+      - name: Package (Windows)
+        if: contains(matrix.target, 'windows')
+        working-directory: compiler
+        shell: pwsh
+        run: |
+          $archive = "vigil-${{ matrix.target }}.zip"
+          Compress-Archive -Path "target/${{ matrix.target }}/release/vigil.exe" -DestinationPath $archive
+          $hash = (Get-FileHash -Algorithm SHA256 $archive).Hash.ToLower()
+          [IO.File]::WriteAllText("$PWD/$archive.sha256", "$hash  $archive`n")
       - uses: actions/upload-artifact@v4
         with:
           name: vigil-${{ matrix.target }}
-          path: compiler/vigil-${{ matrix.target }}.tar.gz*
+          path: |
+            compiler/vigil-${{ matrix.target }}.tar.gz*
+            compiler/vigil-${{ matrix.target }}.zip*
 
+  # publishing what was built, even when a target failed (a runner that
+  # never came, as happens with the macOS ones): the release then lacks that
+  # target and the run is marked failed. Running the failed jobs again
+  # builds it and adds it to the same release
   release:
     needs: build
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -79,17 +108,26 @@ jobs:
     # they can.
     env:
       PAGES_TOKEN: ${{ secrets.PAGES_TOKEN }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/download-artifact@v4
         with:
           path: dist
           merge-multiple: true
       - name: Publish
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --generate-notes
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --generate-notes
+          fi
       - name: Rebuild the website
         if: env.PAGES_TOKEN != ''
         env:
           GH_TOKEN: ${{ env.PAGES_TOKEN }}
         run: gh workflow run pages.yml --repo "$PAGES_REPO"
+      - name: Report the missing targets
+        if: needs.build.result != 'success'
+        run: |
+          echo "::error::some targets were not built; run the failed jobs again to add them to the release"
+          exit 1

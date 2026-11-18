@@ -1,9 +1,10 @@
 # The tests of the compiler, on every push and pull request.
 #
 # The compiler embeds the standard library from `../std`, a separate
-# repository, so the job lays the two out side by side, as they are on a
-# developer's machine: this repository in `compiler/`, the library, at the
-# branch or tag named in `std.ref`, in `std/`.
+# repository, so each job, on Linux and on Windows, lays the two out side
+# by side, as they are on a developer's machine: this repository in
+# `compiler/`, the library, at the branch or tag named in `std.ref`, in
+# `std/`.
 name: CI
 
 on:
@@ -25,6 +26,31 @@ jobs:
         run: git clone --depth 1 --branch "$(cat compiler/std.ref)" "$STD_REPO" std
       - name: Install clang
         run: sudo apt-get update && sudo apt-get install -y clang-18 && sudo ln -sf /usr/bin/clang-18 /usr/local/bin/clang
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: compiler
+      - working-directory: compiler
+        run: cargo test --workspace --locked
+
+  # the same tests on Windows. The image has LLVM, so the tests that build
+  # objects run there too; the few that fake a clang with a shell script are
+  # Unix only
+  test-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # LF checkouts, as on Linux: the `.gitattributes` of the repositories
+      # ask for it, but an older ref of the library may not have one
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v5
+        with:
+          path: compiler
+      - name: Check out the standard library
+        run: git clone --depth 1 --branch "$(cat compiler/std.ref)" "$STD_REPO" std
+      - run: clang --version
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
         with:
